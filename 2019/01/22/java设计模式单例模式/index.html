@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="设计核心一个类只有一个对象实例，且由其自行创建，并提供一个访问它的全局访问点。 七种写法饿汉模式123456789101112public class A&amp;#123;	//类在加载时就完成了初始化	private static A instance = new A();		private A()&amp;#123;	&amp;#125;		//可以迅速的获得实例对象	public static A getInst">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java设计模式创建篇------单例模式">
+<meta property="og:url" content="http://yoursite.com/2019/01/22/java设计模式单例模式/index.html">
+<meta property="og:site_name" content="yanzs的博客">
+<meta property="og:description" content="设计核心一个类只有一个对象实例，且由其自行创建，并提供一个访问它的全局访问点。 七种写法饿汉模式123456789101112public class A&amp;#123;	//类在加载时就完成了初始化	private static A instance = new A();		private A()&amp;#123;	&amp;#125;		//可以迅速的获得实例对象	public static A getInst">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-22T02:55:19.009Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java设计模式创建篇------单例模式">
+<meta name="twitter:description" content="设计核心一个类只有一个对象实例，且由其自行创建，并提供一个访问它的全局访问点。 七种写法饿汉模式123456789101112public class A&amp;#123;	//类在加载时就完成了初始化	private static A instance = new A();		private A()&amp;#123;	&amp;#125;		//可以迅速的获得实例对象	public static A getInst">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/22/java设计模式单例模式/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>java设计模式创建篇------单例模式 | yanzs的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/22/java设计模式单例模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java设计模式创建篇------单例模式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-22 10:53:56 / 修改时间：10:55:19" itemprop="dateCreated datePublished" datetime="2019-01-22T10:53:56+08:00">2019-01-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="设计核心"><a href="#设计核心" class="headerlink" title="设计核心"></a>设计核心</h2><p>一个类只有一个对象实例，且由其自行创建，并提供一个访问它的全局访问点。</p>
+<h2 id="七种写法"><a href="#七种写法" class="headerlink" title="七种写法"></a>七种写法</h2><h3 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a>饿汉模式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">	<span class="comment">//类在加载时就完成了初始化</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> A instance = <span class="keyword">new</span> A();</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//可以迅速的获得实例对象</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> A getInstance&#123;</span><br><span class="line">		<span class="keyword">return</span> instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这一写法是在类的加载时完成的初始化，避免了多线程难以同步的问题，但是无论这一实例需不需要使用都对其进行了装载，使用的内存多，但是效率高。<br>顺带一提，其名字很有意思，饿汉模式中的饿汉体现在获取实例的迅速，因为饥饿所以要迅速的得到补充，所以一开始就把实例准备好。</p>
+<h3 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a>懒汉模式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">	<span class="comment">//并不着急于初始化</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> A instance;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//获取实例</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> A getInstance&#123;</span><br><span class="line">		<span class="comment">//首先判断是否已经初始化</span></span><br><span class="line">		<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="comment">//如果没有完成初始化才进行初始化</span></span><br><span class="line">			instance =<span class="keyword">new</span> A();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在类的加载时并不着急去初始化，而是等着需要调用的时候，根据需要进行初始化实例，但是效率不会太高，毕竟临时初始化需要时间，而且会有线程的同步问题，在多线程中，多个线程同时对其进行调用，在判断是否已经初始化过的时候，很难进行同步，产生多个实例。但是如果没有对其的调用的话，就不需要进行初始化，节约了内存空间。<br>这个名字也很贴切，懒汉不急，什么时候需要使用时，它才慢悠悠的进行准备，如果一直没有使用需求的话，它就一直这么懒下去。</p>
+<h3 id="懒汉模式（保证线程安全）"><a href="#懒汉模式（保证线程安全）" class="headerlink" title="懒汉模式（保证线程安全）"></a>懒汉模式（保证线程安全）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">	<span class="comment">//并不着急于初始化</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> A instance;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//获取实例并且对这个方法加锁</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span>  A getInstance&#123;</span><br><span class="line">		<span class="comment">//首先判断是否已经初始化</span></span><br><span class="line">		<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="comment">//如果没有完成初始化才进行初始化</span></span><br><span class="line">			instance =<span class="keyword">new</span> A();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个写法与上一个的写法没有什么不同，唯一一点就是在获取实例的方法处加了一个锁用于同步，每次在使用这个函数之前先检查有没有别的线程在使用该函数，如果别的线程在使用则该函数，则会对这一函数加锁，使其等待其访问结束后才能调用，保证了多个线程之间对实例初始化的同步。但是这一机制导致每次调用实例时都需要对其进行检查，有很大的同步开销，所以不建议这一写法。</p>
+<h3 id="双重检查模式"><a href="#双重检查模式" class="headerlink" title="双重检查模式"></a>双重检查模式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">	<span class="comment">//使用了volatile关键字保证不同线程对这一变量的修改对其他线程可以立即可见。</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> A instance;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function">pubilc <span class="keyword">static</span> A <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="comment">//第一重检查</span></span><br><span class="line">		<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">			synchronzied(A.class)&#123;</span><br><span class="line">				<span class="comment">//第二重检查</span></span><br><span class="line">				<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">					<span class="comment">//如果没有初始化则进行初始化</span></span><br><span class="line">					instance = <span class="keyword">new</span> A();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> instance;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在获取实例时对实例进行了两次的检查确认实例没有初始化后进行实例操作，其中第一次的检查是防止不必要的同步操作。这一方式保证了实例在第一次获取时进行实例化，效率很高，但是实例化需要时间，对于高并发操作还有一定影响，但是已经解决了同步问题和多余的资源消耗，并且只是第一次实例化时存在延迟，还是存在一定问题。</p>
+<h3 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//由静态内部类获取实例</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> A <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> AInClass.instance;</span><br><span class="line">	&#125;  </span><br><span class="line">	<span class="comment">//静态内部类用来存放唯一的实例</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">AInClass</span></span>&#123;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> A instance = <span class="keyword">new</span> A(); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在加载A类时不需要加载AInClass，只有第一次调用A的实例时，AInClass才会被加载，同时实例化。这种方法保证了线程同步性和单例的唯一性，同时不需要使用时不加载AInClass，合理的使用内存，同时也保证了效率，推荐使用。</p>
+<h3 id="枚举模式"><a href="#枚举模式" class="headerlink" title="枚举模式"></a>枚举模式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> A &#123;  </span><br><span class="line">	instance;<span class="comment">//唯一实例</span></span><br><span class="line">	<span class="comment">//逻辑方法  </span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>枚举模式十分简单只需要使用枚举类型即可，解决了多线程同步的问题，而且系统中只保存了这一个实例，节省了内存空间，但是枚举对象是jdk1.5之后添加的，操作上可能会有理解上的问题。</p>
+<h3 id="使用容器实现"><a href="#使用容器实现" class="headerlink" title="使用容器实现"></a>使用容器实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InstanceMap</span></span>&#123;</span><br><span class="line">    <span class="comment">//使用Map容器来存储单例</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;String,Object&gt;();</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">InstanceMap</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//实例化对象并将其存入容器中，以键值对的形式存取</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">registerObject</span><span class="params">(String key,Object object)</span></span>&#123;</span><br><span class="line">		<span class="comment">//如果实例没有在之前存入则将其存入容器</span></span><br><span class="line">		<span class="keyword">if</span>(!map.containsKey(key))&#123;</span><br><span class="line">			map.put(key,object);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">getInstance</span><span class="params">(String key)</span></span>&#123;</span><br><span class="line">		<span class="comment">//以键值对的形式对单例进行存取</span></span><br><span class="line">		<span class="keyword">return</span> map.get(key);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方式充分的使用了HashMap的特点，同一个键对应一个实例对象，保证了单一实例，同时可以管理多种不同类型的单例，并且使用统一的类进行管理，条理清晰。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>单例模式的几种写法各自有对应的特点，我们可以根据自己项目的需求选择合适的使用方式，来控制实例化对象对资源的消耗。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/22/微机原理笔记4/" rel="next" title="微机原理笔记（4）------8251A芯片">
+                <i class="fa fa-chevron-left"></i> 微机原理笔记（4）------8251A芯片
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#设计核心"><span class="nav-number">1.</span> <span class="nav-text">设计核心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七种写法"><span class="nav-number">2.</span> <span class="nav-text">七种写法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#饿汉模式"><span class="nav-number">2.1.</span> <span class="nav-text">饿汉模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#懒汉模式"><span class="nav-number">2.2.</span> <span class="nav-text">懒汉模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#懒汉模式（保证线程安全）"><span class="nav-number">2.3.</span> <span class="nav-text">懒汉模式（保证线程安全）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双重检查模式"><span class="nav-number">2.4.</span> <span class="nav-text">双重检查模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态内部类"><span class="nav-number">2.5.</span> <span class="nav-text">静态内部类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#枚举模式"><span class="nav-number">2.6.</span> <span class="nav-text">枚举模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用容器实现"><span class="nav-number">2.7.</span> <span class="nav-text">使用容器实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
