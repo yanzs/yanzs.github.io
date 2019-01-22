@@ -104,12 +104,12 @@
 <meta property="og:site_name" content="yanzs的博客">
 <meta property="og:description" content="分类传统的集合运算并(∪)、交(∩)、差(-)、笛卡尔积(×)专门的关系运算选择(σ)、投影(π)、连接、除(÷)基本的五种关系运算选择(σ)、投影(π)、并(∪)、差(-)、笛卡尔积(×) 传统的集合运算并运算（∪）R∪S = { t|t 属于R∨t 属于S } 交运算（ ∩ ）R∩S = { t|t 属于R∧t 属于S } 差运算（-）R -S = { t|t属于R∧t不属于S } 广义笛卡尔">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20190105175811223.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-01-22T02:30:48.303Z">
+<meta property="og:image" content="http://yoursite.com/2019/01/22/数据库复习笔记2/1.png">
+<meta property="og:updated_time" content="2019-01-22T08:56:40.453Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库复习笔记（2）------关系代数">
 <meta name="twitter:description" content="分类传统的集合运算并(∪)、交(∩)、差(-)、笛卡尔积(×)专门的关系运算选择(σ)、投影(π)、连接、除(÷)基本的五种关系运算选择(σ)、投影(π)、并(∪)、差(-)、笛卡尔积(×) 传统的集合运算并运算（∪）R∪S = { t|t 属于R∨t 属于S } 交运算（ ∩ ）R∩S = { t|t 属于R∧t 属于S } 差运算（-）R -S = { t|t属于R∧t不属于S } 广义笛卡尔">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190105175811223.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/22/数据库复习笔记2/1.png">
 
 
 
@@ -385,7 +385,7 @@
                 
               
 
-              <time title="创建时间：2019-01-22 10:25:01 / 修改时间：10:30:48" itemprop="dateCreated datePublished" datetime="2019-01-22T10:25:01+08:00">2019-01-22</time>
+              <time title="创建时间：2019-01-22 16:39:53 / 修改时间：16:56:40" itemprop="dateCreated datePublished" datetime="2019-01-22T16:39:53+08:00">2019-01-22</time>
             
 
             
@@ -457,7 +457,7 @@
 <h4 id="外连接"><a href="#外连接" class="headerlink" title="外连接"></a>外连接</h4><p>如果把舍弃的元组也保存在结果关系中，而在其他属性上填空值(Null)，这种连接就叫做外连接。</p>
 <h4 id="左外连接"><a href="#左外连接" class="headerlink" title="左外连接"></a>左外连接</h4><p> 如果只把左边关系R中要舍弃的元组保留就叫做左外连接。</p>
 <h4 id="右外连接"><a href="#右外连接" class="headerlink" title="右外连接"></a>右外连接</h4><p> 如果只把右边关系S中要舍弃的元组保留就叫做右外连接。</p>
-<h3 id="除（÷）"><a href="#除（÷）" class="headerlink" title="除（÷）"></a>除（÷）</h3><p>两个关系中的某个或某些属性出自相同的域集，记为A<br>除运算是将被除的关系中，除去这些属性A后对剩下的属性进行筛选，选出其取值所在的象集中包含有除数关系中对A的投影的部分。<br><img src="https://img-blog.csdnimg.cn/20190105175811223.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="例子"><br>在关系R中，A可以取四个值{a1，a2，a3，a4}<br>a1的象集为 {(b1，c2)，(b2，c3)，(b2，c1)}<br>a2的象集为 {(b3，c7)，(b2，c3)}<br>a3的象集为 {(b4，c6)}<br>a4的象集为 {(b6，c6)}<br>S在(B，C)上的投影为:<br>{(b1，c2)，(b2，c1)，(b2，c3) }<br>只有a1的象集包含了S在(B，C)属性组上的投影, 所以:<br>R ÷ S = { a1 } </p>
+<h3 id="除（÷）"><a href="#除（÷）" class="headerlink" title="除（÷）"></a>除（÷）</h3><p>两个关系中的某个或某些属性出自相同的域集，记为A<br>除运算是将被除的关系中，除去这些属性A后对剩下的属性进行筛选，选出其取值所在的象集中包含有除数关系中对A的投影的部分。<br><img src="/2019/01/22/数据库复习笔记2/1.png" alt="例子"><br>在关系R中，A可以取四个值{a1，a2，a3，a4}<br>a1的象集为 {(b1，c2)，(b2，c3)，(b2，c1)}<br>a2的象集为 {(b3，c7)，(b2，c3)}<br>a3的象集为 {(b4，c6)}<br>a4的象集为 {(b6，c6)}<br>S在(B，C)上的投影为:<br>{(b1，c2)，(b2，c1)，(b2，c3) }<br>只有a1的象集包含了S在(B，C)属性组上的投影, 所以:<br>R ÷ S = { a1 } </p>
 
       
     </div>
