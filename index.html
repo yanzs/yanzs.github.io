@@ -97,12 +97,12 @@
 
 
   <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="博客">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="博客">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="博客">
 
 
 
@@ -119,7 +119,7 @@
   };
 </script>
 
-  <title>Hexo</title>
+  <title>博客</title>
   
 
 
@@ -179,7 +179,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -336,6 +336,235 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/22/数据库复习笔记0/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/01/22/数据库复习笔记0/" class="post-title-link" itemprop="url">数据库复习笔记（0）------基本概念</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-22 10:19:29 / 修改时间：10:21:56" itemprop="dateCreated datePublished" datetime="2019-01-22T10:19:29+08:00">2019-01-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/计算机基础理论/" itemprop="url" rel="index"><span itemprop="name">计算机基础理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="数据库基本概念"><a href="#数据库基本概念" class="headerlink" title="数据库基本概念"></a>数据库基本概念</h2><h3 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h3><p>描述事物的符号记录称为数据，数据库存储的最小单元。</p>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>数据库是长期存储于计算机内，有组织，可共享的大量数据的集合。<br>数据库的结构由数据库的元数据解释，目的是将数据组织起来，以便用户直接从数据中获得信息。<br><strong>数据模型来组织数据。数据库的共享性是要进行最大限度的共享</strong></p>
+<p><strong>数据库元数据包含：</strong><br>数据结构名称（如：表名、列名）</p>
+<p>数据类型（如：字符型、整数型）</p>
+<p>数据描述（如：Sname代表学生姓名）</p>
+<p>其他描述数据库所存数据特征的信息</p>
+<h3 id="数据库管理系统DBMS"><a href="#数据库管理系统DBMS" class="headerlink" title="数据库管理系统DBMS"></a>数据库管理系统DBMS</h3><p>数据库管理系统是位于用户与操作系统之间的一层数据管理软件，实现对数据库数据对象的统一管理、控制和维护。<br><strong>主要功能</strong><br><strong>数据定义：</strong> 数据定义语言DDL，供用户定义数据库的三级模式结构、两级映像以及完整性约束和保密限制等约束。相关信息被存放在数据字典中。</p>
+<p><strong>数据操作：</strong> 数据操作语言DML，供用户实现对数据的追加、删除、更新、查询等操作。</p>
+<p><strong>数据库的运行管理：</strong> 并发控制、安全性控制、完整性控制、日志管理、事务管理与恢复。</p>
+<p><strong>数据的组织、存储与管理 ：</strong> 组织、存储和管理各种数据，包括数据字典、用户数据、存取路径等。基本目标是提高存储空间利用率，选择合适的存取方法提高存取效率。</p>
+<p><strong>数据库的维护：</strong>  包括数据载入、转换、转储、数据库的重组合重构以及性能监控等功能。</p>
+<p><strong>通信：</strong> 负责数据的传送，DBMS与其他软件系统的通信功能以及数据库之间的互操作功能</p>
+<h3 id="数据库系统DBS"><a href="#数据库系统DBS" class="headerlink" title="数据库系统DBS"></a>数据库系统DBS</h3><p>三个组成部分：数据库、数据库管理系统和应用程序。<br>基于计算机系统，目的是在用户和数据库信息之间保证高效的交互。<br><strong>特点：</strong><br><strong>数据结构化</strong></p>
+<p><strong>数据的共享性高、冗余度低且易扩充</strong></p>
+<p><strong>数据独立性高</strong><br>数据独立性：包括逻辑独立与物理独立，描述了应用程序对数据结构的依赖程度。<br>物理独立性：应用程序与数据库中的数据的物理结构相互独立<br>逻辑独立性：应用程序与数据库中的数据的逻辑结构相互独立</p>
+<p><strong>数据由数据库管理系统(DBMS)统一管理和控制</strong></p>
+<h2 id="数据管理技术"><a href="#数据管理技术" class="headerlink" title="数据管理技术"></a>数据管理技术</h2><h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h3><p>数据处理是将数据转换成信息，包括：数据的收集、管理、加工利用、信息输出。</p>
+<h3 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h3><p>数据管理是数据处理的中心问题，包括对数据的分类、组织、编码、存储、检索和维护。</p>
+<h3 id="发展过程"><a href="#发展过程" class="headerlink" title="发展过程"></a>发展过程</h3><p>人工管理（20世纪50年代中期之前）<br>文件系统（20世纪50年代后期-60年代中期）<br>数据库系统（20世纪60年代后期）<br>结构化、共享性、独立性、管理与控制等方面比较<br><img src="https://img-blog.csdnimg.cn/20190105103336736.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="结构化、共享性、独立性、管理与控制等方面比较"></p>
+<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><h3 id="数据模型-1"><a href="#数据模型-1" class="headerlink" title="数据模型"></a>数据模型</h3><p>模型是对现实世界中复杂对象的模拟与抽象，数据模型是对现实世界中相关实体数据特征的抽象<br>数据模型是一个描述数据、数据联系、数据语义以及一致性约束的概念工具的集合<br><strong>数据模型是数据库系统的核心和基础</strong><br><strong>理解联系</strong><br>三个世界：<strong>现实世界、信息世界和机器世界</strong><br><strong>抽象</strong>的过程是把现实世界中的客观对象抽象为概念模型，再把概念模型转换为某一DBMS支持的数据模型，概念模型是现实世界到机器世界的一个中间层次。</p>
+<h3 id="数据模型的三要素"><a href="#数据模型的三要素" class="headerlink" title="数据模型的三要素"></a>数据模型的三要素</h3><h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>与对象的类型、内容、性质有关<br>与数据之间的联系有关</p>
+<h4 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h4><p>查询，更新（删除，插入，修改）</p>
+<h4 id="数据的完整性约束"><a href="#数据的完整性约束" class="headerlink" title="数据的完整性约束"></a>数据的完整性约束</h4><p>数据的完整性约束条件是一组完整性规则。完整性规则是给定的数据模型中数据及其联系所具有的制约和依存规则，用以限定符合数据模型的数据库状态以及状态的变化，以保证数据的<strong>正确、有效、相容</strong></p>
+<h3 id="两类数据模型"><a href="#两类数据模型" class="headerlink" title="两类数据模型"></a>两类数据模型</h3><h4 id="概念模型"><a href="#概念模型" class="headerlink" title="概念模型"></a>概念模型</h4><p><strong>信息世界中的基本概念：实体、属性、码、实体型、实体集、联系</strong></p>
+<ol>
+<li>实体：客观存在并可相互区别的事物。可以是具体的人、事、物或抽象的概念。</li>
+<li>属性：实体所具有的某一特性称为属性.一个实体可以由若干个属性来刻画。</li>
+<li>码：唯一标识实体的属性集。</li>
+<li>域：    属性的取值范围称为该属性的域。</li>
+<li>实体型：用实体名及其属性名集合来抽象和刻画同类实体称为实体型。</li>
+<li>实体集：同一类型实体的集合称为实体集</li>
+<li>联系：现实世界中事物内部以及事物之间的联系在信息世界中反映为实体内部的联系和实体之间的联系。</li>
+</ol>
+<p><strong>概念模型：</strong> 按用户的观点来对数据和信息建模，即：信息世界的建模。<strong>是信息世界的数据模型（建模工具）</strong><br>常用的概念模型：实体-联系模型（E-R模型），是一种用E-R图描述（抽象）现实世界的概念模型</p>
+<h4 id="机器世界的逻辑模型和物理模型（也称结构数据模型）"><a href="#机器世界的逻辑模型和物理模型（也称结构数据模型）" class="headerlink" title="机器世界的逻辑模型和物理模型（也称结构数据模型）"></a>机器世界的逻辑模型和物理模型（也称结构数据模型）</h4><p><strong>逻辑模型：</strong> 数据库的逻辑结构<br><strong>物理模型：</strong> 描述数据在存储介质上的存储方式和存取方法</p>
+<h5 id="常用的结构数据模型"><a href="#常用的结构数据模型" class="headerlink" title="常用的结构数据模型"></a>常用的结构数据模型</h5><h6 id="层次模型"><a href="#层次模型" class="headerlink" title="层次模型"></a>层次模型</h6><p>满足两个条件的基本层次联系的集合为层次模型：</p>
+<ol>
+<li>有且只有一个结点没有双亲结点，这个结点称为根结点</li>
+<li>根以外的其它结点有且只有一个双亲结点<br>是数据库系统中最早出现的数据模型<br>用树形结构来表示各类实体以及实体间的联系<h6 id="网状模型"><a href="#网状模型" class="headerlink" title="网状模型"></a>网状模型</h6>满足下面两个条件的基本层次联系的集合为网状模型：</li>
+<li>允许一个以上的结点无双亲；</li>
+<li>一个结点可以有多于一个的双亲。<h6 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h6>关系模型由一组关系组成<br>每个关系的逻辑结构是一张二维表，它由行（元组）和列（属性）组成。<br><strong>实体及实体间的联系都用表来表示</strong><br><strong>相关概念：</strong></li>
+<li>关系：一个关系对应通常说的一张表</li>
+<li>元组：表中的一行即为一个元组</li>
+<li>属性：表中的一列即为一个属性（属性名）</li>
+<li>主码：表中的某个属性组，可以唯一确定一个元组</li>
+<li>域：属性的取值范围</li>
+<li>分量：元组中的一个属性值</li>
+<li>关系模式对关系的描述：<br>关系名（属性1，属性2，…，属性n）<br>例如：学生（学号，姓名，年龄，性别，系，年级）</li>
+</ol>
+<p><strong>关系模型的数据操作</strong></p>
+<ol>
+<li>数据操作是集合操作，操作对象和操作结果都是关系</li>
+<li>操作：查询、插入、删除、更新  </li>
+<li>数据操作是集合操作，操作对象和操作结果都是关系（元组的集合）</li>
+<li>存取路径对用户隐蔽，只要指出“做什么”，不必详细说明“怎么做”</li>
+</ol>
+<p><strong>关系的完整性约束条件</strong><br>实体完整性，参照完整性，用户定义的完整性</p>
+<h2 id="数据库系统的结构"><a href="#数据库系统的结构" class="headerlink" title="数据库系统的结构"></a>数据库系统的结构</h2><h3 id="内部结构-三级模式结构"><a href="#内部结构-三级模式结构" class="headerlink" title="内部结构-三级模式结构"></a>内部结构-三级模式结构</h3><p>三级模式是对数据的三个抽象级别</p>
+<h4 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h4><p>数据库整体逻辑结构</p>
+<h4 id="外模式"><a href="#外模式" class="headerlink" title="外模式"></a>外模式</h4><p>用户的局部逻辑结构</p>
+<h4 id="内模式"><a href="#内模式" class="headerlink" title="内模式"></a>内模式</h4><p>数据库的物理结构 </p>
+<h4 id="二级映象"><a href="#二级映象" class="headerlink" title="二级映象"></a>二级映象</h4><p>二级映象在数据库管理系统内部实现这三个抽象层次的联系和转换</p>
+<h5 id="外模式-模式映像"><a href="#外模式-模式映像" class="headerlink" title="外模式/模式映像"></a>外模式/模式映像</h5><p>实现数据的逻辑独立性</p>
+<h5 id="模式-内模式映像"><a href="#模式-内模式映像" class="headerlink" title="模式/内模式映像"></a>模式/内模式映像</h5><p>实现数据的物理独立性</p>
+<h3 id="外部结构-体系结构"><a href="#外部结构-体系结构" class="headerlink" title="外部结构-体系结构"></a>外部结构-体系结构</h3><p>从数据库最终用户角度看（数据库系统的体系结构） ，数据库系统的结构分为：</p>
+<ol>
+<li>单用户结构、主从式结构、分布式结构、客户/服务器</li>
+<li>浏览器/应用服务器/数据库服务器多层结构等</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/test/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -345,7 +574,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="博客">
     </span>
 
     
@@ -575,14 +804,42 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
               
 
               
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
 
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
               
             </nav>
           
