@@ -115,9 +115,9 @@
 <meta property="og:image" content="http://yoursite.com/2019/01/22/微机原理笔记3/9.png">
 <meta property="og:image" content="http://yoursite.com/2019/01/22/微机原理笔记3/10.png">
 <meta property="og:image" content="http://yoursite.com/2019/01/22/微机原理笔记3/11.png">
-<meta property="og:image" content="http://yoursite.com/2019/01/22/微机原理笔记3/h微机原理笔记3/12.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/22/微机原理笔记3/12.png">
 <meta property="og:image" content="http://yoursite.com/2019/01/22/微机原理笔记3/13.png">
-<meta property="og:updated_time" content="2019-01-22T09:06:35.310Z">
+<meta property="og:updated_time" content="2019-01-22T09:19:44.306Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微机原理笔记（3）------8253芯片">
 <meta name="twitter:description" content="引脚双列直插，24根引脚  引脚功能数据端口D7～D0：8位三态双向缓冲器接收CPU送来的数据(计数值)和控制信息(控制字)。高阻态：隔离芯片与系统总线。连接系统数据总线 读/写控制逻辑~CS：片选信号输入引脚，低电平有效~RD：读信号输入引脚，低电平有效~WR：写信号输入引脚，低电平有效A1、A0：端口选择信号输入引脚 8253的端口操作 计数器通道0、1、2三个通道完全相同 计数初值寄存器CR">
@@ -397,7 +397,7 @@
                 
               
 
-              <time title="创建时间：2019-01-22 16:41:00 / 修改时间：17:06:35" itemprop="dateCreated datePublished" datetime="2019-01-22T16:41:00+08:00">2019-01-22</time>
+              <time title="创建时间：2019-01-22 16:41:00 / 修改时间：17:19:44" itemprop="dateCreated datePublished" datetime="2019-01-22T16:41:00+08:00">2019-01-22</time>
             
 
             
@@ -473,7 +473,7 @@
 <h4 id="方式3（方波发生器）（软硬件启动）"><a href="#方式3（方波发生器）（软硬件启动）" class="headerlink" title="方式3（方波发生器）（软硬件启动）"></a>方式3（方波发生器）（软硬件启动）</h4><p><img src="/2019/01/22/微机原理笔记3/8.png" alt="时序图"><br>//前N/2或(N+1)/2个CLK ，OUT为高//<br>//后N/2或(N-1)/2个CLK，OUT为低//<br>控制字写入后，OUT引脚输出高电平。<br>计数初值写入后的下一个CLK脉冲，开始计数<br>当计数到一半值时，OUT引脚输出变低，直至计数到0。OUT引脚输出高，计数初值自动重装，重新开始计数<br>特点：自动重装计数初值，输出方波信号<br>计数过程中，GATE引脚变低，暂停计数；GATE引脚出现上升沿，重新开始计数。——硬件启动<br>计数过程中写入新初值，影响下次计数</p>
 <h4 id="方式4（软件触发选通）（软件启动）"><a href="#方式4（软件触发选通）（软件启动）" class="headerlink" title="方式4（软件触发选通）（软件启动）"></a>方式4（软件触发选通）（软件启动）</h4><p><img src="/2019/01/22/微机原理笔记3/9.png" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后的下一个CLK脉冲，开始计数<br>计数值减到0时，OUT引脚输出低电平，维持一个TCLK，又变为高电平，计数停止<br>特点：计数初值不会自动重装<br>当GATE=1时，允许计数；GATE=0时，停止计数<br>计数过程中改变计数值，按新值重新开始计数</p>
 <h4 id="方式5（硬件触发选通）（硬件启动）"><a href="#方式5（硬件触发选通）（硬件启动）" class="headerlink" title="方式5（硬件触发选通）（硬件启动）"></a>方式5（硬件触发选通）（硬件启动）</h4><p><img src="/2019/01/22/微机原理笔记3/10.png" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后，待GATE引脚出现上升沿后，从下一个CLK脉冲开始计数<br>计数值减到0时，OUT引脚输出低电平，维持一个TCLK，又变为高电平，计数停止<br>特点：计数初值不会自动重装<br>计数过程中，若改变计数初值，仅当GATE上升沿才按新计数值重新开始计数<br>计数过程中出现GATE上升沿，重新开始计数</p>
-<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p><img src="/2019/01/22/微机原理笔记3/11.png" alt="方式对比"><br><img src="/2019/01/22/微机原理笔记3/h微机原理笔记3/12.png" alt="门控信号"></p>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p><img src="/2019/01/22/微机原理笔记3/11.png" alt="方式对比"><br><img src="/2019/01/22/微机原理笔记3/12.png" alt="门控信号"></p>
 <h2 id="初始化编程"><a href="#初始化编程" class="headerlink" title="初始化编程"></a>初始化编程</h2><p>先写控制字，再送计数初值<br>计数初值一次只能写入8位（先写低8位，后写高8位（可不写））<br>控制字写入控制口，每个计数器的计数初值写入各自计数器口<br>写入的顺序：按通道序号分别写入，按内容分别写入</p>
 <h3 id="8253方式控制字"><a href="#8253方式控制字" class="headerlink" title="8253方式控制字"></a>8253方式控制字</h3><p><img src="/2019/01/22/微机原理笔记3/13.png" alt="方式控制字"></p>
 
