@@ -381,7 +381,7 @@
                 
               
 
-              <time title="创建时间：2019-01-22 10:35:27 / 修改时间：10:38:44" itemprop="dateCreated datePublished" datetime="2019-01-22T10:35:27+08:00">2019-01-22</time>
+              <time title="创建时间：2019-01-22 10:35:27 / 修改时间：10:39:34" itemprop="dateCreated datePublished" datetime="2019-01-22T10:35:27+08:00">2019-01-22</time>
             
 
             
@@ -440,43 +440,25 @@
       
         
           
-            <h2 id="引脚"><a href="#引脚" class="headerlink" title="引脚"></a>引脚</h2><p>双列直插，28根引脚<br><img src="https://img-blog.csdnimg.cn/2019010816364713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="引脚图"></p>
-<h3 id="引脚功能"><a href="#引脚功能" class="headerlink" title="引脚功能"></a>引脚功能</h3><h4 id="数据总线缓冲器"><a href="#数据总线缓冲器" class="headerlink" title="数据总线缓冲器"></a>数据总线缓冲器</h4><p>D7~D0：实现CPU与外设间数据传送<br>实现状态寄存器中的状态信息对CPU的传输</p>
-<h5 id="双向三态缓冲器"><a href="#双向三态缓冲器" class="headerlink" title="双向三态缓冲器"></a>双向三态缓冲器</h5><p>其内部包含3个8位双向三态缓冲器</p>
-<ol>
-<li>状态缓冲器：用IN指令读取状态信息。</li>
-<li>接收数据缓冲器：用IN指令读取数据信息。</li>
-<li>发送数据/命令缓冲器：OUT指令写入的数据/命令字<h4 id="读写控制电路"><a href="#读写控制电路" class="headerlink" title="读写控制电路"></a>读写控制电路</h4>用于接收CPU的控制信号和命令字，协调内部工作。</li>
-</ol>
-<p>RESET：复位信号，输入，高电平有效，使8251A进入空闲状态，等待初始化编程。</p>
-<p>CLK：主时钟信号，输入，在同步方式下，CLK的频率必须比~ TxC和~ RxC大30倍。在异步方式下，CLK的频率应比~ TxC和~ RxC大4.5倍。</p>
-<p>~RD：读信号，输入，低电平有效。表示CPU从8251A读出数据或状态信息。</p>
-<p>~WR：写信号，输入，低电平有效，表示CPU把数据或控制字写入8251A。</p>
-<p>~CS：片选信号，输入，低电平有效，表示8251A被CPU选中，可以对它进行读写操作。</p>
-<p>C/~D：控制/数据信号，输入，在高电平时，表示传输的是控制信号或状态字，在低电平时，表示传输的是数据信息。<br><img src="https://img-blog.csdnimg.cn/20190108164735647.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="对应引脚编码"></p>
-<h4 id="接收器和接收控制电路"><a href="#接收器和接收控制电路" class="headerlink" title="接收器和接收控制电路"></a>接收器和接收控制电路</h4><p>接收串行数据，转换为并行数据后存放<br>RxD：接收数据，输入，逐位移入接收移位寄存器，串转并后送入接收数据缓冲器</p>
-<p>RxRDY：接收数据准备好，输出，高电平有效，当CPU读取该字符后，复位为低电平，中断方式或查询方式(作为联络信号)</p>
-<p>RxC：接收时钟，输入，决定8251A接收数据的速率，在异步方式下，输入的时钟频率可以是波特率的1倍、16倍或64倍。接收时钟通常应与发送时钟相同。</p>
-<p>SYNDET/BRKDET：同步检测/断点检测，输入或输出。</p>
-<ol>
-<li><strong>同步方式</strong>：用于同步检测。复位时为低电平。<br>内（自）同步方式：检测到同步字符输出高电平<br>外同步方式：由低变高时，在下一个时钟的上升沿开始接收字符</li>
-<li><strong>异步方式</strong>：用于断点检测，输出<br>RxD引脚连续收到两个全0字符时，输出高电平。<br>作为状态位，供CPU读取<h5 id="异步通信方式"><a href="#异步通信方式" class="headerlink" title="异步通信方式"></a>异步通信方式</h5>在无字符传送时，RxD引脚上为高电平。<br>RxD出现低电平，启动内部计数器，检测起始位。<br>接收数据位，送移位寄存器处理得到并行数据，送至接收数据缓冲器，同时发出RxRDY信号通知CPU<h5 id="同步通信方式"><a href="#同步通信方式" class="headerlink" title="同步通信方式"></a>同步通信方式</h5>监视RxD引脚，以一次一位的方式将数据送至接收寄存器。<br>每接收一位，将接收寄存器与存放同步字符的寄存器比较。<br>直至搜索到同步字符，置SYNDET=1。<br>根据RxC引脚送入的同步时钟，按规定位数逐个移位至接收数据缓冲器，同时发出RxRDY信号通知CPU。<h4 id="发送器和发送控制电路"><a href="#发送器和发送控制电路" class="headerlink" title="发送器和发送控制电路"></a>发送器和发送控制电路</h4>将并行数据+成帧信号，转换为串行数据发送。<br><strong>异步通信方式</strong>：加上起始位，并根据控制字加上奇偶校验位和停止位。<br><strong>同步通信方式</strong>：先发送同步字符，随后发送若干数据字符。</li>
-</ol>
-<p>TxD：发送数据，输出。将并行数据转换成串行数据，逐位从TxD引脚发送。</p>
-<p>TxRDY：发送数据准备好，输出，高电平有效。表示已准备好从CPU接收一个数据。<br><strong>在中断方式或查询方式中作为联络信号</strong></p>
-<p>TxE：发送缓冲器空，输出，高电平有效，表示发送器中的并到串转换器空。<br><strong>异步方式下</strong>，由TxD引脚向外部输出空闲位。<br><strong>同步方式下</strong>，由TxD引脚向外部输出同步字符。</p>
-<p>~TxC：发送器时钟，输入，决定8251A的发送速率。<br><strong>异步方式下</strong>，时钟是波特率的1倍、16倍或64倍。<br><strong>同步方式下</strong>，时钟频率应等于发送数据的波特率。</p>
-<h4 id="调制解调控制电路"><a href="#调制解调控制电路" class="headerlink" title="调制解调控制电路"></a>调制解调控制电路</h4><p>与调制解调器(Modem)相连，可实现远距离数据传输，发送方用Modem将串行数字信号变为模拟信号，接收方模拟信号经过Modem变为数字信号。<br>用于为调制解调器提供控制信号。</p>
-<p>~DTR：数据终端准备好，输出，低电平有效。表示CPU准备好进行数据传送，由控制命令字的D1位置1使之有效</p>
-<p>~DSR：数据设备准备好，输入，低电平有效，对应状态寄存器D7位，可通过读状态字获取设备的状态。</p>
-<p>~RTS：请求传送数据，输出，低电平有效，表示CPU已准备好发送数据，由控制命令字的D5位置1使之有效。</p>
-<p>~CTS：允许发送数据，输入，低电平有效，是调制解调器或外设对RTS的响应信号</p>
-<h2 id="初始化编程"><a href="#初始化编程" class="headerlink" title="初始化编程"></a>初始化编程</h2><p><img src="https://img-blog.csdnimg.cn/2019010817154828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="初始化流程"></p>
-<h3 id="控制字"><a href="#控制字" class="headerlink" title="控制字"></a>控制字</h3><h4 id="方式控制字"><a href="#方式控制字" class="headerlink" title="方式控制字"></a>方式控制字</h4><p>紧接在复位操作后写入。<br><img src="https://img-blog.csdnimg.cn/20190108171800374.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="方式控制字"></p>
-<h4 id="命令控制字"><a href="#命令控制字" class="headerlink" title="命令控制字"></a>命令控制字</h4><p>写入方式控制字后，才能写入同步字符和命令控制字。在工作过程中，可随时写入新的命令控制字。<br><img src="https://img-blog.csdnimg.cn/2019010817182926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="命令控制字"><br>与方式控制字写入相同端口地址。<br>复位后首先写入方式控制字，之后写入命令控制字。</p>
-<h3 id="状态字"><a href="#状态字" class="headerlink" title="状态字"></a>状态字</h3><p>给出8251A当前的运行状态<br><img src="https://img-blog.csdnimg.cn/20190108171956224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="状态字"></p>
+            <p>
+              引脚双列直插，28根引脚
+引脚功能数据总线缓冲器D7~D0：实现CPU与外设间数据传送实现状态寄存器中的状态信息对CPU的传输
+双向三态缓冲器其内部包含3个8位双向三态缓冲器
 
+状态缓冲器：用IN指令读取状态信息。
+接收数据缓冲器：用IN指令读取数据信息。
+发送数据/命令缓冲器：OUT指令写入的数据
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/微机原理笔记4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -635,30 +617,22 @@
       
         
           
-            <h2 id="引脚"><a href="#引脚" class="headerlink" title="引脚"></a>引脚</h2><p>双列直插，24根引脚</p>
-<p><img src="https://img-blog.csdnimg.cn/20190103154815725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="芯片引脚图"></p>
-<h3 id="引脚功能"><a href="#引脚功能" class="headerlink" title="引脚功能"></a>引脚功能</h3><h4 id="数据端口"><a href="#数据端口" class="headerlink" title="数据端口"></a>数据端口</h4><p>D7～D0：8位三态双向缓冲器<br>接收CPU送来的数据(计数值)和控制信息(控制字)。<br>高阻态：隔离芯片与系统总线。<br>连接系统数据总线</p>
-<h4 id="读-写控制逻辑"><a href="#读-写控制逻辑" class="headerlink" title="读/写控制逻辑"></a>读/写控制逻辑</h4><p>~CS：片选信号输入引脚，低电平有效<br>~RD：读信号输入引脚，低电平有效<br>~WR：写信号输入引脚，低电平有效<br>A1、A0：端口选择信号输入引脚<br><img src="https://img-blog.csdnimg.cn/20190103155411974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="端口选择信号"></p>
-<h4 id="8253的端口操作"><a href="#8253的端口操作" class="headerlink" title="8253的端口操作"></a>8253的端口操作</h4><p><img src="https://img-blog.csdnimg.cn/20190103155445633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="8253的端口操作"></p>
-<h4 id="计数器通道0、1、2"><a href="#计数器通道0、1、2" class="headerlink" title="计数器通道0、1、2"></a>计数器通道0、1、2</h4><p>三个通道完全相同<br><img src="https://img-blog.csdnimg.cn/2019010315572114.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="内部结构"></p>
-<h5 id="计数初值寄存器CR"><a href="#计数初值寄存器CR" class="headerlink" title="计数初值寄存器CR"></a>计数初值寄存器CR</h5><p>16位，存放计数初值，在计数/定时启动之前设定</p>
-<h5 id="计数器执行部件CE"><a href="#计数器执行部件CE" class="headerlink" title="计数器执行部件CE"></a>计数器执行部件CE</h5><p>16位减1计数器，初值=CR值，CLK引脚每出现一个脉冲，计数值减1。减至零时，OUT引脚输出电平或脉冲信号，CPU不能直接访问。</p>
-<h5 id="输出锁存器OL"><a href="#输出锁存器OL" class="headerlink" title="输出锁存器OL"></a>输出锁存器OL</h5><p>16位，锁存CE值，跟随CE变化，使用锁存命令来锁定当前计数值</p>
-<h5 id="相应引脚"><a href="#相应引脚" class="headerlink" title="相应引脚"></a>相应引脚</h5><p>门控信号输入端GATEn：允许/禁止、启动/停止计数<br>脉冲信号输入端CLKn：时钟脉冲频率不能大于2MHz<br>计数/定时完成信号输出端OUTn：以电平或脉冲方式</p>
-<h4 id="控制字寄存器"><a href="#控制字寄存器" class="headerlink" title="控制字寄存器"></a>控制字寄存器</h4><p>8位，存放CPU送来的控制字<br>用于选定计数器通道及其工作方式，指定计数初值的读写格式和表示方式</p>
-<h3 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h3><h4 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h4><p>写入计数初值后的第1个CLK脉冲的下降沿开始计数，前提条件是GATE引脚保持高电平。</p>
-<h4 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h4><p>由门控信号GATE的上升沿触发开始计数。</p>
-<h3 id="工作方式"><a href="#工作方式" class="headerlink" title="工作方式"></a>工作方式</h3><h4 id="方式0（计数结束中断）（软件启动）"><a href="#方式0（计数结束中断）（软件启动）" class="headerlink" title="方式0（计数结束中断）（软件启动）"></a>方式0（计数结束中断）（软件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103162911811.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出低电平。<br>计数初值写入后的下一个CLK脉冲，开始计数。<br>计数值减为0时，OUT引脚输出高电平。<br>特点：计数初值不会自动重装，只计数一遍。（OUT保持高电平）<br>计数过程中，新的计数初值，触发重新开始计数。<br>GATE信号：“1”允许计数，“0”停止计数。从低变为高时，继续计数。</p>
-<h4 id="方式1（可编程单稳态输出）（硬件启动）"><a href="#方式1（可编程单稳态输出）（硬件启动）" class="headerlink" title="方式1（可编程单稳态输出）（硬件启动）"></a>方式1（可编程单稳态输出）（硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103163150849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平。<br>计数初值写入后，OUT引脚保持高电平。<br>GATE门控信号上升沿后的下一个CLK脉冲，开始计数。同时，OUT引脚变为低电平。<br>计数值减为0时，OUT引脚输出高电平。<br>特点：计数初值不会自动重装，GATE引脚上升沿可实现重装<br>计数过程中，GATE引脚上升沿，触发重新计数<br>计数过程中，写入新初值不影响本次计数。</p>
-<h4 id="方式2（比率发生器）（软硬件启动）"><a href="#方式2（比率发生器）（软硬件启动）" class="headerlink" title="方式2（比率发生器）（软硬件启动）"></a>方式2（比率发生器）（软硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103163509436.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后的下一个CLK脉冲，开始计数<br>计数值减到1时，OUT引脚输出低电平，维持一个Tclk，又<br>变为高电平，且计数初值自动重装，重新开始计数。<br>特点：自动重装计数初值<br>计数过程中，GATE引脚变低，暂停计数；GATE引脚出现上升沿，重新开始计数。——硬件启动<br>计数过程中写入新初值影响下次计数</p>
-<h4 id="方式3（方波发生器）（软硬件启动）"><a href="#方式3（方波发生器）（软硬件启动）" class="headerlink" title="方式3（方波发生器）（软硬件启动）"></a>方式3（方波发生器）（软硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103165017645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>//前N/2或(N+1)/2个CLK ，OUT为高//<br>//后N/2或(N-1)/2个CLK，OUT为低//<br>控制字写入后，OUT引脚输出高电平。<br>计数初值写入后的下一个CLK脉冲，开始计数<br>当计数到一半值时，OUT引脚输出变低，直至计数到0。OUT引脚输出高，计数初值自动重装，重新开始计数<br>特点：自动重装计数初值，输出方波信号<br>计数过程中，GATE引脚变低，暂停计数；GATE引脚出现上升沿，重新开始计数。——硬件启动<br>计数过程中写入新初值，影响下次计数</p>
-<h4 id="方式4（软件触发选通）（软件启动）"><a href="#方式4（软件触发选通）（软件启动）" class="headerlink" title="方式4（软件触发选通）（软件启动）"></a>方式4（软件触发选通）（软件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103165626580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后的下一个CLK脉冲，开始计数<br>计数值减到0时，OUT引脚输出低电平，维持一个TCLK，又变为高电平，计数停止<br>特点：计数初值不会自动重装<br>当GATE=1时，允许计数；GATE=0时，停止计数<br>计数过程中改变计数值，按新值重新开始计数</p>
-<h4 id="方式5（硬件触发选通）（硬件启动）"><a href="#方式5（硬件触发选通）（硬件启动）" class="headerlink" title="方式5（硬件触发选通）（硬件启动）"></a>方式5（硬件触发选通）（硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103165918765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后，待GATE引脚出现上升沿后，从下一个CLK脉冲开始计数<br>计数值减到0时，OUT引脚输出低电平，维持一个TCLK，又变为高电平，计数停止<br>特点：计数初值不会自动重装<br>计数过程中，若改变计数初值，仅当GATE上升沿才按新计数值重新开始计数<br>计数过程中出现GATE上升沿，重新开始计数</p>
-<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p><img src="https://img-blog.csdnimg.cn/20190103170039435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="方式对比"><br><img src="https://img-blog.csdnimg.cn/20190103170111450.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="门控信号"></p>
-<h2 id="初始化编程"><a href="#初始化编程" class="headerlink" title="初始化编程"></a>初始化编程</h2><p>先写控制字，再送计数初值<br>计数初值一次只能写入8位（先写低8位，后写高8位（可不写））<br>控制字写入控制口，每个计数器的计数初值写入各自计数器口<br>写入的顺序：按通道序号分别写入，按内容分别写入</p>
-<h3 id="8253方式控制字"><a href="#8253方式控制字" class="headerlink" title="8253方式控制字"></a>8253方式控制字</h3><p><img src="https://img-blog.csdnimg.cn/20190103204356783.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="方式控制字"></p>
+            <p>
+              引脚双列直插，24根引脚
 
+引脚功能数据端口D7～D0：8位三态双向缓冲器接收CPU送来的数据(计数值)和控制信息(控制字)。高阻态：隔离芯片与系统总线。连接系统数据总线
+读/写控制逻辑~CS：片选信号输入引脚，低电平有效~RD：读信号输入引脚，低电平有效~WR：写信号输入引脚，低电平有效A1、A0
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/微机原理笔记3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -817,41 +791,21 @@
       
         
           
-            <h2 id="引脚"><a href="#引脚" class="headerlink" title="引脚"></a>引脚</h2><p>双列直插，40根引脚<br><img src="https://img-blog.csdnimg.cn/20190103100935210.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="引脚功能"></p>
-<h3 id="引脚功能"><a href="#引脚功能" class="headerlink" title="引脚功能"></a>引脚功能</h3><h4 id="数据端口"><a href="#数据端口" class="headerlink" title="数据端口"></a>数据端口</h4><p>8位数据端口：A口、B口、C口<br>A口：PA7~PA0<br>B口：PB7~PB0<br>C口：PC7~PC0<br>连接外部设备<br>A口与B口为一个8位的输入口或输出口<br>C口单独作为一个8位的输入口或输出口<br>配合A口和B口使用，作为控制信号和状态信号</p>
-<h4 id="A组和B组控制逻辑"><a href="#A组和B组控制逻辑" class="headerlink" title="A组和B组控制逻辑"></a>A组和B组控制逻辑</h4><p>A组：A口和C口的高4位；<br>B组：B口和C口的低4位。<br>控制寄存器：保存CPU送来的命令字。<br>决定A组和B组的工作方式<br>对C口的每一位执行置位/复位操作<br>根据命令字，向相关端口送出控制信号</p>
-<h4 id="数据总线缓冲器"><a href="#数据总线缓冲器" class="headerlink" title="数据总线缓冲器"></a>数据总线缓冲器</h4><p>D7~D0：8位三态双向缓冲器<br>连接系统数据总线<br>用于传输三类信息<br>CPU送来的数据和控制信息(命令字)<br>外设送来的数据和状态信息U<br>高阻态：隔离芯片与系统总线</p>
-<h4 id="读-写控制逻辑"><a href="#读-写控制逻辑" class="headerlink" title="读/写控制逻辑"></a>读/写控制逻辑</h4><p>CS：片选信号输入引脚，低电平有效<br>~RD：读信号输入引脚，低电平有效<br>~WR：写信号输入引脚，低电平有效<br>~RESET：复位信号输入引脚，高电平有效。用于将8255A控制字寄存器清“0”，并将A、B、C口置成输入状态<br>A1、A0：端口选择信号输入引脚<br><img src="https://img-blog.csdnimg.cn/20190103102812616.png" alt=""><br>8255A的端口操作<br><img src="https://img-blog.csdnimg.cn/20190103102921320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="8255A的端口操作"></p>
-<h4 id="其余引脚"><a href="#其余引脚" class="headerlink" title="其余引脚"></a>其余引脚</h4><p>VCC接电源，GND接地</p>
-<h4 id="8255A与微机系统的连接"><a href="#8255A与微机系统的连接" class="headerlink" title="8255A与微机系统的连接"></a>8255A与微机系统的连接</h4><p>8位数据总线的系统中，A1与A0与地址总线的A1与A0相连。<br>16位数据总线的系统中，A1与A0与地址总线的A2，A1相连，当数据线D7~D0连接到cpu数据总线的低8位，以偶地址来寻址，连接到cpu数据总线的高8位，以奇地址来寻址。</p>
-<h2 id="工作方式"><a href="#工作方式" class="headerlink" title="工作方式"></a>工作方式</h2><h3 id="方式0（基本输入-输出方式）"><a href="#方式0（基本输入-输出方式）" class="headerlink" title="方式0（基本输入/输出方式）"></a>方式0（基本输入/输出方式）</h3><p>A口、B口和C口：三个独立的8位输入或输出数据口。<br>C口：可分为两个独立的4位输入或输出数据口。<br>输出时有锁存能力，输入时无锁存能力。</p>
-<h4 id="基本输入方式"><a href="#基本输入方式" class="headerlink" title="基本输入方式"></a>基本输入方式</h4><p><img src="https://img-blog.csdnimg.cn/20190103105254850.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="基本输入方式"><br>外设将数据送到8255A输入缓冲器<br>CPU给出有效的8255A地址及控制信号<br>CPU发读命令，将输入缓冲器中的数据读入AL寄存器中</p>
-<h4 id="基本输出方式"><a href="#基本输出方式" class="headerlink" title="基本输出方式"></a>基本输出方式</h4><p><img src="https://img-blog.csdnimg.cn/2019010310532819.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="基本输出方式"><br>CPU给出有效的8255A地址及控制信号。<br>CPU发写命令，将AL寄存器中的数据写入输出锁存器。<br>适合于无条件输入输出方式。</p>
-<h3 id="方式1（选通输入-输出方式）"><a href="#方式1（选通输入-输出方式）" class="headerlink" title="方式1（选通输入/输出方式）"></a>方式1（选通输入/输出方式）</h3><p>CPU发写命令，将AL寄存器中的数据写入输出锁存器。<br>C口分成两部分：其中6位用作A口和B口的选通控制信号(联络信号)，剩余2位可工作于方式0。<br>当A口用于方式1时，C口的PC3，PC4，PC5用于A口的状态和控制线，B口用于方式1时，C口的PC0，PC1，PC2用于B口的状态和控制线。<br>C口剩余的PC6与PC7由方式选择控制字中的D3位来定义其传送方向，D3=1时，其用于输入，D3=0时，其用于输出。<br>输入和输出口都有锁存能力。<br>适合于中断控制方式下的输入和输出。</p>
-<h4 id="选通输入方式"><a href="#选通输入方式" class="headerlink" title="选通输入方式"></a>选通输入方式</h4><p><img src="https://img-blog.csdnimg.cn/20190103111024876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="选通输入方式"><br>选通信号~STB：由外设输入，低电平有效，将外设的数据送入输入缓冲器，对应A口时为PC4，对应B口时为PC2。</p>
-<p>输入缓冲器满信号IBF：输出到外设，高电平有效，通知外设暂时不要送新的数据，由~STB的前沿产生，CPU取走数据后被清除，对应A口为PC5，对应B口为PC1。</p>
-<p>中断允许信号INTE：无外部引脚，通过软件设置，控制8255A能否向CPU发中断请求信号。1：允许；0：禁止；给8255A控制字寄存器送C口PC4(或PC2)位的置位/复位字实现，对应A口时为PC3，对应B口时为PC0。</p>
-<h4 id="选通输出方式"><a href="#选通输出方式" class="headerlink" title="选通输出方式"></a>选通输出方式</h4><p><img src="https://img-blog.csdnimg.cn/2019010311111540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="选通输出方式"><br>输出缓冲器满信号~OBF：输出到外设，低电平有效，通知外设取走数据。</p>
-<p>外设应答信号~ACK:由外设输入，低电平有效，表示外设已从数据端口取走数据。</p>
-<p>中断允许信号INTE：无外部引脚，通过软件设置，控制8255A能否向CPU发中断请求信号。1：允许；0：禁止；给8255A控制字寄存器送C口PC6(或PC2)位的置位/复位字实现。</p>
-<p>中断请求信号INTR：输出到CPU，高电平有效，~OBF ~ACK和INTE有效时产生，表明外设已收到数据。</p>
-<h3 id="方式2（双向选通传送方式）"><a href="#方式2（双向选通传送方式）" class="headerlink" title="方式2（双向选通传送方式）"></a>方式2（双向选通传送方式）</h3><p>双向方式：既能用作输入口，同时又能用作输出口。只有A口可工作在方式2下。占用C口的5位作为选通控制信号（联络信号）<br>适用场合：中断控制方式下的输入和输出，查询方式与CPU联系。<br><img src="https://img-blog.csdnimg.cn/20190103145836563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="双向选通传送方式"><br>选通信号~STB：由外设输入，低电平有效，将外设的数据送入输入缓冲器</p>
-<p>输入缓冲器满信号IBF：输出到外设，高电平有效，通知外设暂时不要送新的数据，由~STB的前沿产生。CPU取走数据后被清除。</p>
-<p>输出缓冲器满信号OBF：输出到外设，低电平有效，通知外设取走数据。</p>
-<p>外设应答信号ACK：由外设输入，低电平有效，表示外设已从端口取走数据。</p>
-<p>中断允许信号INTE：无外部引脚，由软件设置，控制8255A能否向CPU发中断请求信号。1:允许；0:禁止；给8255A控制字寄存器送C口PC4位的置位/复位字实现。</p>
-<p>中断请求信号INTR：输出到CPU，高电平有效，输入时由~STB的后沿产生，输出时由 ~ACK上升沿产生</p>
-<h3 id="三个数据端口，三种工作方式"><a href="#三个数据端口，三种工作方式" class="headerlink" title="三个数据端口，三种工作方式"></a>三个数据端口，三种工作方式</h3><p>A口可工作于方式0、方式1和方式2中的任一种<br>B口可工作于方式0和方式1，但不能工作于方式2<br>C口只能工作于方式0</p>
-<h3 id="C口状态字"><a href="#C口状态字" class="headerlink" title="C口状态字"></a>C口状态字</h3><p>通过IN指令读取C口的状态字，查询A口和B口在方式1和方式2时的状态<br><strong>C口状态字 ≠ C口作为联络信号时输入的状态</strong></p>
-<h4 id="A口和B口均工作在方式1的输入"><a href="#A口和B口均工作在方式1的输入" class="headerlink" title="A口和B口均工作在方式1的输入"></a>A口和B口均工作在方式1的输入</h4><p><img src="https://img-blog.csdnimg.cn/20190103151246218.png" alt="A口和B口均工作在方式1的输入"></p>
-<h4 id="A口和B口均工作在方式1的输出"><a href="#A口和B口均工作在方式1的输出" class="headerlink" title="A口和B口均工作在方式1的输出"></a>A口和B口均工作在方式1的输出</h4><p><img src="https://img-blog.csdnimg.cn/20190103151346946.png" alt=" A口和B口均工作在方式1的输出"></p>
-<h4 id="A口工作在方式2"><a href="#A口工作在方式2" class="headerlink" title="A口工作在方式2"></a>A口工作在方式2</h4><p><img src="https://img-blog.csdnimg.cn/20190103151436628.png" alt="A口工作在方式2"></p>
-<h2 id="控制字"><a href="#控制字" class="headerlink" title="控制字"></a>控制字</h2><h3 id="方式选择控制字"><a href="#方式选择控制字" class="headerlink" title="方式选择控制字"></a>方式选择控制字</h3><p>定义三个数据端口的工作方式<br><img src="https://img-blog.csdnimg.cn/20190103151954578.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="方式选择控制字"></p>
-<p><strong>C口的某些位作为A口和B口选通（联络）信号时，不受方式选择控制字的D0和D3控制</strong></p>
-<h3 id="C口置位-复位控制字"><a href="#C口置位-复位控制字" class="headerlink" title="C口置位/复位控制字"></a>C口置位/复位控制字</h3><p>对C端口任意一位进行置位或复位操作<br><img src="https://img-blog.csdnimg.cn/20190103152214556.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="C口置位/复位控制字"></p>
-<p>使用时与方式选择控制字写入同一控制端口。</p>
-
+            <p>
+              引脚双列直插，40根引脚
+引脚功能数据端口8位数据端口：A口、B口、C口A口：PA7~PA0B口：PB7~PB0C口：PC7~PC0连接外部设备A口与B口为一个8位的输入口或输出口C口单独作为一个8位的输入口或输出口配合A口和B口使用，作为控制信号和状态信号
+A组和B组控制逻辑A组：A口和C口的高4
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/微机原理笔记2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1010,25 +964,20 @@
       
         
           
-            <h2 id="引脚"><a href="#引脚" class="headerlink" title="引脚"></a>引脚</h2><p>28根引脚，双列直插式封装<br><img src="https://img-blog.csdnimg.cn/20190102162138197.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="引脚图"></p>
-<h3 id="引脚功能"><a href="#引脚功能" class="headerlink" title="引脚功能"></a>引脚功能</h3><p>D7~D0：数据总线，与cpu数据总线连接，实现与cpu的数据交换。<br>IR7~IR0：八级中断请求信号输入引脚。<br>INT：中断请求信号输出引脚，接CPU的INTR引脚。<br>~INTA：中断应答信号输入引脚，接CPU的INTA引脚。<br>~WD ~RD：读/写控制信号输入引脚。<br>~CS：片选信号输入引脚，用以确定8259A端口地址。<br>A0：内部寄存器的选择信号输入引脚。<br>CAS2～CAS0：级联信号引脚，主片时输出，从片时输入。<br>~SP ~EN：从设备编程/缓冲器允许引脚。<br>非缓冲方式：~SP有效，输入引脚。单片接高电平；级联主片接高电平，从片接低电平。<br>缓冲方式：~EN有效，输出引脚。控制总线缓冲器的接收和发送。<br>VCC、GND：电源和接地引脚。</p>
-<h3 id="相关寄存器"><a href="#相关寄存器" class="headerlink" title="相关寄存器"></a>相关寄存器</h3><h4 id="中断请求寄存器IRR"><a href="#中断请求寄存器IRR" class="headerlink" title="中断请求寄存器IRR"></a>中断请求寄存器IRR</h4><p>8位锁存器，保存中断请求信号IR0～IR7。<br>收到请求信号时，将IRR对应位置“1”。<br>中断请求产生方式：边沿触发和电平触发。<br>边沿触发方式：中断请求输入端IRi出现正跳变。<br>电平触发方式：中断请求输入端IRi的高电平信号。<br>响应中断后，高电平信号应及时撤销。</p>
-<h4 id="中断服务寄存器ISR"><a href="#中断服务寄存器ISR" class="headerlink" title="中断服务寄存器ISR"></a>中断服务寄存器ISR</h4><p>8位寄存器，保存当前正在被服务的中断请求。<br>第一个INTA周期，将ISR对应位置“l”，同时将对应的<br>IRR位复位。<br>ISR的复位由8259A中断结束方式决定。<br>自动结束方式（硬件）：由CPU在第二个INTA周期后沿将其复位。<br>非自动结束方式（软件）：由CPU发送的中断结束命令将其复位。</p>
-<h4 id="中断屏蔽寄存器IMR"><a href="#中断屏蔽寄存器IMR" class="headerlink" title="中断屏蔽寄存器IMR"></a>中断屏蔽寄存器IMR</h4><p>8位寄存器，保存要屏蔽的中断请求。<br>“1”表示屏蔽中断请求；“0”表示开放。</p>
-<h2 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h2><h3 id="初始化控制字"><a href="#初始化控制字" class="headerlink" title="初始化控制字"></a>初始化控制字</h3><h4 id="芯片控制初始化命令字ICW1"><a href="#芯片控制初始化命令字ICW1" class="headerlink" title="芯片控制初始化命令字ICW1"></a>芯片控制初始化命令字ICW1</h4><p><img src="https://img-blog.csdnimg.cn/20190102192821785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="芯片控制初始化命令字ICW1"></p>
-<h4 id="中断类型初始化命令字ICW2"><a href="#中断类型初始化命令字ICW2" class="headerlink" title="中断类型初始化命令字ICW2"></a>中断类型初始化命令字ICW2</h4><p><img src="https://img-blog.csdnimg.cn/20190102192922932.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="中断类型初始化命令字ICW2"></p>
-<h4 id="主-从片初始化命令字ICW3"><a href="#主-从片初始化命令字ICW3" class="headerlink" title="主/从片初始化命令字ICW3"></a>主/从片初始化命令字ICW3</h4><p><img src="https://img-blog.csdnimg.cn/20190102193015855.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="主/从片初始化命令字ICW3"></p>
-<h4 id="方式控制初始化控制字ICW4"><a href="#方式控制初始化控制字ICW4" class="headerlink" title="方式控制初始化控制字ICW4"></a>方式控制初始化控制字ICW4</h4><p><img src="https://img-blog.csdnimg.cn/20190102193043895.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="方式控制初始化控制字ICW4"></p>
-<h3 id="操作命令字"><a href="#操作命令字" class="headerlink" title="操作命令字"></a>操作命令字</h3><h4 id="屏蔽操作命令字OCW1"><a href="#屏蔽操作命令字OCW1" class="headerlink" title="屏蔽操作命令字OCW1"></a>屏蔽操作命令字OCW1</h4><p><img src="https://img-blog.csdnimg.cn/2019010219341510.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="屏蔽操作命令字OCW1"></p>
-<h4 id="中断方式操作命令字OCW2"><a href="#中断方式操作命令字OCW2" class="headerlink" title="中断方式操作命令字OCW2"></a>中断方式操作命令字OCW2</h4><p><img src="https://img-blog.csdnimg.cn/20190102193506237.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="中断方式操作命令字OCW2"></p>
-<p><img src="https://img-blog.csdnimg.cn/20190102193624417.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="中断方式操作命令字OCW2"></p>
-<h4 id="状态操作命令字OCW3"><a href="#状态操作命令字OCW3" class="headerlink" title="状态操作命令字OCW3"></a>状态操作命令字OCW3</h4><p><img src="https://img-blog.csdnimg.cn/20190102193726861.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="状态操作命令字OCW3"><br>在读IMR时直接向奇地址中取值，因为其直接由OCW1写入且为奇地址</p>
-<h3 id="8259A端口分配及操作功能"><a href="#8259A端口分配及操作功能" class="headerlink" title="8259A端口分配及操作功能"></a>8259A端口分配及操作功能</h3><p><img src="https://img-blog.csdnimg.cn/20190102193825108.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="8259A端口分配及操作功能"></p>
-<h3 id="初始化顺序"><a href="#初始化顺序" class="headerlink" title="初始化顺序"></a>初始化顺序</h3><p><img src="https://img-blog.csdnimg.cn/20190102194342819.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="初始化顺序"></p>
-<h3 id="同一端口如何区分ICW和OCW"><a href="#同一端口如何区分ICW和OCW" class="headerlink" title="同一端口如何区分ICW和OCW"></a>同一端口如何区分ICW和OCW</h3><h4 id="A0奇偶地址位区分"><a href="#A0奇偶地址位区分" class="headerlink" title="A0奇偶地址位区分"></a>A0奇偶地址位区分</h4><p>ICW1必须写入偶地址端口（A0=0）<br>ICW2必须写入奇地址端口（A0=1）<br>ICW3只有在ICW1中的SNGL=0即级联时写入<br>ICW4只有在ICW1中IC4=1时才写入<br>OCW1写入偶地址端口，2、3写入奇地址端口<br>ICW写完后继续进入OCW1、2、3（根据奇偶地址来区分）</p>
-<h4 id="标志位区分"><a href="#标志位区分" class="headerlink" title="标志位区分"></a>标志位区分</h4><p>ICW4的D7到D5为0为其标志位<br>D4、D3位为00时为OCW2，为01时为OCW3（注意标志位）</p>
-
+            <p>
+              引脚28根引脚，双列直插式封装
+引脚功能D7~D0：数据总线，与cpu数据总线连接，实现与cpu的数据交换。IR7~IR0：八级中断请求信号输入引脚。INT：中断请求信号输出引脚，接CPU的INTR引脚。~INTA：中断应答信号输入引脚，接CPU的INTA引脚。~WD ~RD：读/写控制信号输入引脚
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/微机原理笔记1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1187,46 +1136,24 @@
       
         
           
-            <h2 id="数据依赖"><a href="#数据依赖" class="headerlink" title="数据依赖"></a>数据依赖</h2><p>数据依赖是一种特殊的约束，定义属性值间的相互关连（主要体现于值的相等与否）。<br><strong>描述：</strong></p>
-<ol>
-<li>是一个关系内部属性与属性之间的约束关系</li>
-<li>是现实世界属性间相互联系的抽象</li>
-<li>是数据内在的性质</li>
-<li>是<strong>语义</strong>的体现<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3>函数依赖、多值依赖、连接依赖、包含依赖等<h4 id="函数依赖"><a href="#函数依赖" class="headerlink" title="函数依赖"></a>函数依赖</h4>设R(U)是一个属性集U上的关系模式，X和Y是U的子集。   若对于R(U)的任意一个可能的关系r，r中不可能存在两个元组在X上的属性值相等，而在Y上的属性值不等， 则称 “X函数确定Y”   或  “Y函数依赖于X”，记作X → Y。  （X为决定因素）<br><strong>描述：</strong></li>
-<li>所有关系实例均要满足</li>
-<li>是语义范畴的概念</li>
-<li>是数据库设计者可以对现实世界作强制的规定</li>
-</ol>
-<p><strong>特殊的有：</strong></p>
-<h5 id="平凡、非平凡的函数依赖"><a href="#平凡、非平凡的函数依赖" class="headerlink" title="平凡、非平凡的函数依赖"></a>平凡、非平凡的函数依赖</h5><p>若X包含Y则有X → Y为平凡的函数依赖，否则则为非平凡的函数依赖</p>
-<h5 id="完全、部分的函数依赖"><a href="#完全、部分的函数依赖" class="headerlink" title="完全、部分的函数依赖"></a>完全、部分的函数依赖</h5><p>若X与Y有X → Y的函数依赖，但是X的任意<strong>真子集</strong>X’对Y均没有X’ → Y，则为Y对X的完全函数依赖，否则为部分函数依赖</p>
-<h5 id="传递的函数依赖"><a href="#传递的函数依赖" class="headerlink" title="传递的函数依赖"></a>传递的函数依赖</h5><p>若X与Y有X → Y的函数依赖，Y与Z有Y → Z的函数依赖，且Z不包含于Y，Y不包含于X且有X与Z的X → Z的函数依赖，则称为Z对X的传递依赖。</p>
-<h4 id="多值依赖"><a href="#多值依赖" class="headerlink" title="多值依赖"></a>多值依赖</h4><p>设R(U)是一个属性集U上的一个关系模式， X、 Y和Z是U的子集，并且Z＝U－X－Y。关系模式R(U)中多值依赖 X →→Y 成立，当且仅当对R(U)的任一关系r，给定的一对（x，z）值，有一组Y的值，这组值仅由x值决定，而与z值无关。</p>
-<h5 id="平凡、非平凡的多值依赖"><a href="#平凡、非平凡的多值依赖" class="headerlink" title="平凡、非平凡的多值依赖"></a>平凡、非平凡的多值依赖</h5><p>若X→→Y，而Z为空，则称 X→→Y 为平凡的多值依赖（函数依赖）；否则称 X→→Y为非平凡的多值依赖。</p>
-<h5 id="多值依赖的性质"><a href="#多值依赖的性质" class="headerlink" title="多值依赖的性质"></a>多值依赖的性质</h5><ol>
-<li>对称性     若X→→Y，则X→→Z，其中Z＝U－X－Y</li>
-<li>传递性     若X→→Y，Y→→Z， 则X→→Z –Y</li>
-<li>函数依赖是多值依赖的特殊情况     若X→Y，则X→→Y。</li>
-<li>若X→→Y，X→→Z，则X→→Y交Z。</li>
-<li>若X→→Y，X→→Z，则X→→Y并Z。</li>
-<li>若X→→Y，X→→Z，则X→→Y差Z，X→→Z -Y</li>
-</ol>
-<h3 id="对关系模式的影响"><a href="#对关系模式的影响" class="headerlink" title="对关系模式的影响"></a>对关系模式的影响</h3><p>不当的数据依赖会导致数据冗余、操作（增、删、改）异常。<br>通过分解关系模式可以消除其中不合适的数据依赖。</p>
-<h2 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h2><p>规范化（理论）是用来改造关系模式，通过分解关系模式来消除其中不合适的数据依赖，以解决插入异常、删除异常、更新异常和数据冗余问题。</p>
-<h3 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h3><p>范式是符合某一种级别的关系模式的集合。<br>关系数据库中的关系必须满足一定的要求。满足不同程度要求的为不同范式。</p>
-<h4 id="范式种类"><a href="#范式种类" class="headerlink" title="范式种类"></a>范式种类</h4><p>第一范式(1NF)、第二范式(2NF)、第三范式(3NF)、BC范式(BCNF)、第四范式(4NF)等。</p>
-<h4 id="码"><a href="#码" class="headerlink" title="码"></a>码</h4><p>以函数依赖的概念来定义码：<br>主码和候选码均成为码，根据语义判断</p>
-<h4 id="第一范式（1NF）–-关系模式的基本要求"><a href="#第一范式（1NF）–-关系模式的基本要求" class="headerlink" title="第一范式（1NF）–  关系模式的基本要求"></a>第一范式（1NF）–  关系模式的基本要求</h4><p>如果一个关系模式R的所有属性都是不可分的基本数据项，则R∈1NF。<br>缺点：存在非主属性对码的部分函数依赖！</p>
-<h4 id="第二范式（2NF）"><a href="#第二范式（2NF）" class="headerlink" title="第二范式（2NF）"></a>第二范式（2NF）</h4><p>若R∈1NF，且每一个非主属性完全函数依赖于码，则R∈2NF。<br>缺点：存在非主属性(dmanager)对码的传递函数依赖！</p>
-<h4 id="第三范式（3NF）"><a href="#第三范式（3NF）" class="headerlink" title="第三范式（3NF）"></a>第三范式（3NF）</h4><p>关系模式R&lt;U，F&gt; 中若不存在这样的码X、属性组Y及非主属性Z（Z 不包含于Y）, 使得X→Y，Y→Z成立，Y → X，则称R&lt;U，F&gt; ∈ 3NF。即每一个非主属性既不部分依赖于码也不传递依赖于码。<br>缺点：主属性存在对码的部分或传递依赖！</p>
-<h4 id="BC范式（BCNF）"><a href="#BC范式（BCNF）" class="headerlink" title="BC范式（BCNF）"></a>BC范式（BCNF）</h4><p>关系模式R&lt;U，F&gt;∈1NF，若X→Y且Y 不包含于X时，X必含有码，则R&lt;U，F&gt; ∈BCNF<br><strong>特点：</strong></p>
-<ol>
-<li>所有非主属性对每一个码都是完全函数依赖；</li>
-<li>所有的主属性对每一个不包含它的码，也是完全函数依赖；</li>
-<li>没有任何属性完全函数依赖于非码的任何一组属性<h4 id="第四范式4NF"><a href="#第四范式4NF" class="headerlink" title="第四范式4NF*"></a>第四范式4NF*</h4>关系模式R&lt;U，F&gt;∈1NF，如果对于R的每个非平凡多值依赖X→→Y（Y不包含于X），X都含有码，则R∈4NF。<br>即不允许有非平凡且非函数依赖的多值依赖，允许的非平凡多值依赖必须存在对应的函数依赖<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><img src="https://img-blog.csdnimg.cn/20190106113255375.png" alt="总结"><h2 id="关系模式的分解"><a href="#关系模式的分解" class="headerlink" title="关系模式的分解"></a>关系模式的分解</h2>目的：使模式更加规范化，减少乃至消除数据冗余和更新异常。<br>原则：无损连接、保持依赖<br>无损连接保证数据等价原则，保证不丢失信息，但不一定能解决操作异常和数据冗余等问题。<br>保持函数依赖反映了分解的依赖等价原则。依赖等价保证了分解后的模式与原有的模式在语义上的一致性。<h3 id="模式分解的两个规则（分解为第2、第3范式）"><a href="#模式分解的两个规则（分解为第2、第3范式）" class="headerlink" title="模式分解的两个规则（分解为第2、第3范式）"></a>模式分解的两个规则（分解为第2、第3范式）</h3><h4 id="公共属性共享"><a href="#公共属性共享" class="headerlink" title="公共属性共享"></a>公共属性共享</h4>保留公共属性，进行自然连接是分解后的模式实现无损连接的必要条件。<br>若存在部分依赖，决定因素的真子集为公共属性。将模式分解成部分依赖和完全依赖两个子模式。<br>若存在传递依赖，则传递链的中间属性为公共属性，将链断开，分解成两个模式（保持了两个基本依赖）。<h4 id="相关属性合一"><a href="#相关属性合一" class="headerlink" title="相关属性合一"></a>相关属性合一</h4><strong>将以函数依赖形式联系在一起的相关属性放在一个模式中</strong>，从而使原有的函数依赖得以保持。这是分解后的模式实现保持依赖的的充分条件。<br><strong>对于存在部分依赖或传递依赖的相关属性则不应放在一个模式中</strong>，因为这正是导致数据冗余和更新异常的根源，也正是模式分解所要解决的问题。</li>
-</ol>
+            <p>
+              数据依赖数据依赖是一种特殊的约束，定义属性值间的相互关连（主要体现于值的相等与否）。描述：
 
+是一个关系内部属性与属性之间的约束关系
+是现实世界属性间相互联系的抽象
+是数据内在的性质
+是语义的体现分类函数依赖、多值依赖、连接依赖、包含依赖等函数依赖设R(U)是一个属性集U上的关系模式，X和Y是U的子
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/数据库复习笔记4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1385,32 +1312,22 @@
       
         
           
-            <h2 id="基本构件"><a href="#基本构件" class="headerlink" title="基本构件"></a>基本构件</h2><p>实体和联系是E-R图的两个基本构件</p>
-<h3 id="实体"><a href="#实体" class="headerlink" title="实体"></a>实体</h3><p>现实世界中客观存在且可以相互区分的事物。可以是具体的事务，也可以是抽象的概念</p>
-<h3 id="联系"><a href="#联系" class="headerlink" title="联系"></a>联系</h3><p>现实世界中的事物内部以及事物之间存在一定的关系，E-R模型中的联系是<strong>对这种关系的抽象</strong>。</p>
-<h2 id="E-R图"><a href="#E-R图" class="headerlink" title="E-R图"></a>E-R图</h2><h3 id="实体-1"><a href="#实体-1" class="headerlink" title="实体"></a>实体</h3><p>实体是E-R图的基本构件，用于描述数据库所记录的内容。可以表示现实世界中的众多概念。<br>实体在E-R图中用矩形表示，矩形框内标注实体名称。<br><img src="https://img-blog.csdnimg.cn/20190105181510590.png" alt="例子"><br><strong>每个实体包含多个实体实例/实体成员。实体成员不需要表示在E-R图中，但会被记录到该E-R图所创建的数据库中。</strong></p>
-<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>每个实体都有属性，实体的一个属性描述该实体的一种特征。实体的属性表示每个实体需要记录的细节。</p>
-<h4 id="唯一属性"><a href="#唯一属性" class="headerlink" title="唯一属性"></a>唯一属性</h4><p>唯一属性是指可以唯一标识实体实例的属性。唯一属性都带下划线。<br><img src="https://img-blog.csdnimg.cn/20190105181626488.png" alt="例子"></p>
-<h4 id="复合属性"><a href="#复合属性" class="headerlink" title="复合属性"></a>复合属性</h4><p>复合属性是若干属性的组合。用带括号的属性名表示。<br><img src="https://img-blog.csdnimg.cn/20190105181654713.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="例子"></p>
-<h4 id="复合的唯一属性"><a href="#复合的唯一属性" class="headerlink" title="复合的唯一属性"></a>复合的唯一属性</h4><p>某些单个属性不能唯一标识实体，但是组合在一起可以作为唯一属性。<br><img src="https://img-blog.csdnimg.cn/20190105181905250.png" alt="例子"></p>
-<h4 id="多个唯一属性（候选码）"><a href="#多个唯一属性（候选码）" class="headerlink" title="多个唯一属性（候选码）"></a>多个唯一属性（候选码）</h4><p>当实体同时拥有多个唯一属性时，每个唯一属性是一个候选码。<br><img src="https://img-blog.csdnimg.cn/20190105181939868.png" alt="例子"></p>
-<h4 id="多值属性"><a href="#多值属性" class="headerlink" title="多值属性"></a>多值属性</h4><p>多值属性用于实体属性有多个不同取值的情况，用双线椭圆表示<br><img src="https://img-blog.csdnimg.cn/20190105182021404.png" alt="例子"></p>
-<h4 id="派生属性"><a href="#派生属性" class="headerlink" title="派生属性"></a>派生属性</h4><p>派生属性<strong>属于非永久性存储于数据库中的属性</strong>。派生属性的值可以其他属性值或数据（如当前日期）派生出来。派生属性用虚线椭圆表示。<br><img src="https://img-blog.csdnimg.cn/20190105182110174.png" alt="例子"></p>
-<h4 id="可选属性"><a href="#可选属性" class="headerlink" title="可选属性"></a>可选属性</h4><p>对于每一个实例，实体的大部分属性都有相应的取值，但也有的属性可能没有值，这些属性就是可选属性。可选属性用属性名加上大写O表示。<br><img src="https://img-blog.csdnimg.cn/20190105182140289.png" alt="例子"></p>
-<h3 id="联系-1"><a href="#联系-1" class="headerlink" title="联系"></a>联系</h3><p>E-R图中每个实体必须通过联系至少与一个其他实体相关联。E-R图中的联系用菱形表示。<br><img src="https://img-blog.csdnimg.cn/2019010518225925.png" alt="例子"></p>
-<h4 id="基数约束"><a href="#基数约束" class="headerlink" title="基数约束"></a>基数约束</h4><p>用于表示该实体可以有多少实例与另一实体的实例存在联系（数量约束）<br><strong>最大基数</strong>：靠近实体一端的基数约束部分；<br><strong>最小基数</strong>：远离实体一端的基数约束部分。<br><img src="https://img-blog.csdnimg.cn/20190105182639502.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="例子"></p>
-<h4 id="联系类型（最大基数侧）"><a href="#联系类型（最大基数侧）" class="headerlink" title="联系类型（最大基数侧）"></a>联系类型（最大基数侧）</h4><p>联系两侧的最大基数约束可为一个或多个<br><img src="https://img-blog.csdnimg.cn/2019010518283192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="例子"></p>
-<h4 id="联系实例"><a href="#联系实例" class="headerlink" title="联系实例"></a>联系实例</h4><p><img src="https://img-blog.csdnimg.cn/20190105182921315.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="例子"></p>
-<h4 id="联系属性"><a href="#联系属性" class="headerlink" title="联系属性"></a>联系属性</h4><p>多对多联系有自己的属性，这些属性就是联系属性<br>一对一与一对多联系若存在属性，该属性可以转化为在该联系中最大基数为1的实体属性（不必要）</p>
-<h4 id="联系的度"><a href="#联系的度" class="headerlink" title="联系的度"></a>联系的度</h4><p>联系的度表示有多少个实体参与到该联系中</p>
-<ol>
-<li>一元联系（同一个实体的成员之间的联系）</li>
-<li>二元联系（两个实体之间的联系）</li>
-<li>多元联系（两个以上实体之间的联系）<h3 id="弱实体、强实体"><a href="#弱实体、强实体" class="headerlink" title="弱实体、强实体"></a>弱实体、强实体</h3>没有唯一属性的实体。用双框矩形表示<br>具有唯一属性的实体则是强实体</li>
-</ol>
-<p><strong>弱实体必须与另一个称为标识实体或属主实体的实体通过标识性联系（用双框菱形表示）关联才有意义。即弱实体存在依赖于标识实体（标识实体拥有它所标识的弱实体）。</strong><br><img src="https://img-blog.csdnimg.cn/20190106003352958.png" alt="例子"><br>例如，公寓编号在同一个建筑物内是唯一的，该属性称为部分码，用下划虚线表示。<br>部分码与属主实体的唯一属性的组合可以唯一标识弱实体的每个实例。如上例中：建筑物ID+公寓编号。</p>
-
+            <p>
+              基本构件实体和联系是E-R图的两个基本构件
+实体现实世界中客观存在且可以相互区分的事物。可以是具体的事务，也可以是抽象的概念
+联系现实世界中的事物内部以及事物之间存在一定的关系，E-R模型中的联系是对这种关系的抽象。
+E-R图实体实体是E-R图的基本构件，用于描述数据库所记录的内容。可以表示现实世界
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/数据库复习笔记3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1569,24 +1486,21 @@
       
         
           
-            <h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>传统的集合运算<br>并(∪)、交(∩)、差(-)、笛卡尔积(×)<br>专门的关系运算<br>选择(σ)、投影(π)、连接、除(÷)<br><strong>基本的五种关系运算</strong><br>选择(σ)、投影(π)、并(∪)、差(-)、笛卡尔积(×)</p>
-<h2 id="传统的集合运算"><a href="#传统的集合运算" class="headerlink" title="传统的集合运算"></a>传统的集合运算</h2><h3 id="并运算（∪）"><a href="#并运算（∪）" class="headerlink" title="并运算（∪）"></a>并运算（∪）</h3><p>R∪S = { t|t 属于R∨t 属于S }</p>
-<h3 id="交运算（-∩-）"><a href="#交运算（-∩-）" class="headerlink" title="交运算（ ∩ ）"></a>交运算（ ∩ ）</h3><p>R∩S = { t|t 属于R∧t 属于S }</p>
-<h3 id="差运算（-）"><a href="#差运算（-）" class="headerlink" title="差运算（-）"></a>差运算（-）</h3><p>R -S = { t|t属于R∧t不属于S }</p>
-<h3 id="广义笛卡尔积（×）"><a href="#广义笛卡尔积（×）" class="headerlink" title="广义笛卡尔积（×）"></a>广义笛卡尔积（×）</h3><p>R×S  = { (tr,ts) |tr属于R ∧ ts属于S }</p>
-<h2 id="专门的关系运算"><a href="#专门的关系运算" class="headerlink" title="专门的关系运算"></a>专门的关系运算</h2><p>象集：用于表示关系中某一属性上取值固定后，诸元组在其余属性上的分量集合。</p>
-<h3 id="选择（σ）"><a href="#选择（σ）" class="headerlink" title="选择（σ）"></a>选择（σ）</h3><p>σF(R) = {t|t属于R∧F(t)= ‘真’}<br>F(t)为选择条件，即在关系R中选择满足给定条件的元组。<br>例σmno = ‘01’ (Student)表示查询Student表中，mno属性值为01的元组<br>属性还可以由其在表头中所在位置来表示<br>多个限制条件可以由∧符号连接</p>
-<h3 id="投影-π"><a href="#投影-π" class="headerlink" title="投影(π)"></a>投影(π)</h3><p> πA(R) = { t[A] | t 属于R }<br> A：R中的属性列<br> t[A]表示取出A属性的那一列或几列<br> 即从R中选择出若干属性列组成新的关系<br><strong>投影之后不仅取消了原关系中的某些列，而且还可能取消某些元组来避免重复行 (自动取消重复行！)
-</strong></p>
-<h3 id="连接（条件连接）"><a href="#连接（条件连接）" class="headerlink" title="连接（条件连接）"></a>连接（条件连接）</h3><p>从两个关系的笛卡尔积中选取属性间满足一定条件的元组。<br>选取的属性分别为两个关系上度数相等且可比的属性组</p>
-<h4 id="等值连接"><a href="#等值连接" class="headerlink" title="等值连接"></a>等值连接</h4><p> 选取等值的条件，令不同关系的中的某个属性值相同为条件进行连接，当条件不同时连接的结果也不相同，两个关系可以没有相同的属性列</p>
-<h4 id="自然连接（特殊的等值连接）"><a href="#自然连接（特殊的等值连接）" class="headerlink" title="自然连接（特殊的等值连接）"></a>自然连接（特殊的等值连接）</h4><p> 自然连接必须要有相同的属性列才能进行，以相同的属性作为等值条件，等值连接之后要去除相同的属性列</p>
-<h4 id="外连接"><a href="#外连接" class="headerlink" title="外连接"></a>外连接</h4><p>如果把舍弃的元组也保存在结果关系中，而在其他属性上填空值(Null)，这种连接就叫做外连接。</p>
-<h4 id="左外连接"><a href="#左外连接" class="headerlink" title="左外连接"></a>左外连接</h4><p> 如果只把左边关系R中要舍弃的元组保留就叫做左外连接。</p>
-<h4 id="右外连接"><a href="#右外连接" class="headerlink" title="右外连接"></a>右外连接</h4><p> 如果只把右边关系S中要舍弃的元组保留就叫做右外连接。</p>
-<h3 id="除（÷）"><a href="#除（÷）" class="headerlink" title="除（÷）"></a>除（÷）</h3><p>两个关系中的某个或某些属性出自相同的域集，记为A<br>除运算是将被除的关系中，除去这些属性A后对剩下的属性进行筛选，选出其取值所在的象集中包含有除数关系中对A的投影的部分。<br><img src="https://img-blog.csdnimg.cn/20190105175811223.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="例子"><br>在关系R中，A可以取四个值{a1，a2，a3，a4}<br>a1的象集为 {(b1，c2)，(b2，c3)，(b2，c1)}<br>a2的象集为 {(b3，c7)，(b2，c3)}<br>a3的象集为 {(b4，c6)}<br>a4的象集为 {(b6，c6)}<br>S在(B，C)上的投影为:<br>{(b1，c2)，(b2，c1)，(b2，c3) }<br>只有a1的象集包含了S在(B，C)属性组上的投影, 所以:<br>R ÷ S = { a1 } </p>
-
+            <p>
+              分类传统的集合运算并(∪)、交(∩)、差(-)、笛卡尔积(×)专门的关系运算选择(σ)、投影(π)、连接、除(÷)基本的五种关系运算选择(σ)、投影(π)、并(∪)、差(-)、笛卡尔积(×)
+传统的集合运算并运算（∪）R∪S = { t|t 属于R∨t 属于S }
+交运算（ ∩ ）R∩S = { t
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/数据库复习笔记2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1745,44 +1659,21 @@
       
         
           
-            <h2 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h2><p>现实世界的实体以及实体间的各种联系均用<strong>关系</strong>来表示，是一种<strong>单一的数据结构</strong><br>关系模型中数据的逻辑结构是一张<strong>二维表</strong><br><strong>建立在集合代数的基础上</strong> </p>
-<h3 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h3><h4 id="域"><a href="#域" class="headerlink" title="域"></a>域</h4><p>一组具有相同数据类型的值的集合</p>
-<h4 id="笛卡尔积"><a href="#笛卡尔积" class="headerlink" title="笛卡尔积"></a>笛卡尔积</h4><p>给定一组域D1，D2，…，Dn（域中可以有相同的）<br>笛卡尔积是所有域的所有取值的一个组合<br> D1，D2，…，Dn的笛卡尔积为：<br> D1×D2×…×Dn ＝｛(d1,d2,…,dn)｜di属于Di，i＝1,2,…,n｝<br> 其中的值不能重复</p>
-<h4 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h4><p> 笛卡尔积中每一个元素（d1，d2，…，dn）叫作一个n元组或元组</p>
-<h4 id="分量"><a href="#分量" class="headerlink" title="分量"></a>分量</h4><p> 笛卡尔积元素（d1，d2，…，dn）中的每一个值di</p>
-<h4 id="基数"><a href="#基数" class="headerlink" title="基数"></a>基数</h4><p> 一个域允许的不同取值的个数<br> D1×D2×…×Dn不同域之间的笛卡儿积的基数为各个基数的乘积</p>
-<h4 id="关系-1"><a href="#关系-1" class="headerlink" title="关系"></a>关系</h4><p> D1×D2×…×Dn的子集叫作在域D1,D2,…,Dn上的关系<br>表示为：R（D1，D2，…，Dn）<br>R：关系名<br>n：关系的目或度（属性的数目）<br>关系也是一个二维表，表的每行对应一个元组，表的每列对应一个域</p>
-<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><p>关系中每一列表示一个属性</p>
-<h4 id="码"><a href="#码" class="headerlink" title="码"></a>码</h4><h5 id="候选码"><a href="#候选码" class="headerlink" title="候选码"></a>候选码</h5><p>若关系中的某一属性组的值能唯一地标识一个元组，且没有多余属性，则称该属性组为候选码。</p>
-<h5 id="主码"><a href="#主码" class="headerlink" title="主码"></a>主码</h5><p>若一个关系有多个候选码，则选定其中一个为主码</p>
-<h5 id="全码"><a href="#全码" class="headerlink" title="全码"></a>全码</h5><p>所有属性组共同组成的候选码，称为全码</p>
-<h5 id="主属性"><a href="#主属性" class="headerlink" title="主属性"></a>主属性</h5><p>候选码的诸属性称为主属性</p>
-<h5 id="非主属性"><a href="#非主属性" class="headerlink" title="非主属性"></a>非主属性</h5><p>不包含在任何侯选码中的属性称为非主属性或非码属性</p>
-<h4 id="三类关系"><a href="#三类关系" class="headerlink" title="三类关系"></a>三类关系</h4><h5 id="基本关系"><a href="#基本关系" class="headerlink" title="基本关系"></a>基本关系</h5><p>实际存在的表，是实际存储数据的逻辑表示。</p>
-<h5 id="查询表"><a href="#查询表" class="headerlink" title="查询表"></a>查询表</h5><p>查询结果对应的表</p>
-<h5 id="视图表"><a href="#视图表" class="headerlink" title="视图表"></a>视图表</h5><p>由基本表或其他视图表导出的表，是虚表</p>
-<h4 id="基本关系的性质"><a href="#基本关系的性质" class="headerlink" title="基本关系的性质"></a>基本关系的性质</h4><ol>
-<li>列是同质的</li>
-<li>不同的列可出自同一个域</li>
-<li>列的顺序无所谓，列的次序可以任意交换</li>
-<li>行的顺序无所谓，行的次序可以任意交换</li>
-<li>任意两个元组的候选码不能相同</li>
-<li>分量必须取原子值，即每一个分量都必须是不可分的数据项<h2 id="关系模式"><a href="#关系模式" class="headerlink" title="关系模式"></a>关系模式</h2>关系模式是对关系的描述,包括：元组集合的结构(属性构成;属性来自的域 ;属性与域之间的映象关系)，元组语义以及完整性约束条件，属性间的数据依赖关系集合<h3 id="形象化表示"><a href="#形象化表示" class="headerlink" title="形象化表示"></a>形象化表示</h3>R（U，D，DOM，F）<br>R       关系名<br>U       组成该关系的属性名集合<br>D       属性组U中属性所来自的域<br>DOM  属性向域的映象集合<br>F        属性间的数据依赖关系集合<br>域名及属性向域的映象常常直接说明为属性的类型、长度<h3 id="简化形式"><a href="#简化形式" class="headerlink" title="简化形式"></a>简化形式</h3>R (U)    或    R (A1，A2，…，An)<br>R (U，F)<br>R: 关系名<br>A1，A2，…，An  : 属性名</li>
-</ol>
-<h2 id="关系模式与关系"><a href="#关系模式与关系" class="headerlink" title="关系模式与关系"></a>关系模式与关系</h2><p>关系模式是对关系的描述，静态的、稳定的。<br>关系是关系模式在某一时刻的状态或内容；动态的、随时间不断变化的<br><strong>（关系模式相当于表头，关系相当于表体）</strong><br>关系模式和关系往往统称为关系，通过上下文加以区别<br>关系数据库：在一个给定的应用领域中，所有关系的集合构成一个关系数据库<br><strong>关系数据库的型：关系模式<br>关系数据库的值：关系</strong></p>
-<h2 id="关系操作"><a href="#关系操作" class="headerlink" title="关系操作"></a>关系操作</h2><p>特点：集合操作方式，操作的对象和结果都是集合，一次一集合的方式</p>
-<h3 id="常用的关系操作"><a href="#常用的关系操作" class="headerlink" title="常用的关系操作"></a>常用的关系操作</h3><h4 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h4><p>选择、投影、连接、除、并、交、差、笛卡尔积共八种</p>
-<h4 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h4><p>插入、删除、修改</p>
-<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><p>选择、投影、并、差、笛卡尔积共5种</p>
-<h3 id="关系操作语言的分类"><a href="#关系操作语言的分类" class="headerlink" title="关系操作语言的分类"></a>关系操作语言的分类</h3><h4 id="关系代数语言"><a href="#关系代数语言" class="headerlink" title="关系代数语言"></a>关系代数语言</h4><p>用对关系的运算来表达查询要求（如ISBL<br>）</p>
-<h4 id="关系演算语言"><a href="#关系演算语言" class="headerlink" title="关系演算语言"></a>关系演算语言</h4><p>用谓词来表达查询要求</p>
-<h5 id="元组关系演算语言"><a href="#元组关系演算语言" class="headerlink" title="元组关系演算语言"></a>元组关系演算语言</h5><p>谓词变元的基本对象是元组变量（如APLHA, QUEL）</p>
-<h5 id="域关系演算语言"><a href="#域关系演算语言" class="headerlink" title="域关系演算语言"></a>域关系演算语言</h5><p>谓词变元的基本对象是域变量（QBE）</p>
-<h4 id="具有关系代数和关系演算双重特点的语言（SQL）"><a href="#具有关系代数和关系演算双重特点的语言（SQL）" class="headerlink" title="具有关系代数和关系演算双重特点的语言（SQL）"></a>具有关系代数和关系演算双重特点的语言（SQL）</h4><h2 id="关系的完整性"><a href="#关系的完整性" class="headerlink" title="关系的完整性"></a>关系的完整性</h2><h3 id="三类完整性约束"><a href="#三类完整性约束" class="headerlink" title="三类完整性约束"></a>三类完整性约束</h3><h4 id="实体完整系"><a href="#实体完整系" class="headerlink" title="实体完整系"></a>实体完整系</h4><p>若属性A是基本关系R的主属性，则属性A取值必须唯一且不能取空值。</p>
-<h4 id="参照完整性"><a href="#参照完整性" class="headerlink" title="参照完整性"></a>参照完整性</h4><p> 若属性（或属性组）F是基本关系R的外码它与基本关系S的主码Ks相对应（基本关系R和S不一定是不同的关系），则对于R中每个元组在F上的值必须为：或者取空值（F的每个属性值均为空值），或者等于S中某个元组的主码值</p>
-<h4 id="用户定义完整性"><a href="#用户定义完整性" class="headerlink" title="用户定义完整性"></a>用户定义完整性</h4><p>针对某一具体关系数据库的约束条件，反映某一具体应用所涉及的数据必须满足的语义要求<br>关系模型应提供定义和检验这类完整性的机制，以便用统一的系统的方法处理它们，而不要由应用程序承担这一功能</p>
-
+            <p>
+              关系现实世界的实体以及实体间的各种联系均用关系来表示，是一种单一的数据结构关系模型中数据的逻辑结构是一张二维表建立在集合代数的基础上 
+相关概念域一组具有相同数据类型的值的集合
+笛卡尔积给定一组域D1，D2，…，Dn（域中可以有相同的）笛卡尔积是所有域的所有取值的一个组合 D1，D2，…，Dn的笛卡
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/数据库复习笔记1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -1941,77 +1832,21 @@
       
         
           
-            <h2 id="数据库基本概念"><a href="#数据库基本概念" class="headerlink" title="数据库基本概念"></a>数据库基本概念</h2><h3 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h3><p>描述事物的符号记录称为数据，数据库存储的最小单元。</p>
-<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>数据库是长期存储于计算机内，有组织，可共享的大量数据的集合。<br>数据库的结构由数据库的元数据解释，目的是将数据组织起来，以便用户直接从数据中获得信息。<br><strong>数据模型来组织数据。数据库的共享性是要进行最大限度的共享</strong></p>
-<p><strong>数据库元数据包含：</strong><br>数据结构名称（如：表名、列名）</p>
-<p>数据类型（如：字符型、整数型）</p>
-<p>数据描述（如：Sname代表学生姓名）</p>
-<p>其他描述数据库所存数据特征的信息</p>
-<h3 id="数据库管理系统DBMS"><a href="#数据库管理系统DBMS" class="headerlink" title="数据库管理系统DBMS"></a>数据库管理系统DBMS</h3><p>数据库管理系统是位于用户与操作系统之间的一层数据管理软件，实现对数据库数据对象的统一管理、控制和维护。<br><strong>主要功能</strong><br><strong>数据定义：</strong> 数据定义语言DDL，供用户定义数据库的三级模式结构、两级映像以及完整性约束和保密限制等约束。相关信息被存放在数据字典中。</p>
-<p><strong>数据操作：</strong> 数据操作语言DML，供用户实现对数据的追加、删除、更新、查询等操作。</p>
-<p><strong>数据库的运行管理：</strong> 并发控制、安全性控制、完整性控制、日志管理、事务管理与恢复。</p>
-<p><strong>数据的组织、存储与管理 ：</strong> 组织、存储和管理各种数据，包括数据字典、用户数据、存取路径等。基本目标是提高存储空间利用率，选择合适的存取方法提高存取效率。</p>
-<p><strong>数据库的维护：</strong>  包括数据载入、转换、转储、数据库的重组合重构以及性能监控等功能。</p>
-<p><strong>通信：</strong> 负责数据的传送，DBMS与其他软件系统的通信功能以及数据库之间的互操作功能</p>
-<h3 id="数据库系统DBS"><a href="#数据库系统DBS" class="headerlink" title="数据库系统DBS"></a>数据库系统DBS</h3><p>三个组成部分：数据库、数据库管理系统和应用程序。<br>基于计算机系统，目的是在用户和数据库信息之间保证高效的交互。<br><strong>特点：</strong><br><strong>数据结构化</strong></p>
-<p><strong>数据的共享性高、冗余度低且易扩充</strong></p>
-<p><strong>数据独立性高</strong><br>数据独立性：包括逻辑独立与物理独立，描述了应用程序对数据结构的依赖程度。<br>物理独立性：应用程序与数据库中的数据的物理结构相互独立<br>逻辑独立性：应用程序与数据库中的数据的逻辑结构相互独立</p>
-<p><strong>数据由数据库管理系统(DBMS)统一管理和控制</strong></p>
-<h2 id="数据管理技术"><a href="#数据管理技术" class="headerlink" title="数据管理技术"></a>数据管理技术</h2><h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h3><p>数据处理是将数据转换成信息，包括：数据的收集、管理、加工利用、信息输出。</p>
-<h3 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h3><p>数据管理是数据处理的中心问题，包括对数据的分类、组织、编码、存储、检索和维护。</p>
-<h3 id="发展过程"><a href="#发展过程" class="headerlink" title="发展过程"></a>发展过程</h3><p>人工管理（20世纪50年代中期之前）<br>文件系统（20世纪50年代后期-60年代中期）<br>数据库系统（20世纪60年代后期）<br>结构化、共享性、独立性、管理与控制等方面比较<br><img src="https://img-blog.csdnimg.cn/20190105103336736.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="结构化、共享性、独立性、管理与控制等方面比较"></p>
-<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><h3 id="数据模型-1"><a href="#数据模型-1" class="headerlink" title="数据模型"></a>数据模型</h3><p>模型是对现实世界中复杂对象的模拟与抽象，数据模型是对现实世界中相关实体数据特征的抽象<br>数据模型是一个描述数据、数据联系、数据语义以及一致性约束的概念工具的集合<br><strong>数据模型是数据库系统的核心和基础</strong><br><strong>理解联系</strong><br>三个世界：<strong>现实世界、信息世界和机器世界</strong><br><strong>抽象</strong>的过程是把现实世界中的客观对象抽象为概念模型，再把概念模型转换为某一DBMS支持的数据模型，概念模型是现实世界到机器世界的一个中间层次。</p>
-<h3 id="数据模型的三要素"><a href="#数据模型的三要素" class="headerlink" title="数据模型的三要素"></a>数据模型的三要素</h3><h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>与对象的类型、内容、性质有关<br>与数据之间的联系有关</p>
-<h4 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h4><p>查询，更新（删除，插入，修改）</p>
-<h4 id="数据的完整性约束"><a href="#数据的完整性约束" class="headerlink" title="数据的完整性约束"></a>数据的完整性约束</h4><p>数据的完整性约束条件是一组完整性规则。完整性规则是给定的数据模型中数据及其联系所具有的制约和依存规则，用以限定符合数据模型的数据库状态以及状态的变化，以保证数据的<strong>正确、有效、相容</strong></p>
-<h3 id="两类数据模型"><a href="#两类数据模型" class="headerlink" title="两类数据模型"></a>两类数据模型</h3><h4 id="概念模型"><a href="#概念模型" class="headerlink" title="概念模型"></a>概念模型</h4><p><strong>信息世界中的基本概念：实体、属性、码、实体型、实体集、联系</strong></p>
-<ol>
-<li>实体：客观存在并可相互区别的事物。可以是具体的人、事、物或抽象的概念。</li>
-<li>属性：实体所具有的某一特性称为属性.一个实体可以由若干个属性来刻画。</li>
-<li>码：唯一标识实体的属性集。</li>
-<li>域：    属性的取值范围称为该属性的域。</li>
-<li>实体型：用实体名及其属性名集合来抽象和刻画同类实体称为实体型。</li>
-<li>实体集：同一类型实体的集合称为实体集</li>
-<li>联系：现实世界中事物内部以及事物之间的联系在信息世界中反映为实体内部的联系和实体之间的联系。</li>
-</ol>
-<p><strong>概念模型：</strong> 按用户的观点来对数据和信息建模，即：信息世界的建模。<strong>是信息世界的数据模型（建模工具）</strong><br>常用的概念模型：实体-联系模型（E-R模型），是一种用E-R图描述（抽象）现实世界的概念模型</p>
-<h4 id="机器世界的逻辑模型和物理模型（也称结构数据模型）"><a href="#机器世界的逻辑模型和物理模型（也称结构数据模型）" class="headerlink" title="机器世界的逻辑模型和物理模型（也称结构数据模型）"></a>机器世界的逻辑模型和物理模型（也称结构数据模型）</h4><p><strong>逻辑模型：</strong> 数据库的逻辑结构<br><strong>物理模型：</strong> 描述数据在存储介质上的存储方式和存取方法</p>
-<h5 id="常用的结构数据模型"><a href="#常用的结构数据模型" class="headerlink" title="常用的结构数据模型"></a>常用的结构数据模型</h5><h6 id="层次模型"><a href="#层次模型" class="headerlink" title="层次模型"></a>层次模型</h6><p>满足两个条件的基本层次联系的集合为层次模型：</p>
-<ol>
-<li>有且只有一个结点没有双亲结点，这个结点称为根结点</li>
-<li>根以外的其它结点有且只有一个双亲结点<br>是数据库系统中最早出现的数据模型<br>用树形结构来表示各类实体以及实体间的联系<h6 id="网状模型"><a href="#网状模型" class="headerlink" title="网状模型"></a>网状模型</h6>满足下面两个条件的基本层次联系的集合为网状模型：</li>
-<li>允许一个以上的结点无双亲；</li>
-<li>一个结点可以有多于一个的双亲。<h6 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h6>关系模型由一组关系组成<br>每个关系的逻辑结构是一张二维表，它由行（元组）和列（属性）组成。<br><strong>实体及实体间的联系都用表来表示</strong><br><strong>相关概念：</strong></li>
-<li>关系：一个关系对应通常说的一张表</li>
-<li>元组：表中的一行即为一个元组</li>
-<li>属性：表中的一列即为一个属性（属性名）</li>
-<li>主码：表中的某个属性组，可以唯一确定一个元组</li>
-<li>域：属性的取值范围</li>
-<li>分量：元组中的一个属性值</li>
-<li>关系模式对关系的描述：<br>关系名（属性1，属性2，…，属性n）<br>例如：学生（学号，姓名，年龄，性别，系，年级）</li>
-</ol>
-<p><strong>关系模型的数据操作</strong></p>
-<ol>
-<li>数据操作是集合操作，操作对象和操作结果都是关系</li>
-<li>操作：查询、插入、删除、更新  </li>
-<li>数据操作是集合操作，操作对象和操作结果都是关系（元组的集合）</li>
-<li>存取路径对用户隐蔽，只要指出“做什么”，不必详细说明“怎么做”</li>
-</ol>
-<p><strong>关系的完整性约束条件</strong><br>实体完整性，参照完整性，用户定义的完整性</p>
-<h2 id="数据库系统的结构"><a href="#数据库系统的结构" class="headerlink" title="数据库系统的结构"></a>数据库系统的结构</h2><h3 id="内部结构-三级模式结构"><a href="#内部结构-三级模式结构" class="headerlink" title="内部结构-三级模式结构"></a>内部结构-三级模式结构</h3><p>三级模式是对数据的三个抽象级别</p>
-<h4 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h4><p>数据库整体逻辑结构</p>
-<h4 id="外模式"><a href="#外模式" class="headerlink" title="外模式"></a>外模式</h4><p>用户的局部逻辑结构</p>
-<h4 id="内模式"><a href="#内模式" class="headerlink" title="内模式"></a>内模式</h4><p>数据库的物理结构 </p>
-<h4 id="二级映象"><a href="#二级映象" class="headerlink" title="二级映象"></a>二级映象</h4><p>二级映象在数据库管理系统内部实现这三个抽象层次的联系和转换</p>
-<h5 id="外模式-模式映像"><a href="#外模式-模式映像" class="headerlink" title="外模式/模式映像"></a>外模式/模式映像</h5><p>实现数据的逻辑独立性</p>
-<h5 id="模式-内模式映像"><a href="#模式-内模式映像" class="headerlink" title="模式/内模式映像"></a>模式/内模式映像</h5><p>实现数据的物理独立性</p>
-<h3 id="外部结构-体系结构"><a href="#外部结构-体系结构" class="headerlink" title="外部结构-体系结构"></a>外部结构-体系结构</h3><p>从数据库最终用户角度看（数据库系统的体系结构） ，数据库系统的结构分为：</p>
-<ol>
-<li>单用户结构、主从式结构、分布式结构、客户/服务器</li>
-<li>浏览器/应用服务器/数据库服务器多层结构等</li>
-</ol>
-
+            <p>
+              数据库基本概念数据描述事物的符号记录称为数据，数据库存储的最小单元。
+数据库数据库是长期存储于计算机内，有组织，可共享的大量数据的集合。数据库的结构由数据库的元数据解释，目的是将数据组织起来，以便用户直接从数据中获得信息。数据模型来组织数据。数据库的共享性是要进行最大限度的共享
+数据库元数据包含：数
+              ...
+            </p>
+          <!--noindex-->
           
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/22/数据库复习笔记0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
