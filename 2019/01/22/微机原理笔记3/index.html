@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="引脚双列直插，24根引脚  引脚功能数据端口D7～D0：8位三态双向缓冲器接收CPU送来的数据(计数值)和控制信息(控制字)。高阻态：隔离芯片与系统总线。连接系统数据总线 读/写控制逻辑~CS：片选信号输入引脚，低电平有效~RD：读信号输入引脚，低电平有效~WR：写信号输入引脚，低电平有效A1、A0：端口选择信号输入引脚 8253的端口操作 计数器通道0、1、2三个通道完全相同 计数初值寄存器CR">
+<meta name="keywords" content="课程,微机原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微机原理笔记（3）------8253芯片">
+<meta property="og:url" content="http://yoursite.com/2019/01/22/微机原理笔记3/index.html">
+<meta property="og:site_name" content="yanzs的博客">
+<meta property="og:description" content="引脚双列直插，24根引脚  引脚功能数据端口D7～D0：8位三态双向缓冲器接收CPU送来的数据(计数值)和控制信息(控制字)。高阻态：隔离芯片与系统总线。连接系统数据总线 读/写控制逻辑~CS：片选信号输入引脚，低电平有效~RD：读信号输入引脚，低电平有效~WR：写信号输入引脚，低电平有效A1、A0：端口选择信号输入引脚 8253的端口操作 计数器通道0、1、2三个通道完全相同 计数初值寄存器CR">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103154815725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103155411974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103155445633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019010315572114.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103162911811.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103163150849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103163509436.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103165017645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103165626580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103165918765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103170039435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103170111450.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190103204356783.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-01-22T02:38:15.113Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微机原理笔记（3）------8253芯片">
+<meta name="twitter:description" content="引脚双列直插，24根引脚  引脚功能数据端口D7～D0：8位三态双向缓冲器接收CPU送来的数据(计数值)和控制信息(控制字)。高阻态：隔离芯片与系统总线。连接系统数据总线 读/写控制逻辑~CS：片选信号输入引脚，低电平有效~RD：读信号输入引脚，低电平有效~WR：写信号输入引脚，低电平有效A1、A0：端口选择信号输入引脚 8253的端口操作 计数器通道0、1、2三个通道完全相同 计数初值寄存器CR">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190103154815725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/22/微机原理笔记3/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>微机原理笔记（3）------8253芯片 | yanzs的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/22/微机原理笔记3/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微机原理笔记（3）------8253芯片
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-22 10:35:17 / 修改时间：10:38:15" itemprop="dateCreated datePublished" datetime="2019-01-22T10:35:17+08:00">2019-01-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/计算机基础理论/" itemprop="url" rel="index"><span itemprop="name">计算机基础理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引脚"><a href="#引脚" class="headerlink" title="引脚"></a>引脚</h2><p>双列直插，24根引脚</p>
+<p><img src="https://img-blog.csdnimg.cn/20190103154815725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="芯片引脚图"></p>
+<h3 id="引脚功能"><a href="#引脚功能" class="headerlink" title="引脚功能"></a>引脚功能</h3><h4 id="数据端口"><a href="#数据端口" class="headerlink" title="数据端口"></a>数据端口</h4><p>D7～D0：8位三态双向缓冲器<br>接收CPU送来的数据(计数值)和控制信息(控制字)。<br>高阻态：隔离芯片与系统总线。<br>连接系统数据总线</p>
+<h4 id="读-写控制逻辑"><a href="#读-写控制逻辑" class="headerlink" title="读/写控制逻辑"></a>读/写控制逻辑</h4><p>~CS：片选信号输入引脚，低电平有效<br>~RD：读信号输入引脚，低电平有效<br>~WR：写信号输入引脚，低电平有效<br>A1、A0：端口选择信号输入引脚<br><img src="https://img-blog.csdnimg.cn/20190103155411974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="端口选择信号"></p>
+<h4 id="8253的端口操作"><a href="#8253的端口操作" class="headerlink" title="8253的端口操作"></a>8253的端口操作</h4><p><img src="https://img-blog.csdnimg.cn/20190103155445633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="8253的端口操作"></p>
+<h4 id="计数器通道0、1、2"><a href="#计数器通道0、1、2" class="headerlink" title="计数器通道0、1、2"></a>计数器通道0、1、2</h4><p>三个通道完全相同<br><img src="https://img-blog.csdnimg.cn/2019010315572114.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="内部结构"></p>
+<h5 id="计数初值寄存器CR"><a href="#计数初值寄存器CR" class="headerlink" title="计数初值寄存器CR"></a>计数初值寄存器CR</h5><p>16位，存放计数初值，在计数/定时启动之前设定</p>
+<h5 id="计数器执行部件CE"><a href="#计数器执行部件CE" class="headerlink" title="计数器执行部件CE"></a>计数器执行部件CE</h5><p>16位减1计数器，初值=CR值，CLK引脚每出现一个脉冲，计数值减1。减至零时，OUT引脚输出电平或脉冲信号，CPU不能直接访问。</p>
+<h5 id="输出锁存器OL"><a href="#输出锁存器OL" class="headerlink" title="输出锁存器OL"></a>输出锁存器OL</h5><p>16位，锁存CE值，跟随CE变化，使用锁存命令来锁定当前计数值</p>
+<h5 id="相应引脚"><a href="#相应引脚" class="headerlink" title="相应引脚"></a>相应引脚</h5><p>门控信号输入端GATEn：允许/禁止、启动/停止计数<br>脉冲信号输入端CLKn：时钟脉冲频率不能大于2MHz<br>计数/定时完成信号输出端OUTn：以电平或脉冲方式</p>
+<h4 id="控制字寄存器"><a href="#控制字寄存器" class="headerlink" title="控制字寄存器"></a>控制字寄存器</h4><p>8位，存放CPU送来的控制字<br>用于选定计数器通道及其工作方式，指定计数初值的读写格式和表示方式</p>
+<h3 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h3><h4 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h4><p>写入计数初值后的第1个CLK脉冲的下降沿开始计数，前提条件是GATE引脚保持高电平。</p>
+<h4 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h4><p>由门控信号GATE的上升沿触发开始计数。</p>
+<h3 id="工作方式"><a href="#工作方式" class="headerlink" title="工作方式"></a>工作方式</h3><h4 id="方式0（计数结束中断）（软件启动）"><a href="#方式0（计数结束中断）（软件启动）" class="headerlink" title="方式0（计数结束中断）（软件启动）"></a>方式0（计数结束中断）（软件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103162911811.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出低电平。<br>计数初值写入后的下一个CLK脉冲，开始计数。<br>计数值减为0时，OUT引脚输出高电平。<br>特点：计数初值不会自动重装，只计数一遍。（OUT保持高电平）<br>计数过程中，新的计数初值，触发重新开始计数。<br>GATE信号：“1”允许计数，“0”停止计数。从低变为高时，继续计数。</p>
+<h4 id="方式1（可编程单稳态输出）（硬件启动）"><a href="#方式1（可编程单稳态输出）（硬件启动）" class="headerlink" title="方式1（可编程单稳态输出）（硬件启动）"></a>方式1（可编程单稳态输出）（硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103163150849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平。<br>计数初值写入后，OUT引脚保持高电平。<br>GATE门控信号上升沿后的下一个CLK脉冲，开始计数。同时，OUT引脚变为低电平。<br>计数值减为0时，OUT引脚输出高电平。<br>特点：计数初值不会自动重装，GATE引脚上升沿可实现重装<br>计数过程中，GATE引脚上升沿，触发重新计数<br>计数过程中，写入新初值不影响本次计数。</p>
+<h4 id="方式2（比率发生器）（软硬件启动）"><a href="#方式2（比率发生器）（软硬件启动）" class="headerlink" title="方式2（比率发生器）（软硬件启动）"></a>方式2（比率发生器）（软硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103163509436.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后的下一个CLK脉冲，开始计数<br>计数值减到1时，OUT引脚输出低电平，维持一个Tclk，又<br>变为高电平，且计数初值自动重装，重新开始计数。<br>特点：自动重装计数初值<br>计数过程中，GATE引脚变低，暂停计数；GATE引脚出现上升沿，重新开始计数。——硬件启动<br>计数过程中写入新初值影响下次计数</p>
+<h4 id="方式3（方波发生器）（软硬件启动）"><a href="#方式3（方波发生器）（软硬件启动）" class="headerlink" title="方式3（方波发生器）（软硬件启动）"></a>方式3（方波发生器）（软硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103165017645.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>//前N/2或(N+1)/2个CLK ，OUT为高//<br>//后N/2或(N-1)/2个CLK，OUT为低//<br>控制字写入后，OUT引脚输出高电平。<br>计数初值写入后的下一个CLK脉冲，开始计数<br>当计数到一半值时，OUT引脚输出变低，直至计数到0。OUT引脚输出高，计数初值自动重装，重新开始计数<br>特点：自动重装计数初值，输出方波信号<br>计数过程中，GATE引脚变低，暂停计数；GATE引脚出现上升沿，重新开始计数。——硬件启动<br>计数过程中写入新初值，影响下次计数</p>
+<h4 id="方式4（软件触发选通）（软件启动）"><a href="#方式4（软件触发选通）（软件启动）" class="headerlink" title="方式4（软件触发选通）（软件启动）"></a>方式4（软件触发选通）（软件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103165626580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后的下一个CLK脉冲，开始计数<br>计数值减到0时，OUT引脚输出低电平，维持一个TCLK，又变为高电平，计数停止<br>特点：计数初值不会自动重装<br>当GATE=1时，允许计数；GATE=0时，停止计数<br>计数过程中改变计数值，按新值重新开始计数</p>
+<h4 id="方式5（硬件触发选通）（硬件启动）"><a href="#方式5（硬件触发选通）（硬件启动）" class="headerlink" title="方式5（硬件触发选通）（硬件启动）"></a>方式5（硬件触发选通）（硬件启动）</h4><p><img src="https://img-blog.csdnimg.cn/20190103165918765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="时序图"><br>控制字写入后，OUT引脚输出高电平<br>计数初值写入后，待GATE引脚出现上升沿后，从下一个CLK脉冲开始计数<br>计数值减到0时，OUT引脚输出低电平，维持一个TCLK，又变为高电平，计数停止<br>特点：计数初值不会自动重装<br>计数过程中，若改变计数初值，仅当GATE上升沿才按新计数值重新开始计数<br>计数过程中出现GATE上升沿，重新开始计数</p>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><p><img src="https://img-blog.csdnimg.cn/20190103170039435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="方式对比"><br><img src="https://img-blog.csdnimg.cn/20190103170111450.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="门控信号"></p>
+<h2 id="初始化编程"><a href="#初始化编程" class="headerlink" title="初始化编程"></a>初始化编程</h2><p>先写控制字，再送计数初值<br>计数初值一次只能写入8位（先写低8位，后写高8位（可不写））<br>控制字写入控制口，每个计数器的计数初值写入各自计数器口<br>写入的顺序：按通道序号分别写入，按内容分别写入</p>
+<h3 id="8253方式控制字"><a href="#8253方式控制字" class="headerlink" title="8253方式控制字"></a>8253方式控制字</h3><p><img src="https://img-blog.csdnimg.cn/20190103204356783.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzM2OTQ1NTky,size_16,color_FFFFFF,t_70" alt="方式控制字"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/课程/" rel="tag"># 课程</a>
+          
+            <a href="/tags/微机原理/" rel="tag"># 微机原理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/22/微机原理笔记2/" rel="next" title="微机原理笔记（2）------8255A芯片">
+                <i class="fa fa-chevron-left"></i> 微机原理笔记（2）------8255A芯片
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/22/微机原理笔记4/" rel="prev" title="微机原理笔记（4）------8251A芯片">
+                微机原理笔记（4）------8251A芯片 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引脚"><span class="nav-number">1.</span> <span class="nav-text">引脚</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引脚功能"><span class="nav-number">1.1.</span> <span class="nav-text">引脚功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据端口"><span class="nav-number">1.1.1.</span> <span class="nav-text">数据端口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读-写控制逻辑"><span class="nav-number">1.1.2.</span> <span class="nav-text">读/写控制逻辑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8253的端口操作"><span class="nav-number">1.1.3.</span> <span class="nav-text">8253的端口操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计数器通道0、1、2"><span class="nav-number">1.1.4.</span> <span class="nav-text">计数器通道0、1、2</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#计数初值寄存器CR"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">计数初值寄存器CR</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#计数器执行部件CE"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">计数器执行部件CE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#输出锁存器OL"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">输出锁存器OL</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相应引脚"><span class="nav-number">1.1.4.4.</span> <span class="nav-text">相应引脚</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#控制字寄存器"><span class="nav-number">1.1.5.</span> <span class="nav-text">控制字寄存器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动方式"><span class="nav-number">1.2.</span> <span class="nav-text">启动方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#软件"><span class="nav-number">1.2.1.</span> <span class="nav-text">软件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#硬件"><span class="nav-number">1.2.2.</span> <span class="nav-text">硬件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作方式"><span class="nav-number">1.3.</span> <span class="nav-text">工作方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方式0（计数结束中断）（软件启动）"><span class="nav-number">1.3.1.</span> <span class="nav-text">方式0（计数结束中断）（软件启动）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式1（可编程单稳态输出）（硬件启动）"><span class="nav-number">1.3.2.</span> <span class="nav-text">方式1（可编程单稳态输出）（硬件启动）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式2（比率发生器）（软硬件启动）"><span class="nav-number">1.3.3.</span> <span class="nav-text">方式2（比率发生器）（软硬件启动）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式3（方波发生器）（软硬件启动）"><span class="nav-number">1.3.4.</span> <span class="nav-text">方式3（方波发生器）（软硬件启动）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式4（软件触发选通）（软件启动）"><span class="nav-number">1.3.5.</span> <span class="nav-text">方式4（软件触发选通）（软件启动）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式5（硬件触发选通）（硬件启动）"><span class="nav-number">1.3.6.</span> <span class="nav-text">方式5（硬件触发选通）（硬件启动）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对比"><span class="nav-number">1.3.7.</span> <span class="nav-text">对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化编程"><span class="nav-number">2.</span> <span class="nav-text">初始化编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8253方式控制字"><span class="nav-number">2.1.</span> <span class="nav-text">8253方式控制字</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
