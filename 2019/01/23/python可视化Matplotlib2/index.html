@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="开篇接上一篇python可视化——Matplotlib简单使用，这一篇我们来讲一讲如何使用Matplotlib库绘制一些常用的图形。 常用图形绘制pyplot.bar条形图条形图很简单，每个矩形表示一个离散数据的数量，可以方便我们直观的观察离散数据的数量。使用bar函数进行绘制。12345678#其中第一个列表表示每个矩形绘制时的起始位置，第二个参数表示矩形的高#除此之外还有许多可选参数：#wid">
+<meta name="keywords" content="python,可视化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python可视化------Matplotlib图形绘制">
+<meta property="og:url" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="开篇接上一篇python可视化——Matplotlib简单使用，这一篇我们来讲一讲如何使用Matplotlib库绘制一些常用的图形。 常用图形绘制pyplot.bar条形图条形图很简单，每个矩形表示一个离散数据的数量，可以方便我们直观的观察离散数据的数量。使用bar函数进行绘制。12345678#其中第一个列表表示每个矩形绘制时的起始位置，第二个参数表示矩形的高#除此之外还有许多可选参数：#wid">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/11.png">
+<meta property="og:updated_time" content="2019-01-24T03:45:11.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python可视化------Matplotlib图形绘制">
+<meta name="twitter:description" content="开篇接上一篇python可视化——Matplotlib简单使用，这一篇我们来讲一讲如何使用Matplotlib库绘制一些常用的图形。 常用图形绘制pyplot.bar条形图条形图很简单，每个矩形表示一个离散数据的数量，可以方便我们直观的观察离散数据的数量。使用bar函数进行绘制。12345678#其中第一个列表表示每个矩形绘制时的起始位置，第二个参数表示矩形的高#除此之外还有许多可选参数：#wid">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/23/python可视化Matplotlib2/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/23/python可视化Matplotlib2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python可视化------Matplotlib图形绘制 | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/23/python可视化Matplotlib2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python可视化------Matplotlib图形绘制
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-23 17:21:16" itemprop="dateCreated datePublished" datetime="2019-01-23T17:21:16+08:00">2019-01-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-24 11:45:11" itemprop="dateModified" datetime="2019-01-24T11:45:11+08:00">2019-01-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/数据可视化/" itemprop="url" rel="index"><span itemprop="name">数据可视化</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>接上一篇<a href="https://yanzs.github.io/2019/01/23/python%E5%8F%AF%E8%A7%86%E5%8C%96Matplotlib1/" target="_blank" rel="noopener">python可视化——Matplotlib简单使用</a>，这一篇我们来讲一讲如何使用Matplotlib库绘制一些常用的图形。</p>
+<h2 id="常用图形绘制"><a href="#常用图形绘制" class="headerlink" title="常用图形绘制"></a>常用图形绘制</h2><h3 id="pyplot-bar条形图"><a href="#pyplot-bar条形图" class="headerlink" title="pyplot.bar条形图"></a>pyplot.bar条形图</h3><p>条形图很简单，每个矩形表示一个离散数据的数量，可以方便我们直观的观察离散数据的数量。使用bar函数进行绘制。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#其中第一个列表表示每个矩形绘制时的起始位置，第二个参数表示矩形的高</span></span><br><span class="line"><span class="comment">#除此之外还有许多可选参数：</span></span><br><span class="line"><span class="comment">#width控制矩形宽度</span></span><br><span class="line"><span class="comment">#align可以控制矩形位于起始位置的中央，设置为center</span></span><br><span class="line"><span class="comment">#color设置颜色</span></span><br><span class="line"><span class="comment">#alpha设置透明度</span></span><br><span class="line">plt.bar([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>], [<span class="number">5</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">12</span>, <span class="number">7</span>] ,width=<span class="number">1</span>,align=<span class="string">'center'</span>,color=<span class="string">'#342342'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/1.png" alt=""><br>通过pyplot.barh函数可以生成水平的条形图<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#水平图</span></span><br><span class="line">plt.barh([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>], [<span class="number">5</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">12</span>, <span class="number">7</span>] ,align=<span class="string">'center'</span>,color=<span class="string">'#342342'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/2.png" alt="水平图"></p>
+<h3 id="pyplot-bar极坐标图"><a href="#pyplot-bar极坐标图" class="headerlink" title="pyplot.bar极坐标图"></a>pyplot.bar极坐标图</h3><p>是的，你没有看错，这个函数也可以画极坐标图，只不过要在图表上做点手脚，gca()函数可以获取我们当前使用的图表，我们将其polar属性设置为true就是极坐标系了。相对于直角坐标，极坐标有很多的特点，我们可以根据需求自己设置是否使用。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#准备十个随机数据</span></span><br><span class="line">N = <span class="number">10</span></span><br><span class="line"><span class="comment">#将一个圆进行十等分</span></span><br><span class="line">x= np.linspace(<span class="number">0.0</span>, <span class="number">2</span> * np.pi, N,endpoint=<span class="keyword">False</span>)</span><br><span class="line"><span class="comment">#产生十个随机的高度</span></span><br><span class="line">y= np.random.rand(N)</span><br><span class="line"><span class="comment">#设置随机的宽度</span></span><br><span class="line">width = np.pi / <span class="number">5</span> * y</span><br><span class="line"><span class="comment">#设置极坐标系</span></span><br><span class="line">plt.gca(polar=<span class="keyword">True</span>)</span><br><span class="line"><span class="comment">#使用bar函数绘制，参数是一样的</span></span><br><span class="line"><span class="comment">#x是极坐标的极角，y是极径</span></span><br><span class="line"><span class="comment">#其余参数与条形图相同</span></span><br><span class="line">plt.bar(x, y, width=width,alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/3.png" alt=""><br>当然也可以改成线条的风格<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">N = <span class="number">1000</span></span><br><span class="line">theta = np.linspace(<span class="number">0.0</span>, <span class="number">2</span> * np.pi, N,endpoint=<span class="keyword">False</span>)</span><br><span class="line">plt.gca(polar=<span class="keyword">True</span>)</span><br><span class="line">plt.plot(theta,theta*<span class="number">3</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/4.png" alt=""></p>
+<h3 id="pyplot-hist直方图"><a href="#pyplot-hist直方图" class="headerlink" title="pyplot.hist直方图"></a>pyplot.hist直方图</h3><p>与条形图不同，直方图展示的是数据的分布情况，其横坐标会将取值分段，根据一定的间隔来计算间隔中有多少值来体现相关数值的频率分布。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#生成随机数据</span></span><br><span class="line">x = <span class="number">10</span> + <span class="number">10</span> * np.random.randn(<span class="number">10000</span>)</span><br><span class="line"><span class="comment">#绘制直方图,hist的参数有：</span></span><br><span class="line"><span class="comment">#x为传入的数据信息</span></span><br><span class="line"><span class="comment">#bins用于对取值进行间隔划分</span></span><br><span class="line"><span class="comment">#normed用于参数的归一化，true表示进行归一化，即将所有数据占的比例总和置为1，</span></span><br><span class="line"><span class="comment">#由于版本问题笔者的参数为density，使用normed会报错</span></span><br><span class="line"><span class="comment">#facecolor直方图的颜色</span></span><br><span class="line"><span class="comment">#alpha直方图的透明度</span></span><br><span class="line">n, bins, patches = plt.hist(x, <span class="number">100</span>, density=<span class="number">1</span>, facecolor=<span class="string">'blue'</span>, alpha=<span class="number">0.7</span>)</span><br><span class="line"><span class="comment">#函数返回了三个参数，分别是:</span></span><br><span class="line"><span class="comment">#n表示的是每个区间上数据的频数，即在这一区间上的数据有多少，以一个列表顺序表示</span></span><br><span class="line"><span class="comment">#bins表示的是区间的划分情况，共划分了100块，所以以101个数来记录划分的区间</span></span><br><span class="line"><span class="comment">#patches包含每个bin的所有数据，对应每个区间和每个区间的所有数据。</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/5.png" alt=""></p>
+<h3 id="pyplot-scatter散点图"><a href="#pyplot-scatter散点图" class="headerlink" title="pyplot.scatter散点图"></a>pyplot.scatter散点图</h3><p>散点图描述了数据点在坐标系中的分布情况，由两组数据构成多个坐标点，使用scatter函数可以实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#生成随机的数据点</span></span><br><span class="line">x = <span class="number">10</span> + <span class="number">10</span> * np.random.randn(<span class="number">10000</span>)</span><br><span class="line">y = <span class="number">10</span> + <span class="number">10</span> * np.random.randn(<span class="number">10000</span>)</span><br><span class="line"><span class="comment">#动态的设置颜色</span></span><br><span class="line">color=x*y</span><br><span class="line"><span class="comment">#绘制散点图，scatter参数有：</span></span><br><span class="line"><span class="comment">#x,y分别是点集的横坐标与纵坐标集</span></span><br><span class="line"><span class="comment">#s是用来标识绘制出的点的大小</span></span><br><span class="line"><span class="comment">#c是用来设置点的颜色，可以根据点的位置来动态的设置</span></span><br><span class="line"><span class="comment">#alpha透明度在0~1之间</span></span><br><span class="line">plt.scatter(x,y,s = <span class="number">5</span>, c = color, alpha = <span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/6.png" alt=""><br>使用pyplot.plot()函数也可以实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">10</span> + <span class="number">10</span> * np.random.randn(<span class="number">10000</span>)</span><br><span class="line">y = <span class="number">10</span> + <span class="number">10</span> * np.random.randn(<span class="number">10000</span>)</span><br><span class="line">plt.plot(x,y,<span class="string">'.'</span>,alpha=<span class="number">0.7</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/7.png" alt=""></p>
+<h3 id="pyplot-plot-折线图"><a href="#pyplot-plot-折线图" class="headerlink" title="pyplot.plot 折线图"></a>pyplot.plot 折线图</h3><p>折线图的实现就简单的多，我们可以直接使用plot实现，只是在传参时要将横纵坐标写完整，还可以实现多个折线图的叠加。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x=np.linspace(<span class="number">0</span>,<span class="number">100</span>,<span class="number">100</span>)</span><br><span class="line">y1 = <span class="number">10</span> + <span class="number">10</span> * np.random.randn(<span class="number">100</span>)</span><br><span class="line">y2 = <span class="number">10</span> + <span class="number">10</span> * np.random.randn(<span class="number">100</span>)</span><br><span class="line"><span class="comment">#对应的x与y要写完整</span></span><br><span class="line">plt.plot(x,y1,x,y2,alpha=<span class="number">0.7</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/8.png" alt=""></p>
+<h3 id="pyplot-pie饼图"><a href="#pyplot-pie饼图" class="headerlink" title="pyplot.pie饼图"></a>pyplot.pie饼图</h3><p>饼图可以表示一系列数据在数据整体中所占的比例，我们使用pie函数对其进行绘制。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对应数据的标签</span></span><br><span class="line">labels = [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>, <span class="string">'F'</span>]</span><br><span class="line"><span class="comment">#相应的数据</span></span><br><span class="line">X = [<span class="number">123</span>, <span class="number">242</span>, <span class="number">43</span>, <span class="number">345</span>, <span class="number">546</span>, <span class="number">3434</span>]</span><br><span class="line"><span class="comment">#用于表示扇形相对于中心的位移</span></span><br><span class="line">expl = [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0.1</span>]</span><br><span class="line"><span class="comment">#每个扇形的颜色</span></span><br><span class="line">color=[<span class="string">'b'</span>,<span class="string">'g'</span>,<span class="string">'r'</span>,<span class="string">'y'</span>,<span class="string">'k'</span>,<span class="string">'#756532'</span>]</span><br><span class="line"><span class="comment">#绘制函数pie,其参数有:</span></span><br><span class="line"><span class="comment">#x为需要进行处理的数据</span></span><br><span class="line"><span class="comment">#labels每一块所需要展示的文字</span></span><br><span class="line"><span class="comment">#explode每一块相对于中心的位置</span></span><br><span class="line"><span class="comment">#shadow是与否显示阴影</span></span><br><span class="line"><span class="comment">#pctdistance显示的比例在圆中的位置</span></span><br><span class="line"><span class="comment">#autopct比例的数值位数，%.1f%%取一位小数</span></span><br><span class="line">plt.pie(X, labels=labels,explode=expl,colors=color, autopct=<span class="string">'%.1f%%'</span>,pctdistance=<span class="number">0.8</span>,shadow=<span class="keyword">True</span>) </span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/9.png" alt=""></p>
+<h2 id="图像标注"><a href="#图像标注" class="headerlink" title="图像标注"></a>图像标注</h2><h3 id="pyplot-text文字"><a href="#pyplot-text文字" class="headerlink" title="pyplot.text文字"></a>pyplot.text文字</h3><p>使用这一函数我们可以在图像上进行相关数据的标注。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">x=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</span><br><span class="line">y1=[<span class="number">1</span>, <span class="number">7</span>,<span class="number">3</span>, <span class="number">9</span>,  <span class="number">5</span>]</span><br><span class="line">plt.bar(x, y1 ,align=<span class="string">'center'</span>, color=<span class="string">'#345345'</span>)</span><br><span class="line">plt.xticks(x, x)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(y1)):</span><br><span class="line">	<span class="comment">#text函数很简单，参数有：</span></span><br><span class="line">	<span class="comment">#x，y所展示的文字的位置</span></span><br><span class="line">	<span class="comment">#'%s' %string string就是文字变量</span></span><br><span class="line">	<span class="comment">#ha条形图中的文字居中，在其它的图中应该也有相关属性，还可以通过计算x，y的值手动设置。</span></span><br><span class="line">    plt.text(x[i],y1[i]+<span class="number">0.1</span>,<span class="string">'%s'</span> %y1[i],ha=<span class="string">'center'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/10.png" alt=""></p>
+<h3 id="pyplot-annotate标注"><a href="#pyplot-annotate标注" class="headerlink" title="pyplot.annotate标注"></a>pyplot.annotate标注</h3><p>annotate标注可以在文字旁加上箭头，并且有许多的参数变化。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">x=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</span><br><span class="line">y1=[<span class="number">1</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">5</span>]</span><br><span class="line">plt.bar(x, y1 ,align=<span class="string">'center'</span>, color=<span class="string">'#345345'</span>)</span><br><span class="line">plt.xticks(x, x)</span><br><span class="line"><span class="comment">#s第一个函数，即要显示的文字</span></span><br><span class="line"><span class="comment">#xy箭头处的坐标</span></span><br><span class="line"><span class="comment">#xytext文字的坐标</span></span><br><span class="line"><span class="comment">#arrowprops箭头函数以字典dict来设置属性</span></span><br><span class="line"><span class="comment">#facecolor箭头颜色</span></span><br><span class="line"><span class="comment">#shrink箭头的缩放在0~1之间</span></span><br><span class="line"><span class="comment">#width点箭头的宽度</span></span><br><span class="line">plt.annotate(<span class="string">'point'</span>, xy=(<span class="number">5</span>,<span class="number">4</span>), xytext=(<span class="number">5</span>,<span class="number">7</span>), arrowprops=dict(facecolor=<span class="string">'b'</span>, shrink=<span class="number">1</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(y1)):</span><br><span class="line">    plt.text(x[i],y1[i]+<span class="number">0.1</span>,<span class="string">'%s'</span> %y1[i],ha=<span class="string">'center'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/01/23/python可视化Matplotlib2/11.png" alt=""></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这些只是对库中函数的基本使用，我们可以通过它们之间的组合来实现我们对于数据可视化的需求，许多的参数和解释详见<a href="https://matplotlib.org/tutorials/index.html" target="_blank" rel="noopener">matplotlib文档</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/可视化/" rel="tag"># 可视化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/23/python可视化Matplotlib1/" rel="next" title="python可视化------Matplotlib简单使用">
+                <i class="fa fa-chevron-left"></i> python可视化------Matplotlib简单使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开篇"><span class="nav-number">1.</span> <span class="nav-text">开篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用图形绘制"><span class="nav-number">2.</span> <span class="nav-text">常用图形绘制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-bar条形图"><span class="nav-number">2.1.</span> <span class="nav-text">pyplot.bar条形图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-bar极坐标图"><span class="nav-number">2.2.</span> <span class="nav-text">pyplot.bar极坐标图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-hist直方图"><span class="nav-number">2.3.</span> <span class="nav-text">pyplot.hist直方图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-scatter散点图"><span class="nav-number">2.4.</span> <span class="nav-text">pyplot.scatter散点图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-plot-折线图"><span class="nav-number">2.5.</span> <span class="nav-text">pyplot.plot 折线图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-pie饼图"><span class="nav-number">2.6.</span> <span class="nav-text">pyplot.pie饼图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图像标注"><span class="nav-number">3.</span> <span class="nav-text">图像标注</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-text文字"><span class="nav-number">3.1.</span> <span class="nav-text">pyplot.text文字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyplot-annotate标注"><span class="nav-number">3.2.</span> <span class="nav-text">pyplot.annotate标注</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
