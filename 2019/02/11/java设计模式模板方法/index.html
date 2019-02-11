@@ -96,25 +96,25 @@
 
 
 
-  <meta name="description" content="开篇对于Cloneable接口不了解的可以参照Java技巧——Cloneable接口与clone方法,我们主要围绕这一接口来聊一聊原型模式。 核心思想使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。 简单实现12345678910111213141516171819202122232425">
+  <meta name="description" content="核心思想定义一个父类的算法框架，将其部分实现步骤延迟到子类中，子类在实现时不用改变相关结构即可实现相关的算法步骤。嗯，说白了就是继承的一种使用。。。。 简单实现抽象父类一般要注意那些方法是可以暴露给子类调用的，不需要给子类使用的用protected关键词就好。12345678910public abstract class AbsA &amp;#123;	protected abstract void d">
 <meta name="keywords" content="java,设计模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java设计模式创建篇------原型模式">
-<meta property="og:url" content="http://yoursite.com/2019/02/06/java设计模式原型模式/index.html">
+<meta property="og:title" content="java设计模式行为篇------模板方法">
+<meta property="og:url" content="http://yoursite.com/2019/02/11/java设计模式模板方法/index.html">
 <meta property="og:site_name" content="yanzs_博客">
-<meta property="og:description" content="开篇对于Cloneable接口不了解的可以参照Java技巧——Cloneable接口与clone方法,我们主要围绕这一接口来聊一聊原型模式。 核心思想使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。 简单实现12345678910111213141516171819202122232425">
+<meta property="og:description" content="核心思想定义一个父类的算法框架，将其部分实现步骤延迟到子类中，子类在实现时不用改变相关结构即可实现相关的算法步骤。嗯，说白了就是继承的一种使用。。。。 简单实现抽象父类一般要注意那些方法是可以暴露给子类调用的，不需要给子类使用的用protected关键词就好。12345678910public abstract class AbsA &amp;#123;	protected abstract void d">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-06T05:59:26.806Z">
+<meta property="og:updated_time" content="2019-02-11T06:16:39.010Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java设计模式创建篇------原型模式">
-<meta name="twitter:description" content="开篇对于Cloneable接口不了解的可以参照Java技巧——Cloneable接口与clone方法,我们主要围绕这一接口来聊一聊原型模式。 核心思想使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。 简单实现12345678910111213141516171819202122232425">
+<meta name="twitter:title" content="java设计模式行为篇------模板方法">
+<meta name="twitter:description" content="核心思想定义一个父类的算法框架，将其部分实现步骤延迟到子类中，子类在实现时不用改变相关结构即可实现相关的算法步骤。嗯，说白了就是继承的一种使用。。。。 简单实现抽象父类一般要注意那些方法是可以暴露给子类调用的，不需要给子类使用的用protected关键词就好。12345678910public abstract class AbsA &amp;#123;	protected abstract void d">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/06/java设计模式原型模式/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/11/java设计模式模板方法/">
 
 
 
@@ -124,7 +124,7 @@
   };
 </script>
 
-  <title>java设计模式创建篇------原型模式 | yanzs_博客</title>
+  <title>java设计模式行为篇------模板方法 | yanzs_博客</title>
   
 
 
@@ -340,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/06/java设计模式原型模式/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/11/java设计模式模板方法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yanzs">
@@ -357,7 +357,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">java设计模式创建篇------原型模式
+          <h1 class="post-title" itemprop="name headline">java设计模式行为篇------模板方法
 
               
             
@@ -383,7 +383,7 @@
                 
               
 
-              <time title="创建时间：2019-02-06 13:57:38 / 修改时间：13:59:26" itemprop="dateCreated datePublished" datetime="2019-02-06T13:57:38+08:00">2019-02-06</time>
+              <time title="创建时间：2019-02-11 14:16:02 / 修改时间：14:16:39" itemprop="dateCreated datePublished" datetime="2019-02-11T14:16:02+08:00">2019-02-11</time>
             
 
             
@@ -440,11 +440,12 @@
       
 
       
-        <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>对于Cloneable接口不了解的可以参照<a href="https://yanzs.github.io/2019/02/05/Java%E6%8A%80%E5%B7%A7Cloneable%E6%8E%A5%E5%8F%A3%E4%B8%8Eclone%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">Java技巧——Cloneable接口与clone方法</a>,我们主要围绕这一接口来聊一聊原型模式。</p>
-<h2 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h2><p>使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。</p>
-<h2 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> param;</span><br><span class="line">    <span class="keyword">private</span> String s;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String  <span class="title">getS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getParam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> param;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">(<span class="keyword">int</span> param, String s)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.param=param;</span><br><span class="line">        <span class="keyword">this</span>.s=s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setParam</span><span class="params">(<span class="keyword">int</span> param)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.param = param;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setS</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.s = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        A t= (A) <span class="keyword">super</span>.clone();</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">	<span class="comment">//对多个A类的clone创建</span></span><br><span class="line">	A a= <span class="keyword">new</span> A(<span class="number">12</span>，<span class="string">"123"</span>);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">6</span>;i++)&#123;<span class="comment">//数量限制</span></span><br><span class="line">		A cloneA =(A) a.clone();</span><br><span class="line">		a.setParam(i);</span><br><span class="line">		a.setS(<span class="string">" "</span>+i);</span><br><span class="line">		System.out.println(a.getS()+a.getParam());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>实现的过程非常简单，基本就是对clone函数的重载与实现，使用Cloneable接口进行标记辅助，除此之外便没有其他需要注意的了。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>主要是对clone方法的重载，一个接口一个方法就是原型模式的全部，在实现上是在内存上直接复制二进制流，效率很高，比new出来的性能要高，但是要注意一下，clone的过程不会调用构造函数，也就是说通过这一方法创造出来的对象不会有构造函数的处理，所以在具体使用时希望大家根据需求灵活进行，特别是在深浅拷贝的选择上一定要仔细考虑。</p>
+        <h2 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h2><p>定义一个父类的算法框架，将其部分实现步骤延迟到子类中，子类在实现时不用改变相关结构即可实现相关的算法步骤。嗯，说白了就是继承的一种使用。。。。</p>
+<h2 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h2><h3 id="抽象父类"><a href="#抽象父类" class="headerlink" title="抽象父类"></a>抽象父类</h3><p>一般要注意那些方法是可以暴露给子类调用的，不需要给子类使用的用protected关键词就好。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbsA</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">deal1</span><span class="params">()</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">deal2</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		deal1();</span><br><span class="line">		deal2();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="具体子类"><a href="#具体子类" class="headerlink" title="具体子类"></a>具体子类</h3><p>子类只要实现父类中的相关方法就可以了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span> <span class="title">AbsA</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">deal1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"逻辑处理1"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">deal2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"逻辑处理2"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">AbsA</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">deal1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"逻辑处理3"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">deal2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"逻辑处理4"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="简单调用"><a href="#简单调用" class="headerlink" title="简单调用"></a>简单调用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	AbsA a= <span class="keyword">new</span> A();</span><br><span class="line">	AbsA b= <span class="keyword">new</span> B();</span><br><span class="line">	a.deal();</span><br><span class="line">	b.deal();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在抽象的父类中设定了暴露的方法，只需要对其调用就好，不需要关心其内部实现。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>模板方法应该算是设计模式中最为简单的一种了，但是其使用是极为广泛的，要注意在抽象类中，并没有抽象到绝对的一般化，而是设置了相关步骤给子类去实现，而子类实现的结果往往影响了父类中相关函数，所以它与一般的对抽象类的使用有很大不同。</p>
 
       
     </div>
@@ -483,8 +484,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/05/Java技巧Cloneable接口与clone方法/" rel="next" title="Java技巧------Cloneable接口与clone方法">
-                <i class="fa fa-chevron-left"></i> Java技巧------Cloneable接口与clone方法
+              <a href="/2019/02/10/java设计模式适配器模式/" rel="next" title="java设计模式结构篇------适配器模式">
+                <i class="fa fa-chevron-left"></i> java设计模式结构篇------适配器模式
               </a>
             
           </div>
@@ -492,10 +493,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/07/java设计模式建造者模式/" rel="prev" title="java设计模式创建篇------建造者模式">
-                java设计模式创建篇------建造者模式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -653,7 +650,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开篇"><span class="nav-number">1.</span> <span class="nav-text">开篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心思想"><span class="nav-number">2.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单实现"><span class="nav-number">3.</span> <span class="nav-text">简单实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心思想"><span class="nav-number">1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单实现"><span class="nav-number">2.</span> <span class="nav-text">简单实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#抽象父类"><span class="nav-number">2.1.</span> <span class="nav-text">抽象父类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体子类"><span class="nav-number">2.2.</span> <span class="nav-text">具体子类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单调用"><span class="nav-number">2.3.</span> <span class="nav-text">简单调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
             
 
           </div>
