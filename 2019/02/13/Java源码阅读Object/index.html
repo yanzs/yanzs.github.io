@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="yanzs_博客">
 <meta property="og:description" content="描述java中一切事物几乎都可以看作类的实例化对象，而所有的类都与Object息息相关，Object类是所有类的父类先祖，甚至是数组arrays都是要实现Object类中定义的方法，如果一个类没有别的继承声明那么这个类一定是继承了Object类。 相关实现常用函数equals这是比较常用的一个方法，在源码中的实现也很简单。123public boolean equals(Object obj) &amp;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-13T14:09:34.995Z">
+<meta property="og:updated_time" content="2019-02-13T14:13:22.764Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java源码阅读------Object">
 <meta name="twitter:description" content="描述java中一切事物几乎都可以看作类的实例化对象，而所有的类都与Object息息相关，Object类是所有类的父类先祖，甚至是数组arrays都是要实现Object类中定义的方法，如果一个类没有别的继承声明那么这个类一定是继承了Object类。 相关实现常用函数equals这是比较常用的一个方法，在源码中的实现也很简单。123public boolean equals(Object obj) &amp;">
@@ -383,7 +383,7 @@
                 
               
 
-              <time title="创建时间：2019-02-13 22:07:47 / 修改时间：22:09:34" itemprop="dateCreated datePublished" datetime="2019-02-13T22:07:47+08:00">2019-02-13</time>
+              <time title="创建时间：2019-02-13 22:07:47 / 修改时间：22:13:22" itemprop="dateCreated datePublished" datetime="2019-02-13T22:07:47+08:00">2019-02-13</time>
             
 
             
@@ -452,7 +452,7 @@
 <h4 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode"></a>hashCode</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
 <p>使用这一函数对不同的对象进行区分（为不同的对象返回不同的整数（原文）），一般由对象实例化后在堆中的地址转换为整数实现，不是由java自己实现（native）。<br>除此之外，该函数为有关哈希表的实现提供支持，比如java.util.HashMap。<br>这个函数可以与equals函数呼应，对于equals不相等的函数，使用hashCode得到的是不等的值。（对同一对象的引用，返回的是相等的地址信息，对不同对象的引用返回的是不同的）</p>
 <h4 id="clone"><a href="#clone" class="headerlink" title="clone"></a>clone</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span>;</span><br></pre></td></tr></table></figure>
-<p>这一方法实现了对于已有对象的克隆，但是需要实现Cloneable接口，而且是浅拷贝，具体可以参照<a href="https://blog.csdn.net/sinat_36945592/article/details/86765463" target="_blank" rel="noopener">Java技巧——Cloneable接口与clone方法</a>。</p>
+<p>这一方法实现了对于已有对象的克隆，但是需要实现Cloneable接口，而且是浅拷贝，具体可以参照<a href="https://yanzs.github.io/2019/02/05/Java%E6%8A%80%E5%B7%A7Cloneable%E6%8E%A5%E5%8F%A3%E4%B8%8Eclone%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">Java技巧——Cloneable接口与clone方法</a>。</p>
 <h3 id="并发与同步"><a href="#并发与同步" class="headerlink" title="并发与同步"></a>并发与同步</h3><p>synchronized大家应该不陌生，我们通过它来同步某个对象或是代码块，我们称之为锁，锁是干啥的呢？事实上在多线程中往往会出现多个线程对同一对象进行修改，但是我们无法实时更新变量的实际状况，大多数时候在我们刷新数据时，这个数据还在进行变化，最常见的就是买票这一类，因此某一数据在任意时刻仅允许一个线程对其进行更改即拿到了锁（拿到了就锁起来只能自己改），没有拿到的线程就无法进行操作即所谓得阻塞式访问。</p>
 <h4 id="wait-long"><a href="#wait-long" class="headerlink" title="wait(long)"></a>wait(long)</h4><p>这个方法有三种种形式，这个是基本的本地实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br></pre></td></tr></table></figure></p>
 <p>首先，调用这一方法的类已经被线程获取到了锁，正在进行相关的逻辑操作，但是由于设计原因，比如异步操作，一些逻辑需要等待一段时间进行时使用这一方法，使用时正在使用的线程放弃使用解锁等待并让出使用权，直到别的线程调用该类的notify或notifyAll方法或者超过了timeout设置的时间，亦或者其他的线程使用了interrupt()方法，再重新获得锁。参数是指超时时间，如果超时时间为0，则只能等着其他线程通知了。</p>
