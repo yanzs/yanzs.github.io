@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="描述java中一切事物几乎都可以看作类的实例化对象，而所有的类都与Object息息相关，Object类是所有类的父类先祖，甚至是数组arrays都是要实现Object类中定义的方法，如果一个类没有别的继承声明那么这个类一定是继承了Object类。 相关实现常用函数equals这是比较常用的一个方法，在源码中的实现也很简单。123public boolean equals(Object obj) &amp;">
+<meta name="keywords" content="java,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java源码阅读------Object">
+<meta property="og:url" content="http://yoursite.com/2019/02/13/Java源码阅读Object/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="描述java中一切事物几乎都可以看作类的实例化对象，而所有的类都与Object息息相关，Object类是所有类的父类先祖，甚至是数组arrays都是要实现Object类中定义的方法，如果一个类没有别的继承声明那么这个类一定是继承了Object类。 相关实现常用函数equals这是比较常用的一个方法，在源码中的实现也很简单。123public boolean equals(Object obj) &amp;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-13T14:09:34.995Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java源码阅读------Object">
+<meta name="twitter:description" content="描述java中一切事物几乎都可以看作类的实例化对象，而所有的类都与Object息息相关，Object类是所有类的父类先祖，甚至是数组arrays都是要实现Object类中定义的方法，如果一个类没有别的继承声明那么这个类一定是继承了Object类。 相关实现常用函数equals这是比较常用的一个方法，在源码中的实现也很简单。123public boolean equals(Object obj) &amp;">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/13/Java源码阅读Object/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java源码阅读------Object | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/13/Java源码阅读Object/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java源码阅读------Object
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-13 22:07:47 / 修改时间：22:09:34" itemprop="dateCreated datePublished" datetime="2019-02-13T22:07:47+08:00">2019-02-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/源码阅读/" itemprop="url" rel="index"><span itemprop="name">源码阅读</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>java中一切事物几乎都可以看作类的实例化对象，而所有的类都与Object息息相关，Object类是所有类的父类先祖，甚至是数组arrays都是要实现Object类中定义的方法，如果一个类没有别的继承声明那么这个类一定是继承了Object类。</p>
+<h2 id="相关实现"><a href="#相关实现" class="headerlink" title="相关实现"></a>相关实现</h2><h3 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h3><h4 id="equals"><a href="#equals" class="headerlink" title="equals"></a>equals</h4><p>这是比较常用的一个方法，在源码中的实现也很简单。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过传入的引用和自身比对，如果是对同一个对象的引用返回为真。这里引用是指实例化对象在堆中的地址。</p>
+<h4 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h4><p>这个函数也是比较常用的，是用于对对象进行文字性描述的方法。我们在使用时一般是重载这个方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> getClass().getName() + <span class="string">"@"</span> + Integer.toHexString(hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在Object中的直接使用时，返回的是对象运行时的类名与hashCode()获取的表示内存地址信息的值。比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object o=<span class="keyword">new</span> Object();</span><br><span class="line">System.out.println(o.toString());</span><br><span class="line"><span class="comment">//输出java.lang.Object@6b884d57</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="native方法"><a href="#native方法" class="headerlink" title="native方法"></a>native方法</h3><p>在java中有很多的方法不是完全使用java实现的，有些对系统底层的调用还需要使用C语言来实现，对这些函数的声明是用native来声明的。</p>
+<h4 id="registerNatives"><a href="#registerNatives" class="headerlink" title="registerNatives"></a>registerNatives</h4><p>Object类中也有许多的native方法，这些方法在初始化的时候需要将它们与对应的C语言方法对应，而实现这个过程的方法是registerNatives。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">registerNatives</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">	registerNatives();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在类中对这一方法进行了初始的静态调用，对本地的方法进行注册，在其他类中也用类似的使用，比如System。<br>再往深一点看看，就是jni的实现了<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> JNINativeMethod methods[] = &#123;</span><br><span class="line">&#123;“hashCode”, 	“()I”, 						(<span class="keyword">void</span> *)&amp;JVM_IHashCode&#125;,</span><br><span class="line">&#123;“wait”, 		“(J)V”, 					(<span class="keyword">void</span> *)&amp;JVM_MonitorWait&#125;,</span><br><span class="line">&#123;“notify”, 		“()V”, 						(<span class="keyword">void</span> *)&amp;JVM_MonitorNotify&#125;,</span><br><span class="line">&#123;“notifyAll”, 	“()V”, 						(<span class="keyword">void</span> *)&amp;JVM_MonitorNotifyAll&#125;,</span><br><span class="line">&#123;“clone”, 		“()Ljava/lang/Object;”, 	(<span class="keyword">void</span> *)&amp;JVM_Clone&#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这里是将java中的函数与在C语言中的函数连接，左边是java中的函数名，右边是在C语言中的函数名，中间的像“()I”中的“I”是jni中对数据类型的转换，V是void,I是int，Object对应是Ljava/lang/Object。还有一点是其中并没有getClass这一函数，但是在调用时还是会按这个名称Java_java_lang_Object_getClass调用。<br>再看看详细的实现<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_java_lang_Object_registerNatives(JNIEnv *env, jclass cls)</span><br><span class="line">&#123;</span><br><span class="line">    (*env)-&gt;RegisterNatives(env, cls, methods, <span class="keyword">sizeof</span>(methods)/<span class="keyword">sizeof</span>(methods[<span class="number">0</span>]));</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//将本地的几个方法methods注册。</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode"></a>hashCode</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>使用这一函数对不同的对象进行区分（为不同的对象返回不同的整数（原文）），一般由对象实例化后在堆中的地址转换为整数实现，不是由java自己实现（native）。<br>除此之外，该函数为有关哈希表的实现提供支持，比如java.util.HashMap。<br>这个函数可以与equals函数呼应，对于equals不相等的函数，使用hashCode得到的是不等的值。（对同一对象的引用，返回的是相等的地址信息，对不同对象的引用返回的是不同的）</p>
+<h4 id="clone"><a href="#clone" class="headerlink" title="clone"></a>clone</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span>;</span><br></pre></td></tr></table></figure>
+<p>这一方法实现了对于已有对象的克隆，但是需要实现Cloneable接口，而且是浅拷贝，具体可以参照<a href="https://blog.csdn.net/sinat_36945592/article/details/86765463" target="_blank" rel="noopener">Java技巧——Cloneable接口与clone方法</a>。</p>
+<h3 id="并发与同步"><a href="#并发与同步" class="headerlink" title="并发与同步"></a>并发与同步</h3><p>synchronized大家应该不陌生，我们通过它来同步某个对象或是代码块，我们称之为锁，锁是干啥的呢？事实上在多线程中往往会出现多个线程对同一对象进行修改，但是我们无法实时更新变量的实际状况，大多数时候在我们刷新数据时，这个数据还在进行变化，最常见的就是买票这一类，因此某一数据在任意时刻仅允许一个线程对其进行更改即拿到了锁（拿到了就锁起来只能自己改），没有拿到的线程就无法进行操作即所谓得阻塞式访问。</p>
+<h4 id="wait-long"><a href="#wait-long" class="headerlink" title="wait(long)"></a>wait(long)</h4><p>这个方法有三种种形式，这个是基本的本地实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br></pre></td></tr></table></figure></p>
+<p>首先，调用这一方法的类已经被线程获取到了锁，正在进行相关的逻辑操作，但是由于设计原因，比如异步操作，一些逻辑需要等待一段时间进行时使用这一方法，使用时正在使用的线程放弃使用解锁等待并让出使用权，直到别的线程调用该类的notify或notifyAll方法或者超过了timeout设置的时间，亦或者其他的线程使用了interrupt()方法，再重新获得锁。参数是指超时时间，如果超时时间为0，则只能等着其他线程通知了。</p>
+<h5 id="wait-long-int"><a href="#wait-long-int" class="headerlink" title="wait(long, int)"></a>wait(long, int)</h5><p>这个函数用于更好的去控制超时时间，第二个参数为毫秒量。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (timeout &lt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		timeout++;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	wait(timeout);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="wait"><a href="#wait" class="headerlink" title="wait()"></a>wait()</h5><p>特殊情况，超时时间为0。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">	wait(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="notify"><a href="#notify" class="headerlink" title="notify"></a>notify</h4><p>通过这一函数来通知等待操作的其他线程，如果有多个线程在等待就选取其中一个。之后，等到正在操作的对象放弃使用权解锁时，该线程运行并获得锁。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notify</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure></p>
+<h4 id="notifyAll"><a href="#notifyAll" class="headerlink" title="notifyAll"></a>notifyAll</h4><p>通过这一函数来通知等待操作的其他线程，之后，等到正在操作的对象放弃使用权解锁时，这些线程运行。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notifyAll</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure></p>
+<h4 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h4><p><strong>notify与notifyAll都是针对使用了wait函数的对象。</strong><br><strong>所谓唤醒与获得锁是两个概念，不是说notify就直接可以获得锁并执行，那样notifyAll会存在多个线程同时获得锁。</strong><br><strong>被wait的线程要先被唤醒，之后才能参与锁的争夺。</strong><br><strong>所以大多数使用是将wait写到循环里，防止判断条件被唤醒的线程打破。</strong></p>
+<h3 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h3><p>java中的反射，即指在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性。</p>
+<h4 id="getClass"><a href="#getClass" class="headerlink" title="getClass"></a>getClass</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> Class&lt;?&gt; getClass();</span><br></pre></td></tr></table></figure>
+<p>返回这一对象运行时的类Class（这里是指Class这个类）的实例。简单的举个例子。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Object o=<span class="keyword">new</span> Object();</span><br><span class="line">Object s= <span class="string">"123"</span>;</span><br><span class="line">System.out.println(o.getClass().getName());</span><br><span class="line">System.out.println(s.getClass().getName());</span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line"><span class="comment">//java.lang.Object</span></span><br><span class="line"><span class="comment">//java.lang.String</span></span><br></pre></td></tr></table></figure></p>
+<p>返回的是运行时的类的实例，所以第二个是String，不是Object。</p>
+<h3 id="finalize"><a href="#finalize" class="headerlink" title="finalize"></a>finalize</h3><p>该方法不是什么理解上的析构函数，gc在回收对象之前会调用该函数。我们可以重写该函数实现对象回收前的资源清理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>Java无法保证finalize的及时执行，甚至不保证其执行，只是在回收之前调用，除此之外该方法由优先级较低的线程执行，gc至多自动处理一次。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>Object类还是很重要的，短短的几百行代码（含注释）中蕴含着许多的设计思想，作为众多类的祖先，其中的相关特性值得我们去深究。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/11/java设计模式模板方法/" rel="next" title="java设计模式行为篇------模板方法">
+                <i class="fa fa-chevron-left"></i> java设计模式行为篇------模板方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#描述"><span class="nav-number">1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关实现"><span class="nav-number">2.</span> <span class="nav-text">相关实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用函数"><span class="nav-number">2.1.</span> <span class="nav-text">常用函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#equals"><span class="nav-number">2.1.1.</span> <span class="nav-text">equals</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#toString-NaN"><span class="nav-number">2.1.2.</span> <span class="nav-text">toString</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#native方法"><span class="nav-number">2.2.</span> <span class="nav-text">native方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#registerNatives"><span class="nav-number">2.2.1.</span> <span class="nav-text">registerNatives</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hashCode"><span class="nav-number">2.2.2.</span> <span class="nav-text">hashCode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#clone"><span class="nav-number">2.2.3.</span> <span class="nav-text">clone</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发与同步"><span class="nav-number">2.3.</span> <span class="nav-text">并发与同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-long"><span class="nav-number">2.3.1.</span> <span class="nav-text">wait(long)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#wait-long-int"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">wait(long, int)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#wait"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">wait()</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#notify"><span class="nav-number">2.3.2.</span> <span class="nav-text">notify</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#notifyAll"><span class="nav-number">2.3.3.</span> <span class="nav-text">notifyAll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#强调"><span class="nav-number">2.3.4.</span> <span class="nav-text">强调</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反射"><span class="nav-number">2.4.</span> <span class="nav-text">反射</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#getClass"><span class="nav-number">2.4.1.</span> <span class="nav-text">getClass</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finalize"><span class="nav-number">2.5.</span> <span class="nav-text">finalize</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+<!-- 
+  <div class="footer-custom">true</div>
+ -->
+
+
+
+
+  <div class="footer-custom">  
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+ </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
