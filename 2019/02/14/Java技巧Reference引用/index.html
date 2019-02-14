@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="yanzs_博客">
 <meta property="og:description" content="描述首先什么是引用？什么是对象？这是一个基础的问题。我们看看一些简单的代码。12Object a;a = new Object(); 这里的a是一个引用，Object a只是声明了一个Object的引用，在第二行执行前，a是一个没有指向的引用。第二行中的new Object()建立了对象存到了堆中，由a = new Object()赋给了a这个引用。1234Object a;Object b;a">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-14T11:42:36.361Z">
+<meta property="og:updated_time" content="2019-02-14T11:47:28.627Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java技巧------Reference引用">
 <meta name="twitter:description" content="描述首先什么是引用？什么是对象？这是一个基础的问题。我们看看一些简单的代码。12Object a;a = new Object(); 这里的a是一个引用，Object a只是声明了一个Object的引用，在第二行执行前，a是一个没有指向的引用。第二行中的new Object()建立了对象存到了堆中，由a = new Object()赋给了a这个引用。1234Object a;Object b;a">
@@ -383,7 +383,7 @@
                 
               
 
-              <time title="创建时间：2019-02-14 19:40:11 / 修改时间：19:42:36" itemprop="dateCreated datePublished" datetime="2019-02-14T19:40:11+08:00">2019-02-14</time>
+              <time title="创建时间：2019-02-14 19:40:11 / 修改时间：19:47:28" itemprop="dateCreated datePublished" datetime="2019-02-14T19:40:11+08:00">2019-02-14</time>
             
 
             
@@ -454,7 +454,7 @@
 <p>对于弱引用在垃圾回收机制中是这样运作的，如果没有其他的强引用或是软引用而只是一个弱引用的话，那么会直接被回收。但是我们不确定回收机制运行的具体时间，所以我们无法确定具体的回收时间。</p>
 <h3 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h3><p>虚引用与其他三种都不同，它可以说是没有引用，使用与不使用并不会改变相关对象的生命周期。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ReferenceQueue&lt;Object&gt; queue = <span class="keyword">new</span> ReferenceQueue&lt;Object&gt;();</span><br><span class="line">PhantomReference&lt;Object&gt; sa = <span class="keyword">new</span> PhantomReference(<span class="keyword">new</span> Object(),queue);</span><br></pre></td></tr></table></figure></p>
 <p>使用虚引用必须要和ReferenceQueue一起使用，当回收机制在回收时发现相关的对象还保留有虚引用时，会将其加入与之关联的ReferenceQueue中，我们可以通过对ReferenceQueue的操作来查看其是否被回收，所以一般使用虚引用来追踪回收过程。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>根据不同的需求，我们可以设置不同的引用类型进行内存管理，优化我们的程序，源码分析详见<a href="https://blog.csdn.net/sinat_36945592/article/details/87099185" target="_blank" rel="noopener">Java源码阅读——Reference</a>。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>根据不同的需求，我们可以设置不同的引用类型进行内存管理，优化我们的程序，源码分析详见<a href="https://yanzs.github.io/2019/02/14/Java%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BBReference/" target="_blank" rel="noopener">Java源码阅读——Reference</a>。</p>
 
       
     </div>
