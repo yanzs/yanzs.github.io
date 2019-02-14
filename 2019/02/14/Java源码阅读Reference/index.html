@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="描述Reference是PhantomReference（虚引用），WeakReference（弱引用），SoftReference（软引用）的父类。位于java.lang.ref包中，是一个使用泛型的抽象类。它定义了所有引用对象的一般操作，与垃圾回收机制（gc）息息相关。 四种状态每一个Reference实例都处在四种可能的内在状态之一。 Active12345678/*Active: Subj">
+<meta name="keywords" content="java,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java源码阅读------Reference">
+<meta property="og:url" content="http://yoursite.com/2019/02/14/Java源码阅读Reference/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="描述Reference是PhantomReference（虚引用），WeakReference（弱引用），SoftReference（软引用）的父类。位于java.lang.ref包中，是一个使用泛型的抽象类。它定义了所有引用对象的一般操作，与垃圾回收机制（gc）息息相关。 四种状态每一个Reference实例都处在四种可能的内在状态之一。 Active12345678/*Active: Subj">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-14T11:42:32.759Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java源码阅读------Reference">
+<meta name="twitter:description" content="描述Reference是PhantomReference（虚引用），WeakReference（弱引用），SoftReference（软引用）的父类。位于java.lang.ref包中，是一个使用泛型的抽象类。它定义了所有引用对象的一般操作，与垃圾回收机制（gc）息息相关。 四种状态每一个Reference实例都处在四种可能的内在状态之一。 Active12345678/*Active: Subj">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/14/Java源码阅读Reference/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java源码阅读------Reference | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/Java源码阅读Reference/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java源码阅读------Reference
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-14 19:39:50 / 修改时间：19:42:32" itemprop="dateCreated datePublished" datetime="2019-02-14T19:39:50+08:00">2019-02-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/源码阅读/" itemprop="url" rel="index"><span itemprop="name">源码阅读</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>Reference是PhantomReference（虚引用），WeakReference（弱引用），SoftReference（软引用）的父类。位于java.lang.ref包中，是一个使用泛型的抽象类。它定义了所有引用对象的一般操作，与垃圾回收机制（gc）息息相关。</p>
+<h2 id="四种状态"><a href="#四种状态" class="headerlink" title="四种状态"></a>四种状态</h2><p>每一个Reference实例都处在四种可能的内在状态之一。</p>
+<h3 id="Active"><a href="#Active" class="headerlink" title="Active"></a>Active</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Active: Subject to special treatment by the garbage collector.  Some</span></span><br><span class="line"><span class="comment"> *     time after the collector detects that the reachability of the</span></span><br><span class="line"><span class="comment"> *     referent has changed to the appropriate state, it changes the</span></span><br><span class="line"><span class="comment"> *     instance's state to either Pending or Inactive, depending upon</span></span><br><span class="line"><span class="comment"> *     whether or not the instance was registered with a queue when it was</span></span><br><span class="line"><span class="comment"> *     created.  In the former case it also adds the instance to the</span></span><br><span class="line"><span class="comment"> *     pending-Reference list.  Newly-created instances are Active.</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>活跃状态，新创建的实例，或是还有强引用的实例是处于Active状态，在gc处理时，会根据是否注册引用队列来区分处理。注册了的会将其放到pending状态，没有注册的直接转到Inactive。</p>
+<h3 id="Pending"><a href="#Pending" class="headerlink" title="Pending"></a>Pending</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Pending: An element of the pending-Reference list, waiting to be</span></span><br><span class="line"><span class="comment"> *     enqueued by the Reference-handler thread.  Unregistered instances</span></span><br><span class="line"><span class="comment"> *     are never in this state.</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>等待状态，在pending状态中，引用会等待Reference-handler这个线程的处理，将其入队进入引用队列ReferenceQueue中，进入Enqueued状态，没有注册引用队列的自然不会进入这一状态。</p>
+<h3 id="Enqueued"><a href="#Enqueued" class="headerlink" title="Enqueued"></a>Enqueued</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Enqueued: An element of the queue with which the instance was</span></span><br><span class="line"><span class="comment"> *     registered when it was created.  When an instance is removed from</span></span><br><span class="line"><span class="comment"> *     its ReferenceQueue, it is made Inactive.  Unregistered instances are</span></span><br><span class="line"><span class="comment"> *     never in this state.</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>队内状态，在这一状态下，引用对象将会处于ReferenceQueue中，如果从中移除后将会进入Inactive状态，同理没有注册ReferenceQueue的引用对象无法进入这一状态。</p>
+<h3 id="Inactive"><a href="#Inactive" class="headerlink" title="Inactive"></a>Inactive</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Inactive: Nothing more to do.  Once an instance becomes Inactive its</span></span><br><span class="line"><span class="comment"> *     state will never change again.</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>不活跃状态，最终状态，位于这一状态的实例将会被gc回收。</p>
+<h2 id="内部实现"><a href="#内部实现" class="headerlink" title="内部实现"></a>内部实现</h2><h3 id="referent"><a href="#referent" class="headerlink" title="referent"></a>referent</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> T referent;         <span class="comment">/* Treated specially by GC */</span></span><br></pre></td></tr></table></figure>
+<p>对内部对象的保存引用，使用了泛型，gc会特别处理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.referent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>相关的get方法获取了包装的引用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.referent = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用clear方法可以对referent 清理，之后其将不会再被加入引用队列，gc在回收清理时并不执行该方法，而是更直接的清理。</p>
+<h3 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> ReferenceQueue&lt;? <span class="keyword">super</span> T&gt; queue;</span><br></pre></td></tr></table></figure>
+<p>对于需要通知机制的，用于储存传入的引用队列，使用通配符泛型，内部可以是相关的子类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEnqueued</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">this</span>.queue == ReferenceQueue.ENQUEUED);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这一方法可以判断queue中是否含有引用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">enqueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.queue.enqueue(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将注册了引用队列的引用加入其对应的队列中。</p>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>有两种构造函数分别实现需要引用队列的和不需要引用队列的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Reference(T referent) &#123;</span><br><span class="line">	<span class="keyword">this</span>(referent, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Reference(T referent, ReferenceQueue&lt;? <span class="keyword">super</span> T&gt; queue) &#123;</span><br><span class="line">	<span class="keyword">this</span>.referent = referent;</span><br><span class="line">    <span class="keyword">this</span>.queue = (queue == <span class="keyword">null</span>) ? ReferenceQueue.NULL : queue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>说明一下在ReferenceQueue的定义中有两个<strong>静态变量</strong>NULL与ENQUEUED分别表示没有设置引用队列和已经入队的两种状态。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Null</span>&lt;<span class="title">S</span>&gt; <span class="keyword">extends</span> <span class="title">ReferenceQueue</span>&lt;<span class="title">S</span>&gt; </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">enqueue</span><span class="params">(Reference&lt;? extends S&gt; r)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> ReferenceQueue&lt;Object&gt; NULL = <span class="keyword">new</span> Null&lt;&gt;();</span><br><span class="line"><span class="keyword">static</span> ReferenceQueue&lt;Object&gt; ENQUEUED = <span class="keyword">new</span> Null&lt;&gt;();</span><br></pre></td></tr></table></figure></p>
+<h3 id="初始化的静态处理"><a href="#初始化的静态处理" class="headerlink" title="初始化的静态处理"></a>初始化的静态处理</h3><h4 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h4><p><strong>线程</strong>：首先，线程不是进程，一个进程有很多子线程，线程是进程中的一个执行流程，只是轮换执行的过程不是同时。多进程是操作系统同时运行多个程序的方法，多线程是程序同时运行多个处理的方法，这里的同步是我们的感觉同步，实际上还是碎片化时间轮流处理。在java中以Thread类实现。<br><strong>线程组</strong>：用于管理线程，是线程的组合，除了初始线程组外,每个线程组都有一个父线程组，所有的线程组呈树状分布，线程组中除了包含线程还会包含线程组。<br><strong>线程优先级</strong>：根据线程处理的事务不同给它们分配不同的优先级，优先级越高越可能被执行，在Thread中定义最小（MIN_PRIORITY）为1，最大（MAX_PRIORITY）为10，默认的优先级（NORM_PRIORITY）为5。<br><strong>线程分类</strong>：一般分为守护线程与用户线程，两者的区别主要体现在java虚拟机的处理上，守护线程依赖非守护线程而存在，如果不存在非守护线程只剩下守护线程，那么虚拟机会直接将其终止并退出（工作完成）。</p>
+<h4 id="静态处理"><a href="#静态处理" class="headerlink" title="静态处理"></a>静态处理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">	ThreadGroup tg = Thread.currentThread().getThreadGroup();</span><br><span class="line">    <span class="keyword">for</span> (ThreadGroup tgn = tg;</span><br><span class="line">    tgn != <span class="keyword">null</span>;</span><br><span class="line">    tg = tgn, tgn = tg.getParent());</span><br><span class="line">    Thread handler = <span class="keyword">new</span> ReferenceHandler(tg, <span class="string">"Reference Handler"</span>);</span><br><span class="line">    <span class="comment">/* If there were a special system-only priority greater than</span></span><br><span class="line"><span class="comment">    * MAX_PRIORITY, it would be used here</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    handler.setPriority(Thread.MAX_PRIORITY);</span><br><span class="line">    handler.setDaemon(<span class="keyword">true</span>);</span><br><span class="line">    handler.start();</span><br><span class="line">    <span class="comment">// provide access in SharedSecrets</span></span><br><span class="line">    SharedSecrets.setJavaLangRefAccess(<span class="keyword">new</span> JavaLangRefAccess() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryHandlePendingReference</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> tryHandlePending(<span class="keyword">false</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先获取了当前正在执行的线程的线程组。之后使用循环获得根线程组，应该是System线程组。之后初始化了一个ReferenceHandler线程，这个是Reference的一个内部类，将名为Reference Handler的线程注册到根线程组中，并设置优先级为最高的10，并设置为守护进程运行，必须在运行之前设置。<br>最后说一下SharedSecrets类，这个类的实现只是包含了许多接口的get与set，简单的说是实现了私有方法的共享，而不必使用反射去实现，在这里其实现了JavaLangRefAccess这个接口，共享了tryHandlePending这一私有方法。</p>
+<h3 id="ReferenceHandler"><a href="#ReferenceHandler" class="headerlink" title="ReferenceHandler"></a>ReferenceHandler</h3><p>ReferenceHandler是一个静态内部类，继承自Thread是一个线程，负责将处于pending状态的引用加入引用队列。</p>
+<h4 id="构造函数-1"><a href="#构造函数-1" class="headerlink" title="构造函数"></a>构造函数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ReferenceHandler(ThreadGroup g, String name) &#123;</span><br><span class="line">	<span class="keyword">super</span>(g, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用Thread中的方法将线程加入到线程组中。</p>
+<h4 id="静态处理-1"><a href="#静态处理-1" class="headerlink" title="静态处理"></a>静态处理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">	<span class="comment">// pre-load and initialize InterruptedException and Cleaner classes</span></span><br><span class="line">	<span class="comment">// so that we don't get into trouble later in the run loop if there's</span></span><br><span class="line">	<span class="comment">// memory shortage while loading/initializing them lazily.</span></span><br><span class="line">	ensureClassInitialized(InterruptedException.class);</span><br><span class="line">	ensureClassInitialized(Cleaner.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用ensureClassInitialized方法完成InterruptedException与Cleaner两个类的初始化加载。</p>
+<h4 id="ensureClassInitialized"><a href="#ensureClassInitialized" class="headerlink" title="ensureClassInitialized"></a>ensureClassInitialized</h4><p>很简单的实现，通过传入的类获取类名加载对应的类，参数中的true为实现初始化，getClassLoader为获取传入的类中的类加载器。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ensureClassInitialized</span><span class="params">(Class&lt;?&gt; clazz)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		Class.forName(clazz.getName(), <span class="keyword">true</span>, clazz.getClassLoader());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> (Error) <span class="keyword">new</span> NoClassDefFoundError(e.getMessage()).initCause(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="run"><a href="#run" class="headerlink" title="run"></a>run</h4><p>这个方法大家应该很熟悉，线程的运行方法包含运行进行的操作。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">		tryHandlePending(<span class="keyword">true</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现也很直观就是跑tryHandlePending这个函数。</p>
+<h3 id="tryHandlePending"><a href="#tryHandlePending" class="headerlink" title="tryHandlePending"></a>tryHandlePending</h3><p>应该算是这个类中比较有意思的一个函数了，负责将处于Pending状态的Reference加入到引用队列queue中。若返回为true表示还有处于Pending状态的Reference，为false则没有，可以通过返回值来操控其运行。waitForNotify参数表示是否等待Notify方法，当没有Pending状态的引用时waitForNotify为true则等待Notify方法或线程的中断interrupted，为false就立即结束。</p>
+<h4 id="Object锁"><a href="#Object锁" class="headerlink" title="Object锁"></a>Object锁</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Lock</span> </span>&#123; &#125;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Lock lock = <span class="keyword">new</span> Lock();</span><br></pre></td></tr></table></figure>
+<p>这里定义了一个Object用于线程同步，具体可以参考Object中的notify与wait方法<a href="https://blog.csdn.net/sinat_36945592/article/details/87106073" target="_blank" rel="noopener">Java源码阅读——Object</a></p>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Reference&lt;Object&gt; pending = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">private</span> Reference&lt;T&gt; discovered;  <span class="comment">/* used by VM */</span></span><br><span class="line">Reference next;</span><br></pre></td></tr></table></figure>
+<p>在实现中出现了两个数据结构，一个是负责描述入队后引用的循环单向列表由next指向下一个Reference对象，具体的是应用在ReferenceQueue实现，还有一个是Pending队列用于存储所有Pending状态的Reference，由discovered与pending实现分别指向队列首部与相应节点的下一个元素。</p>
+<h4 id="详细实现"><a href="#详细实现" class="headerlink" title="详细实现"></a>详细实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">tryHandlePending</span><span class="params">(<span class="keyword">boolean</span> waitForNotify)</span> </span>&#123;</span><br><span class="line">	Reference&lt;Object&gt; r;</span><br><span class="line">    Cleaner c;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">    	<span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">        	<span class="keyword">if</span> (pending != <span class="keyword">null</span>) &#123;</span><br><span class="line">            	r = pending;</span><br><span class="line">                <span class="comment">// 'instanceof' might throw OutOfMemoryError sometimes</span></span><br><span class="line">                <span class="comment">// so do this before un-linking 'r' from the 'pending' chain...</span></span><br><span class="line">                c = r <span class="keyword">instanceof</span> Cleaner ? (Cleaner) r : <span class="keyword">null</span>;</span><br><span class="line">                <span class="comment">// unlink 'r' from 'pending' chain</span></span><br><span class="line">                pending = r.discovered;</span><br><span class="line">                r.discovered = <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// The waiting on the lock may cause an OutOfMemoryError</span></span><br><span class="line">                <span class="comment">// because it may try to allocate exception objects.</span></span><br><span class="line">                <span class="keyword">if</span> (waitForNotify) &#123;</span><br><span class="line">                	lock.wait();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// retry if waited</span></span><br><span class="line">                <span class="keyword">return</span> waitForNotify;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (OutOfMemoryError x) &#123;</span><br><span class="line">    	<span class="comment">// Give other threads CPU time so they hopefully drop some live references</span></span><br><span class="line">        <span class="comment">// and GC reclaims some space.</span></span><br><span class="line">        <span class="comment">// Also prevent CPU intensive spinning in case 'r instanceof Cleaner' above</span></span><br><span class="line">        <span class="comment">// persistently throws OOME for some time...</span></span><br><span class="line">        Thread.yield();</span><br><span class="line">        <span class="comment">// retry</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException x) &#123;</span><br><span class="line">        <span class="comment">// retry</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Fast path for cleaners</span></span><br><span class="line">    <span class="keyword">if</span> (c != <span class="keyword">null</span>) &#123;</span><br><span class="line">        c.clean();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	ReferenceQueue&lt;? <span class="keyword">super</span> Object&gt; q = r.queue;</span><br><span class="line">    <span class="keyword">if</span> (q != ReferenceQueue.NULL) q.enqueue(r);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>判断pending是否为空，为空则根据waitForNotify参数来判断是否立即返回。若不为空，用r取出Pending中的首部元素，重新将Pending指向其下一个元素，判断r是否为Cleaner类方便进行单独的处理，如果是就用c来存储，跳出同步操作，根据c中的数据进行单独的Cleaner清理，最后将获得的Pending状态的引用加入到对应的ReferenceQueue中。注意在同步操作部分可能会出现内存溢出，所以使用了try-catch，出现异常时默认返回true。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>Reference的使用很灵活，其运行过程与gc处理息息相关，源码中的思想还是很值得研究的。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/13/Java源码阅读Object/" rel="next" title="Java源码阅读------Object">
+                <i class="fa fa-chevron-left"></i> Java源码阅读------Object
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/14/Java技巧Reference引用/" rel="prev" title="Java技巧------Reference引用">
+                Java技巧------Reference引用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#描述"><span class="nav-number">1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四种状态"><span class="nav-number">2.</span> <span class="nav-text">四种状态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Active"><span class="nav-number">2.1.</span> <span class="nav-text">Active</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pending"><span class="nav-number">2.2.</span> <span class="nav-text">Pending</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enqueued"><span class="nav-number">2.3.</span> <span class="nav-text">Enqueued</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inactive"><span class="nav-number">2.4.</span> <span class="nav-text">Inactive</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部实现"><span class="nav-number">3.</span> <span class="nav-text">内部实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#referent"><span class="nav-number">3.1.</span> <span class="nav-text">referent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#queue"><span class="nav-number">3.2.</span> <span class="nav-text">queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数"><span class="nav-number">3.3.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化的静态处理"><span class="nav-number">3.4.</span> <span class="nav-text">初始化的静态处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程"><span class="nav-number">3.4.1.</span> <span class="nav-text">线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态处理"><span class="nav-number">3.4.2.</span> <span class="nav-text">静态处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReferenceHandler"><span class="nav-number">3.5.</span> <span class="nav-text">ReferenceHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造函数-1"><span class="nav-number">3.5.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态处理-1"><span class="nav-number">3.5.2.</span> <span class="nav-text">静态处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ensureClassInitialized"><span class="nav-number">3.5.3.</span> <span class="nav-text">ensureClassInitialized</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#run"><span class="nav-number">3.5.4.</span> <span class="nav-text">run</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tryHandlePending"><span class="nav-number">3.6.</span> <span class="nav-text">tryHandlePending</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Object锁"><span class="nav-number">3.6.1.</span> <span class="nav-text">Object锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构"><span class="nav-number">3.6.2.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#详细实现"><span class="nav-number">3.6.3.</span> <span class="nav-text">详细实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+<!-- 
+  <div class="footer-custom">true</div>
+ -->
+
+
+
+
+  <div class="footer-custom">  
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+ </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -96,25 +96,25 @@
 
 
 
-  <meta name="description" content="开篇对于Cloneable接口不了解的可以参照Java技巧——Cloneable接口与clone方法,我们主要围绕这一接口来聊一聊原型模式。 核心思想使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。 简单实现12345678910111213141516171819202122232425">
-<meta name="keywords" content="java,设计模式">
+  <meta name="description" content="描述首先什么是引用？什么是对象？这是一个基础的问题。我们看看一些简单的代码。12Object a;a = new Object(); 这里的a是一个引用，Object a只是声明了一个Object的引用，在第二行执行前，a是一个没有指向的引用。第二行中的new Object()建立了对象存到了堆中，由a = new Object()赋给了a这个引用。1234Object a;Object b;a">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java设计模式创建篇------原型模式">
-<meta property="og:url" content="http://yoursite.com/2019/02/06/java设计模式原型模式/index.html">
+<meta property="og:title" content="Java技巧------Reference引用">
+<meta property="og:url" content="http://yoursite.com/2019/02/14/Java技巧Reference引用/index.html">
 <meta property="og:site_name" content="yanzs_博客">
-<meta property="og:description" content="开篇对于Cloneable接口不了解的可以参照Java技巧——Cloneable接口与clone方法,我们主要围绕这一接口来聊一聊原型模式。 核心思想使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。 简单实现12345678910111213141516171819202122232425">
+<meta property="og:description" content="描述首先什么是引用？什么是对象？这是一个基础的问题。我们看看一些简单的代码。12Object a;a = new Object(); 这里的a是一个引用，Object a只是声明了一个Object的引用，在第二行执行前，a是一个没有指向的引用。第二行中的new Object()建立了对象存到了堆中，由a = new Object()赋给了a这个引用。1234Object a;Object b;a">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-06T05:59:26.806Z">
+<meta property="og:updated_time" content="2019-02-14T11:42:36.361Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java设计模式创建篇------原型模式">
-<meta name="twitter:description" content="开篇对于Cloneable接口不了解的可以参照Java技巧——Cloneable接口与clone方法,我们主要围绕这一接口来聊一聊原型模式。 核心思想使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。 简单实现12345678910111213141516171819202122232425">
+<meta name="twitter:title" content="Java技巧------Reference引用">
+<meta name="twitter:description" content="描述首先什么是引用？什么是对象？这是一个基础的问题。我们看看一些简单的代码。12Object a;a = new Object(); 这里的a是一个引用，Object a只是声明了一个Object的引用，在第二行执行前，a是一个没有指向的引用。第二行中的new Object()建立了对象存到了堆中，由a = new Object()赋给了a这个引用。1234Object a;Object b;a">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/06/java设计模式原型模式/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/14/Java技巧Reference引用/">
 
 
 
@@ -124,7 +124,7 @@
   };
 </script>
 
-  <title>java设计模式创建篇------原型模式 | yanzs_博客</title>
+  <title>Java技巧------Reference引用 | yanzs_博客</title>
   
 
 
@@ -340,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/06/java设计模式原型模式/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/Java技巧Reference引用/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yanzs">
@@ -357,7 +357,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">java设计模式创建篇------原型模式
+          <h1 class="post-title" itemprop="name headline">Java技巧------Reference引用
 
               
             
@@ -383,7 +383,7 @@
                 
               
 
-              <time title="创建时间：2019-02-06 13:57:38 / 修改时间：13:59:26" itemprop="dateCreated datePublished" datetime="2019-02-06T13:57:38+08:00">2019-02-06</time>
+              <time title="创建时间：2019-02-14 19:40:11 / 修改时间：19:42:36" itemprop="dateCreated datePublished" datetime="2019-02-14T19:40:11+08:00">2019-02-14</time>
             
 
             
@@ -405,7 +405,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/java技巧/" itemprop="url" rel="index"><span itemprop="name">java技巧</span></a></span>
 
                 
                 
@@ -440,11 +440,21 @@
       
 
       
-        <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>对于Cloneable接口不了解的可以参照<a href="https://yanzs.github.io/2019/02/05/Java%E6%8A%80%E5%B7%A7Cloneable%E6%8E%A5%E5%8F%A3%E4%B8%8Eclone%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">Java技巧——Cloneable接口与clone方法</a>,我们主要围绕这一接口来聊一聊原型模式。</p>
-<h2 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h2><p>使用原型实例来确定对象的种类，使用clone方法实现对于这些原型的拷贝，产生新的对象。不通过new来产生对象而是通过clone方法复制对象的的模式为原型模式。</p>
-<h2 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> param;</span><br><span class="line">    <span class="keyword">private</span> String s;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String  <span class="title">getS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getParam</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> param;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">(<span class="keyword">int</span> param, String s)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.param=param;</span><br><span class="line">        <span class="keyword">this</span>.s=s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setParam</span><span class="params">(<span class="keyword">int</span> param)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.param = param;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setS</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.s = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        A t= (A) <span class="keyword">super</span>.clone();</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">	<span class="comment">//对多个A类的clone创建</span></span><br><span class="line">	A a= <span class="keyword">new</span> A(<span class="number">12</span>，<span class="string">"123"</span>);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">6</span>;i++)&#123;<span class="comment">//数量限制</span></span><br><span class="line">		A cloneA =(A) a.clone();</span><br><span class="line">		a.setParam(i);</span><br><span class="line">		a.setS(<span class="string">" "</span>+i);</span><br><span class="line">		System.out.println(a.getS()+a.getParam());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>实现的过程非常简单，基本就是对clone函数的重载与实现，使用Cloneable接口进行标记辅助，除此之外便没有其他需要注意的了。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>主要是对clone方法的重载，一个接口一个方法就是原型模式的全部，在实现上是在内存上直接复制二进制流，效率很高，比new出来的性能要高，但是要注意一下，clone的过程不会调用构造函数，也就是说通过这一方法创造出来的对象不会有构造函数的处理，所以在具体使用时希望大家根据需求灵活进行，特别是在深浅拷贝的选择上一定要仔细考虑。</p>
+        <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>首先什么是引用？什么是对象？这是一个基础的问题。我们看看一些简单的代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object a;</span><br><span class="line">a = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure></p>
+<p>这里的a是一个引用，Object a只是声明了一个Object的引用，在第二行执行前，a是一个没有指向的引用。第二行中的new Object()建立了对象存到了堆中，由a = new Object()赋给了a这个引用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Object a;</span><br><span class="line">Object b;</span><br><span class="line">a = <span class="keyword">new</span> Object();</span><br><span class="line">b=a;</span><br></pre></td></tr></table></figure></p>
+<p>同一个对象可以有多个引用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Object a;</span><br><span class="line">a = <span class="keyword">new</span> Object();</span><br><span class="line">a = <span class="keyword">new</span> Object();</span><br><span class="line">a = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure></p>
+<p>一个引用可以指向多个对象。</p>
+<h2 id="引用分类"><a href="#引用分类" class="headerlink" title="引用分类"></a>引用分类</h2><h3 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h3><p>我们平时使用的最简单的就是强引用，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String s= <span class="string">"a"</span>;</span><br></pre></td></tr></table></figure></p>
+<p>强引用在java的垃圾回收机制中不会被回收，即使内存不够也不会回收，只会抛出OutOfMemoryError异常并终止程序。</p>
+<h3 id="软引用"><a href="#软引用" class="headerlink" title="软引用"></a>软引用</h3><p>软引用通过SoftReference类实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object a = <span class="keyword">new</span> Object();</span><br><span class="line">SoftReference sa = <span class="keyword">new</span> SoftReference(a);</span><br></pre></td></tr></table></figure></p>
+<p>这里的Object有两个引用，一个是a，是对其对象的强引用，一个是sa是对其的软引用，也可以这样单独建立一个软引用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SoftReference&lt;Object&gt; sa = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Object());</span><br></pre></td></tr></table></figure></p>
+<p>不同于强引用，在java的垃圾回收机制中如果出现内存不足的情况，这些软引用的对象会直接被回收。正因为这一特点，往往可以用来实现缓存。</p>
+<h3 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h3><p>软引用通过WeakReference类实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object a = <span class="keyword">new</span> Object();</span><br><span class="line">WeakReferencesa = <span class="keyword">new</span> WeakReference(a);</span><br></pre></td></tr></table></figure></p>
+<p>同样这里的Object有两个引用，一个是a，是对其对象的强引用，一个是sa是对其的弱引用，也可以这样单独建立一个弱引用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WeakReferencesa&lt;Object&gt; sa = <span class="keyword">new</span> WeakReferencesa(<span class="keyword">new</span> Object());</span><br></pre></td></tr></table></figure></p>
+<p>对于弱引用在垃圾回收机制中是这样运作的，如果没有其他的强引用或是软引用而只是一个弱引用的话，那么会直接被回收。但是我们不确定回收机制运行的具体时间，所以我们无法确定具体的回收时间。</p>
+<h3 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h3><p>虚引用与其他三种都不同，它可以说是没有引用，使用与不使用并不会改变相关对象的生命周期。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ReferenceQueue&lt;Object&gt; queue = <span class="keyword">new</span> ReferenceQueue&lt;Object&gt;();</span><br><span class="line">PhantomReference&lt;Object&gt; sa = <span class="keyword">new</span> PhantomReference(<span class="keyword">new</span> Object(),queue);</span><br></pre></td></tr></table></figure></p>
+<p>使用虚引用必须要和ReferenceQueue一起使用，当回收机制在回收时发现相关的对象还保留有虚引用时，会将其加入与之关联的ReferenceQueue中，我们可以通过对ReferenceQueue的操作来查看其是否被回收，所以一般使用虚引用来追踪回收过程。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>根据不同的需求，我们可以设置不同的引用类型进行内存管理，优化我们的程序，源码分析详见<a href="https://blog.csdn.net/sinat_36945592/article/details/87099185" target="_blank" rel="noopener">Java源码阅读——Reference</a>。</p>
 
       
     </div>
@@ -470,8 +480,6 @@
           
             <a href="/tags/java/" rel="tag"># java</a>
           
-            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
-          
         </div>
       
 
@@ -483,8 +491,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/05/Java技巧Cloneable接口与clone方法/" rel="next" title="Java技巧------Cloneable接口与clone方法">
-                <i class="fa fa-chevron-left"></i> Java技巧------Cloneable接口与clone方法
+              <a href="/2019/02/14/Java源码阅读Reference/" rel="next" title="Java源码阅读------Reference">
+                <i class="fa fa-chevron-left"></i> Java源码阅读------Reference
               </a>
             
           </div>
@@ -492,10 +500,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/07/java设计模式建造者模式/" rel="prev" title="java设计模式创建篇------建造者模式">
-                java设计模式创建篇------建造者模式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -657,7 +661,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开篇"><span class="nav-number">1.</span> <span class="nav-text">开篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心思想"><span class="nav-number">2.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单实现"><span class="nav-number">3.</span> <span class="nav-text">简单实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#描述"><span class="nav-number">1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用分类"><span class="nav-number">2.</span> <span class="nav-text">引用分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#强引用"><span class="nav-number">2.1.</span> <span class="nav-text">强引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软引用"><span class="nav-number">2.2.</span> <span class="nav-text">软引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#弱引用"><span class="nav-number">2.3.</span> <span class="nav-text">弱引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚引用"><span class="nav-number">2.4.</span> <span class="nav-text">虚引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
             
 
           </div>
