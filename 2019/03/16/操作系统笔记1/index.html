@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="产生原因在多道程序环境下进程的并发进行，常常伴随着对系统资源的共享与竞争，有些资源之间可以共享，有些则是以独占的方式供进程使用，因此会产生进程之间的相互制约关系。  间接的相互制约：共享某种系统资源（互斥） 直接的相互制约：主要源于进程间的合作（同步）  这里的共享资源是指对资源的独占式访问，而进程间的合作是指程序的运行依赖于其他程序的运行结果。这里共享的系统资源往往成为临界资源。 临界资源一次仅">
+<meta name="keywords" content="课程,操作系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统笔记------进程同步（1）">
+<meta property="og:url" content="http://yoursite.com/2019/03/16/操作系统笔记1/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="产生原因在多道程序环境下进程的并发进行，常常伴随着对系统资源的共享与竞争，有些资源之间可以共享，有些则是以独占的方式供进程使用，因此会产生进程之间的相互制约关系。  间接的相互制约：共享某种系统资源（互斥） 直接的相互制约：主要源于进程间的合作（同步）  这里的共享资源是指对资源的独占式访问，而进程间的合作是指程序的运行依赖于其他程序的运行结果。这里共享的系统资源往往成为临界资源。 临界资源一次仅">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-16T02:47:54.066Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统笔记------进程同步（1）">
+<meta name="twitter:description" content="产生原因在多道程序环境下进程的并发进行，常常伴随着对系统资源的共享与竞争，有些资源之间可以共享，有些则是以独占的方式供进程使用，因此会产生进程之间的相互制约关系。  间接的相互制约：共享某种系统资源（互斥） 直接的相互制约：主要源于进程间的合作（同步）  这里的共享资源是指对资源的独占式访问，而进程间的合作是指程序的运行依赖于其他程序的运行结果。这里共享的系统资源往往成为临界资源。 临界资源一次仅">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/16/操作系统笔记1/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>操作系统笔记------进程同步（1） | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/16/操作系统笔记1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统笔记------进程同步（1）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-16 10:42:42 / 修改时间：10:47:54" itemprop="dateCreated datePublished" datetime="2019-03-16T10:42:42+08:00">2019-03-16</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/计算机基础理论/" itemprop="url" rel="index"><span itemprop="name">计算机基础理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因"></a>产生原因</h2><p>在多道程序环境下进程的并发进行，常常伴随着对系统资源的共享与竞争，有些资源之间可以共享，有些则是以独占的方式供进程使用，因此会产生进程之间的相互制约关系。</p>
+<ol>
+<li>间接的相互制约：共享某种系统资源（互斥）</li>
+<li>直接的相互制约：主要源于进程间的合作（同步）</li>
+</ol>
+<p>这里的共享资源是指对资源的独占式访问，而进程间的合作是指程序的运行依赖于其他程序的运行结果。这里共享的系统资源往往成为临界资源。</p>
+<h2 id="临界资源"><a href="#临界资源" class="headerlink" title="临界资源"></a>临界资源</h2><p>一次仅能为一个进程所使用的资源称为临界资源。例如内存变量，数组，指针等都可以成为临界资源。</p>
+<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>在程序中的体现为在进程中访问临界资源的代码段称为临界区。<br>临界资源之间的访问互斥具体到对临界区访问互斥。</p>
+<h3 id="访问控制模型"><a href="#访问控制模型" class="headerlink" title="访问控制模型"></a>访问控制模型</h3><p>大致分为4部分即：进入区，操作区，退出区，后续操作。</p>
+<ol>
+<li>进入区是对临界资源进行访问请求，在这一区域进行占用判断，保证进程对资源的独占式访问。</li>
+<li>操作区这里就已经获得了对资源的访问许可，直接进行相关的逻辑操作就可以了。</li>
+<li>退出区就是释放对临界资源的占用以供其他的进程使用。</li>
+<li>后续的操作就是继续进行进程中的其他操作，这些操作无需对临界资源进行访问（需要临界资源的都在操作区完成了）。</li>
+</ol>
+<h2 id="同步机制原则"><a href="#同步机制原则" class="headerlink" title="同步机制原则"></a>同步机制原则</h2><ol>
+<li>空闲让进：当无进程处于临界区时，请求进入临界区的进程可立即进入。</li>
+<li>忙则等待：当已有进程进入临界区时，其他试图进入临界区进程须等待</li>
+<li>有限等待：对要求访问临界资源进程，保证能在有限时间内进入临界区</li>
+<li>让权等待：当进程不用进入临界区时，应释放对临界区的占用。</li>
+</ol>
+<h2 id="锁（Lock）"><a href="#锁（Lock）" class="headerlink" title="锁（Lock）"></a>锁（Lock）</h2><p>锁，门之键也，古谓之键，今谓之锁。<br>锁一般是私有的象征，这里的门也就是对临界资源的访问，每个进程的访问都是“私有的”，也是互斥的，这样才能保证数据操作的同步。在系统中也使用了锁的设计，操作系统中有锁，JVM中也有，很多的编程语言中有也，Lock几乎成为了数据同步的象征。</p>
+<h2 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h2><p>在cpu处理并发时往往是以时间片的方式来分配使用权来让不同的进程运行相应代码，这导致了一个代码块往往只执行了一部分就用完了时间片的时间，就跳到了另一个进程中运行了，而且由于时间片与程序运行的不确定性，这种跳转是难以预测与控制的。而原子性保证的就是程序的操作中不会产生间断跳转，也就是说，所有的操作一旦开始就必须执行完成，不会被其他的进程干扰。</p>
+<h3 id="原语"><a href="#原语" class="headerlink" title="原语"></a>原语</h3><p>实现了原子性的程序（函数或程序段）称为原语。具有不可分割性与执行连续性，执行过程中不会被中断。</p>
+<h2 id="软件同步"><a href="#软件同步" class="headerlink" title="软件同步"></a>软件同步</h2><p>进程一内部操作<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">	enter_region(<span class="number">0</span>); </span><br><span class="line">	sectionWithResource();</span><br><span class="line">	leave_region(<span class="number">0</span>); </span><br><span class="line">	sectionWithOutResource();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>进程二内部操作<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">	enter_region(<span class="number">1</span>); </span><br><span class="line">	sectionWithResource();</span><br><span class="line">	leave_region(<span class="number">1</span>); </span><br><span class="line">	sectionWithOutResource();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Dekker算法"><a href="#Dekker算法" class="headerlink" title="Dekker算法"></a>Dekker算法</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FALSE 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 2 <span class="comment">// 进程的个数</span></span></span><br><span class="line"><span class="keyword">int</span> turn; <span class="comment">// 轮到哪个进程</span></span><br><span class="line"><span class="keyword">int</span> interested[N]; <span class="comment">// 初始值均为FALSE,标志有那些进程已提出了请求</span></span><br><span class="line"><span class="comment">//请求临界资源</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">enter_region</span> <span class="params">(<span class="keyword">int</span> process)</span><span class="comment">// process = 0 或 1</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> other = <span class="number">1</span> - process;<span class="comment">// 另外一个进程的进程号</span></span><br><span class="line">	interested[process] = TRUE;<span class="comment">// 表明本进程提出请求</span></span><br><span class="line">	<span class="keyword">while</span>(interested[other])</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(turn != process)<span class="comment">//检查是否排上了队</span></span><br><span class="line">		&#123;</span><br><span class="line">			interested[process] = FALSE;<span class="comment">//没排上就撤销请求</span></span><br><span class="line">			<span class="keyword">while</span>(turn == other);<span class="comment">//继续排队</span></span><br><span class="line">			interested[process] = TRUE;<span class="comment">//排上就继续请求</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//释放临界资源</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">leave_region</span> <span class="params">( <span class="keyword">int</span> process)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> other = <span class="number">1</span> - process;</span><br><span class="line">	turn = other;<span class="comment">//转让访问权</span></span><br><span class="line">	interested[process] = FALSE; <span class="comment">// 本进程已离开临界区，撤销请求</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里在理解时注意，在以上函数的各个语句之间，cpu都可能导致其发生进程跳转，在此基础上使用了一个标志数组interested与一个状态变量turn，完成了进程同步。</p>
+<h3 id="Peterson算法"><a href="#Peterson算法" class="headerlink" title="Peterson算法"></a>Peterson算法</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FALSE 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TRUE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 2 <span class="comment">// 进程的个数</span></span></span><br><span class="line"><span class="keyword">int</span> turn; <span class="comment">// 轮到哪个进程</span></span><br><span class="line"><span class="keyword">int</span> interested[N]; <span class="comment">// 初始值均为FALSE,标志有那些进程已提出了请求</span></span><br><span class="line"><span class="comment">//请求临界资源</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">enter_region</span> <span class="params">(<span class="keyword">int</span> process)</span><span class="comment">// process = 0 或 1</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> other; <span class="comment">// 另外一个进程的进程号</span></span><br><span class="line">	other = <span class="number">1</span> - process;</span><br><span class="line">	interested[process] = TRUE;<span class="comment">// 表明本进程提出请求</span></span><br><span class="line">	turn = process; <span class="comment">// 设置标志位</span></span><br><span class="line">	<span class="keyword">while</span>( turn == process &amp;&amp; interested[other] == TRUE);<span class="comment">//如果轮到该进程但是之前已有进程提出请求就死循环等待。</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//释放临界资源</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">leave_region</span> <span class="params">( <span class="keyword">int</span> process)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	interested[process] = FALSE; <span class="comment">// 本进程已离开临界区</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Peterson算法在实现上更加简单，两者实现的思想几乎是类似的，使用的数据结构也相同，只是在逻辑处理上少有不同。</p>
+<h2 id="硬件同步"><a href="#硬件同步" class="headerlink" title="硬件同步"></a>硬件同步</h2><h3 id="基于SWAP指令"><a href="#基于SWAP指令" class="headerlink" title="基于SWAP指令"></a>基于SWAP指令</h3><p>SWAP指令用于交换俩个变量（寄存器）的值，该指令自身保证了操作的原子性，是同步实现的基础。<br>SWAP的C语言描述。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SWAP</span><span class="params">(boolean *lock, boolean *key)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">	boolean tmp;</span><br><span class="line">	tmp=*lock;</span><br><span class="line">	*lock=*key;</span><br><span class="line">	*key=tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">boolean lock=<span class="literal">false</span>;<span class="comment">//lock为全局变量，初始为false</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">enter_region</span><span class="params">(boolean lock)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	boolean key= <span class="literal">true</span>; <span class="comment">//局部变量 </span></span><br><span class="line">	<span class="keyword">while</span>(key!=<span class="literal">false</span>)<span class="comment">//在没有进程使用时lock为false，交换后跳出循环获取访问权限。</span></span><br><span class="line">	&#123;</span><br><span class="line">		SWAP(&amp;lock,&amp;key);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">leave_region</span><span class="params">(boolean lock)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	lock= <span class="literal">false</span>;<span class="comment">//使用结束释放锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/课程/" rel="tag"># 课程</a>
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/13/Java源码阅读Annotation/" rel="next" title="Java源码阅读------Annotation">
+                <i class="fa fa-chevron-left"></i> Java源码阅读------Annotation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#产生原因"><span class="nav-number">1.</span> <span class="nav-text">产生原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#临界资源"><span class="nav-number">2.</span> <span class="nav-text">临界资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#临界区"><span class="nav-number">2.1.</span> <span class="nav-text">临界区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问控制模型"><span class="nav-number">2.2.</span> <span class="nav-text">访问控制模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步机制原则"><span class="nav-number">3.</span> <span class="nav-text">同步机制原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁（Lock）"><span class="nav-number">4.</span> <span class="nav-text">锁（Lock）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原子性"><span class="nav-number">5.</span> <span class="nav-text">原子性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原语"><span class="nav-number">5.1.</span> <span class="nav-text">原语</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件同步"><span class="nav-number">6.</span> <span class="nav-text">软件同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dekker算法"><span class="nav-number">6.1.</span> <span class="nav-text">Dekker算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Peterson算法"><span class="nav-number">6.2.</span> <span class="nav-text">Peterson算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件同步"><span class="nav-number">7.</span> <span class="nav-text">硬件同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于SWAP指令"><span class="nav-number">7.1.</span> <span class="nav-text">基于SWAP指令</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+<!-- 
+  <div class="footer-custom">true</div>
+ -->
+
+
+
+
+  <div class="footer-custom">  
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+ </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
