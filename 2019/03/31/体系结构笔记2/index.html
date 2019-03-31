@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="五段流水线这里介绍和分析的流水线是一个五段的精简指令集（RISC）流水线，即每一个程序指令的执行都分为五段来执行（一般情况下每个阶段（周期）占用一个时钟周期）。 阶段划分取指周期（IF）这一阶段是将PC（程序计数器指向当前运行指令的下一条指令）中对应地址的指令取出并放入指令寄存器（IR）中，并将PC加四指向下一条要运行的指令。（这里的一条指令占4个字节） 读数与译码周期（ID）这一阶段是将之前获取">
+<meta name="keywords" content="课程,体系结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="体系结构笔记------流水线相关与冲突">
+<meta property="og:url" content="http://yoursite.com/2019/03/31/体系结构笔记2/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="五段流水线这里介绍和分析的流水线是一个五段的精简指令集（RISC）流水线，即每一个程序指令的执行都分为五段来执行（一般情况下每个阶段（周期）占用一个时钟周期）。 阶段划分取指周期（IF）这一阶段是将PC（程序计数器指向当前运行指令的下一条指令）中对应地址的指令取出并放入指令寄存器（IR）中，并将PC加四指向下一条要运行的指令。（这里的一条指令占4个字节） 读数与译码周期（ID）这一阶段是将之前获取">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-31T14:13:29.802Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="体系结构笔记------流水线相关与冲突">
+<meta name="twitter:description" content="五段流水线这里介绍和分析的流水线是一个五段的精简指令集（RISC）流水线，即每一个程序指令的执行都分为五段来执行（一般情况下每个阶段（周期）占用一个时钟周期）。 阶段划分取指周期（IF）这一阶段是将PC（程序计数器指向当前运行指令的下一条指令）中对应地址的指令取出并放入指令寄存器（IR）中，并将PC加四指向下一条要运行的指令。（这里的一条指令占4个字节） 读数与译码周期（ID）这一阶段是将之前获取">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/31/体系结构笔记2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>体系结构笔记------流水线相关与冲突 | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/体系结构笔记2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">体系结构笔记------流水线相关与冲突
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-31 22:02:50 / 修改时间：22:13:29" itemprop="dateCreated datePublished" datetime="2019-03-31T22:02:50+08:00">2019-03-31</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/计算机基础理论/" itemprop="url" rel="index"><span itemprop="name">计算机基础理论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="五段流水线"><a href="#五段流水线" class="headerlink" title="五段流水线"></a>五段流水线</h2><p>这里介绍和分析的流水线是一个五段的精简指令集（RISC）流水线，即每一个程序指令的执行都分为五段来执行（一般情况下每个阶段（周期）占用一个时钟周期）。</p>
+<h2 id="阶段划分"><a href="#阶段划分" class="headerlink" title="阶段划分"></a>阶段划分</h2><h3 id="取指周期（IF）"><a href="#取指周期（IF）" class="headerlink" title="取指周期（IF）"></a>取指周期（IF）</h3><p>这一阶段是将PC（程序计数器指向当前运行指令的下一条指令）中对应地址的指令取出并放入指令寄存器（IR）中，并将PC加四指向下一条要运行的指令。（这里的一条指令占4个字节）</p>
+<h3 id="读数与译码周期（ID）"><a href="#读数与译码周期（ID）" class="headerlink" title="读数与译码周期（ID）"></a>读数与译码周期（ID）</h3><p>这一阶段是将之前获取到的指令进行译码，同时在指令中可能还有数据，比如指向不同的寄存器，在MIPS指令架构下寄存器共有32个，以一个五位的数据来表示（0~31），在译码的过程中，通过这一编码来获取对应的寄存器中的数据，这一阶段的访存是对通用寄存器组的访问。</p>
+<h3 id="计算与执行周期（EX）"><a href="#计算与执行周期（EX）" class="headerlink" title="计算与执行周期（EX）"></a>计算与执行周期（EX）</h3><p>在这一阶段是对之前获取的数据进行运算处理，但是不同的指令中含有的数据类型不同，比如有的指令中含有的是寄存器类型的数据，有的含有的是立即数。在这一阶段中主要的操作部件是ALU运算器。根据指令类型与数据类型有以下分类。</p>
+<h4 id="存储器访存"><a href="#存储器访存" class="headerlink" title="存储器访存"></a>存储器访存</h4><p>可能是寄存器的寻址，或者是寄存器与偏移量的相对寻址，这时候可能需要将有关的立即数进行符号扩展或无符号扩展，使得其与寄存器中的数据位数相同，再交由ALU进行加运算产生有效地址。</p>
+<h4 id="寄存器-寄存器"><a href="#寄存器-寄存器" class="headerlink" title="寄存器-寄存器"></a>寄存器-寄存器</h4><p>这一类型的指令中数据来源于寄存器，在上一阶段中已近完成了对数据的读取，在这一周期中只要根据指令对应的操作进行运算即可。</p>
+<h4 id="寄存器-立即数"><a href="#寄存器-立即数" class="headerlink" title="寄存器-立即数"></a>寄存器-立即数</h4><p>这一类型的指令数据分别来自寄存器与立即数，这里的立即数可能会需要进行位扩展，之后再将处理好的数据放到ALU中运算。</p>
+<h4 id="分支指令"><a href="#分支指令" class="headerlink" title="分支指令"></a>分支指令</h4><p>这一指令的功能是进行跳转，在跳转之前要进行条件判断（算术与逻辑操作由ALU执行），之后还要运算跳转处的地址，使用当前的PC值与目标处的标记地址进行运算（PC加上偏移量）。</p>
+<h3 id="访存与分支跳转（MEM）"><a href="#访存与分支跳转（MEM）" class="headerlink" title="访存与分支跳转（MEM）"></a>访存与分支跳转（MEM）</h3><p>这一阶段是为处理访存指令与分支指令设计的，对于访存指令假设是读指令Load，就是将之前运算出的数据地址作为访存地址，将对应的数据取出，而若是存指令Store，就是把相应的数据写到对应的内存单元中。而如果是分支指令，通过前一周期处理的数据来判断其是否跳转，如果跳转就将新的地址写到PC中。</p>
+<h3 id="写回周期（WB）"><a href="#写回周期（WB）" class="headerlink" title="写回周期（WB）"></a>写回周期（WB）</h3><p>这个周期主要是处理运算结果的，对于运算指令是将其产生的运算结果写入通用寄存器组中，对于访存指令是将访存的数据结果存入通用寄存器中。</p>
+<p><strong>对于不同的指令其使用的阶段与周期数是不同的，比如有的指令不需要访存与跳转那就可以不执行MEM段。</strong></p>
+<h2 id="相关与冲突"><a href="#相关与冲突" class="headerlink" title="相关与冲突"></a>相关与冲突</h2><h3 id="相关"><a href="#相关" class="headerlink" title="相关"></a>相关</h3><p>相关的定义是针对指令的，即两条指令之间存在的依赖关系。有三种类型的相关：数据相关、名相关、控制相关。</p>
+<h4 id="数据相关（先写后读）"><a href="#数据相关（先写后读）" class="headerlink" title="数据相关（先写后读）"></a>数据相关（先写后读）</h4><p>对于顺序执行的两条指令之间如果存在下一条指令使用上一条指令的数据即为相关，数据相关具有传递性，当后一条指令j与这条指令之前的指令k相关，而指令k又与上面的指令i相关，这反映了数据的流动关系。<br>对于数据相关，必须要保证对应数据流动的顺序，指令必须按照其数据的流动顺序来执行。相关即后面的指令（直接或间接的）使用前面指令的结果。</p>
+<h4 id="名相关"><a href="#名相关" class="headerlink" title="名相关"></a>名相关</h4><p>名是指指令访问的寄存器或存储单元的名称，如果两条指令使用相同的名，有数据流动（直接或间接）就是上面的数据相关，如果不存在数据相关即使这里的名相关。名相关根据指令间的关系可以有以下的分类。</p>
+<h5 id="反相关（先读后写）"><a href="#反相关（先读后写）" class="headerlink" title="反相关（先读后写）"></a>反相关（先读后写）</h5><p>指令间读操作在前，写操作在后，这是为保证读到的数据为未被修改的数据，所以必须保证先读后写，对指令的执行顺序有严格要求。</p>
+<h5 id="输出相关（先写后写）"><a href="#输出相关（先写后写）" class="headerlink" title="输出相关（先写后写）"></a>输出相关（先写后写）</h5><p>指令间写操作的顺序，如果两条指令同时有写数据的操作并且其操作的目标对象为同相同的寄存器或者内存单元，则也要保证其运行的先后顺序，保证最终写入的数据是最后执行的指令的。<br>与上面的数据相关不同，真数据相关是数据先写入，之后的指令以其写入的结果来作为接下来运行的输入数据，即先写后读。</p>
+<h5 id="控制相关"><a href="#控制相关" class="headerlink" title="控制相关"></a>控制相关</h5><p>由分支指令形成的相关，分支指令是要先进行判断之后进行跳转，所以在指令的运行顺序上有要求。类似于if-else语句中括号内的内容，运行顺序不能进行更改。</p>
+<h3 id="冲突"><a href="#冲突" class="headerlink" title="冲突"></a>冲突</h3><p>在具体的流水线中，下一条指令由于相关等原因无法在给定的时钟周期内执行时会产生流水线冲突。</p>
+<h4 id="结构冲突"><a href="#结构冲突" class="headerlink" title="结构冲突"></a>结构冲突</h4><p>由于硬件资源有限，有时会产生硬件资源无法满足程序并行运行的情况，这时会产生结构冲突。常常是多个指令的执行向同一硬件资源提出请求。</p>
+<h4 id="数据冲突"><a href="#数据冲突" class="headerlink" title="数据冲突"></a>数据冲突</h4><p>往往是由于数据相关产生的冲突，后一条指令需要使用前一条指令的执行结果而产生的冲突。<br>根据读写操作的不同会有以下三类的数据冲突。</p>
+<h5 id="先写后读（RAW）"><a href="#先写后读（RAW）" class="headerlink" title="先写后读（RAW）"></a>先写后读（RAW）</h5><p>对应真数据相关时的情况，下一条指令依赖于上一条指令的执行结果，必须先将结果写入之后再由下一条指令来读。如果先读的话读到的是旧值，不是运算的正确输入。</p>
+<h5 id="先写后写（WAW）"><a href="#先写后写（WAW）" class="headerlink" title="先写后写（WAW）"></a>先写后写（WAW）</h5><p>这个对应于输出相关，比如最后将要输出的值为后一条指令的执行结果，可是这条指令却先执行并写入了，之后执行了上一条指令的写入操作，对应于输出的结果而言就出现冲突了。</p>
+<h5 id="先读后写（WAR）"><a href="#先读后写（WAR）" class="headerlink" title="先读后写（WAR）"></a>先读后写（WAR）</h5><p>这个对应于名相关，指令在读取某一数据之前其读取的对象先被相关的指令写入了运算结果，这导致了读取的数据不是原来的数据，而是下一条指令运行的结果。</p>
+<h4 id="控制冲突"><a href="#控制冲突" class="headerlink" title="控制冲突"></a>控制冲突</h4><p>这一冲突与控制相关有关，分支指令在处理时往往要先处理条件判断，之后再进行跳转，然而在多指令并行执行时，当分支指令计算出跳转的地址时，并行执行的其他指令可能就是按顺序执行取的，并且已经运行了很久，这样就会出现问题，本应跳转运行，但是却取了顺序执行的指令运行。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/课程/" rel="tag"># 课程</a>
+          
+            <a href="/tags/体系结构/" rel="tag"># 体系结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/21/体系结构笔记1/" rel="next" title="体系结构笔记------流水线概述">
+                <i class="fa fa-chevron-left"></i> 体系结构笔记------流水线概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#五段流水线"><span class="nav-number">1.</span> <span class="nav-text">五段流水线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阶段划分"><span class="nav-number">2.</span> <span class="nav-text">阶段划分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#取指周期（IF）"><span class="nav-number">2.1.</span> <span class="nav-text">取指周期（IF）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读数与译码周期（ID）"><span class="nav-number">2.2.</span> <span class="nav-text">读数与译码周期（ID）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算与执行周期（EX）"><span class="nav-number">2.3.</span> <span class="nav-text">计算与执行周期（EX）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#存储器访存"><span class="nav-number">2.3.1.</span> <span class="nav-text">存储器访存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#寄存器-寄存器"><span class="nav-number">2.3.2.</span> <span class="nav-text">寄存器-寄存器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#寄存器-立即数"><span class="nav-number">2.3.3.</span> <span class="nav-text">寄存器-立即数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分支指令"><span class="nav-number">2.3.4.</span> <span class="nav-text">分支指令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访存与分支跳转（MEM）"><span class="nav-number">2.4.</span> <span class="nav-text">访存与分支跳转（MEM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写回周期（WB）"><span class="nav-number">2.5.</span> <span class="nav-text">写回周期（WB）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关与冲突"><span class="nav-number">3.</span> <span class="nav-text">相关与冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相关"><span class="nav-number">3.1.</span> <span class="nav-text">相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据相关（先写后读）"><span class="nav-number">3.1.1.</span> <span class="nav-text">数据相关（先写后读）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#名相关"><span class="nav-number">3.1.2.</span> <span class="nav-text">名相关</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#反相关（先读后写）"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">反相关（先读后写）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#输出相关（先写后写）"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">输出相关（先写后写）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#控制相关"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">控制相关</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冲突"><span class="nav-number">3.2.</span> <span class="nav-text">冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#结构冲突"><span class="nav-number">3.2.1.</span> <span class="nav-text">结构冲突</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据冲突"><span class="nav-number">3.2.2.</span> <span class="nav-text">数据冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#先写后读（RAW）"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">先写后读（RAW）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#先写后写（WAW）"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">先写后写（WAW）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#先读后写（WAR）"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">先读后写（WAR）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#控制冲突"><span class="nav-number">3.2.3.</span> <span class="nav-text">控制冲突</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+<!-- 
+  <div class="footer-custom">true</div>
+ -->
+
+
+
+
+  <div class="footer-custom">  
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+ </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
