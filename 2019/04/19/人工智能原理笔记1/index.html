@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="知识表示对知识的描述，即用一组符号把知识编码成计算机可以接受的某种结构。其表示方法不唯一。 知识表示方法非结构化方法谓词逻辑表示法这里我们主要讨论一阶谓词逻辑表示法，其是一种基于数理逻辑的表示方法，其中数理逻辑可分为一阶经典逻辑与非一阶经典逻辑。  一阶经典逻辑：一阶经典命题逻辑，一阶经典谓词逻辑 非一阶经典逻辑：指除经典逻辑以外的那些逻辑，例如：二阶逻辑，多值逻辑，模糊逻辑等。  命题断言：一个">
+<meta name="keywords" content="课程,人工智能原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人工智能原理笔记------知识表示方法">
+<meta property="og:url" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="知识表示对知识的描述，即用一组符号把知识编码成计算机可以接受的某种结构。其表示方法不唯一。 知识表示方法非结构化方法谓词逻辑表示法这里我们主要讨论一阶谓词逻辑表示法，其是一种基于数理逻辑的表示方法，其中数理逻辑可分为一阶经典逻辑与非一阶经典逻辑。  一阶经典逻辑：一阶经典命题逻辑，一阶经典谓词逻辑 非一阶经典逻辑：指除经典逻辑以外的那些逻辑，例如：二阶逻辑，多值逻辑，模糊逻辑等。  命题断言：一个">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/11.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/12.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/13.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/14.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/15.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/16.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/17.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/18.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/19.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/20.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/21.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/22.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/23.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/24.png">
+<meta property="og:updated_time" content="2019-04-19T14:44:50.199Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="人工智能原理笔记------知识表示方法">
+<meta name="twitter:description" content="知识表示对知识的描述，即用一组符号把知识编码成计算机可以接受的某种结构。其表示方法不唯一。 知识表示方法非结构化方法谓词逻辑表示法这里我们主要讨论一阶谓词逻辑表示法，其是一种基于数理逻辑的表示方法，其中数理逻辑可分为一阶经典逻辑与非一阶经典逻辑。  一阶经典逻辑：一阶经典命题逻辑，一阶经典谓词逻辑 非一阶经典逻辑：指除经典逻辑以外的那些逻辑，例如：二阶逻辑，多值逻辑，模糊逻辑等。  命题断言：一个">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/19/人工智能原理笔记1/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/19/人工智能原理笔记1/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>人工智能原理笔记------知识表示方法 | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/人工智能原理笔记1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">人工智能原理笔记------知识表示方法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-19 22:33:34 / 修改时间：22:44:50" itemprop="dateCreated datePublished" datetime="2019-04-19T22:33:34+08:00">2019-04-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="知识表示"><a href="#知识表示" class="headerlink" title="知识表示"></a>知识表示</h2><p>对知识的描述，即用一组符号把知识编码成计算机可以接受的某种结构。其表示方法不唯一。</p>
+<h2 id="知识表示方法"><a href="#知识表示方法" class="headerlink" title="知识表示方法"></a>知识表示方法</h2><h3 id="非结构化方法"><a href="#非结构化方法" class="headerlink" title="非结构化方法"></a>非结构化方法</h3><h4 id="谓词逻辑表示法"><a href="#谓词逻辑表示法" class="headerlink" title="谓词逻辑表示法"></a>谓词逻辑表示法</h4><p>这里我们主要讨论一阶谓词逻辑表示法，其是一种基于数理逻辑的表示方法，其中数理逻辑可分为一阶经典逻辑与非一阶经典逻辑。</p>
+<ol>
+<li>一阶经典逻辑：一阶经典命题逻辑，一阶经典谓词逻辑</li>
+<li>非一阶经典逻辑：指除经典逻辑以外的那些逻辑，例如：二阶逻辑，多值逻辑，模糊逻辑等。</li>
+</ol>
+<h5 id="命题"><a href="#命题" class="headerlink" title="命题"></a>命题</h5><p>断言：一个陈述句称为一个断言。<br>命题：具有真假意义的断言称为命题。<br>即判断，用于表述客观世界的、<strong>可以分辨真假</strong>且<strong>非真即假</strong>的的<strong>陈述句</strong>。</p>
+<h5 id="真值"><a href="#真值" class="headerlink" title="真值"></a>真值</h5><p>真T：表示命题的意义为真<br>假 F：表示命题的意义为假<br>陈述句是否能分辨真假与是否知晓其真值没有关系。(反例：<del>我们不知道这个陈述句的正值，所以其真值无法判断</del> )</p>
+<h5 id="论域（个体域）"><a href="#论域（个体域）" class="headerlink" title="论域（个体域）"></a>论域（个体域）</h5><p>由所讨论对象的全体构成的集合。亦称为个体域。<br>个体：论域中的元素。</p>
+<h5 id="谓词"><a href="#谓词" class="headerlink" title="谓词"></a>谓词</h5><p>在谓词逻辑中命题是用形如 P(x1,x2,…,xn) 的谓词来表示，其中：<br>谓词名：是命题的谓语，表示个体的性质、状态或个体之间的关系(离散中的谓词常量或谓词变量)<br>个体：是命题的主语，表示独立存在的事物或概念</p>
+<p>x1,x2,…,xn构成论域，P(x1,x2,…,xn)为n元谓词或n元简单命题函数，这里的简单指的是这里只有一个谓词。多个简单命题函数运算后可以得到复合命题函数。简单命题函数与复合命题函数统称命题函数。</p>
+<h5 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h5><p>设D是个体域，f：Dn→D是一个映射， 则称f是D上的一个n元函数，记作 f(x1,x2,…,xn) </p>
+<p>特别注意：函数与命题的区别，首先两者虽然都是映射关系，但是命题映射的结果只有真假，而函数映射的结果是一个个体域。换一句描述就是谓词得到的是真值（真T，假F），函数得到的是实际的个体元素（函数的值）。</p>
+<p>在谓词逻辑中，<strong>谓词可独立存在，函数只能作为谓词的个体</strong>，由谓词与函数（映射得到元素）构成命题。<br><em>上文中的简单命题函数是离散中的概念，指的是函数的映射值为真或假。</em></p>
+<h5 id="谓词逻辑组成"><a href="#谓词逻辑组成" class="headerlink" title="谓词逻辑组成"></a>谓词逻辑组成</h5><p>命题的谓词表示：<br>举例：Friend(A,Brother(B))<br>A与B的哥哥是朋友<br>这里的Friend是<strong>谓词符号</strong>，Brother(X)是函数（<strong>函数符号</strong>），表示X的哥哥这个映射关系。谓词Friend(x1,x2)表示x1与x2的朋友关系，x1，x2是<strong>变量符号</strong>，变量具体到实际的A与B时，A与B为<strong>常量符号</strong>。</p>
+<h5 id="连接词"><a href="#连接词" class="headerlink" title="连接词"></a>连接词</h5><p>合取(与) ^：A ^ B 为真，当且仅当A、B同时为真。</p>
+<p>析取（或）v：A v B为假，当且仅当A、B同时为假</p>
+<p>否定（非）~ : ~ A为真，当且仅当A为假(符号表示应该为笔画中的横折而不是~)</p>
+<p> 蕴涵 =&gt;：A =&gt; B为假，当且仅当A为真，B为假(符号表示应该为右箭头而不是 =&gt; )<br> 等价式为 ~ A v B<br>除此之外在离散数学的定义中还有许多其他的连接词，但是都可以由合取，析取与否定生成，在此不再赘述。</p>
+<h5 id="约束量词"><a href="#约束量词" class="headerlink" title="约束量词"></a>约束量词</h5><p><strong>全称量词</strong>：表达变量x在其论域内的所有可能取值。强调“所有的”、“任一个”。(符号是一个倒立的A)<br><strong>存在量词</strong>：表达变量x在其论域内，存在着、有一个、或至少有一个取值。(符号是一个反写的E)。</p>
+<h5 id="谓词公式"><a href="#谓词公式" class="headerlink" title="谓词公式"></a>谓词公式</h5><p><strong>项</strong>：个体常量、个体变量（基本的项）<br>若t1,t2,…,tn是项，f是n元函数，则f(t1,t2,…,tn)是项；<br>由以上两个进行生成的表达式也是项。<br>个体常量、个体变量和函数统称为项。</p>
+<p><strong>原子谓词公式</strong>：若t1,t2,…,tn是项，P是谓词，则称P(t1,t2,…,tn)为原子谓词公式。</p>
+<p><strong>相关规则</strong>：</p>
+<ol>
+<li>原子公式是谓词公式。</li>
+<li>若A是谓词公式，其否定也是。</li>
+<li>若A,B是谓词公式，其进行的合取与析取运算也是。</li>
+<li>若A是谓词公式，x是项，对x的约束量词表达式产生的也是谓词公式。</li>
+</ol>
+<p><strong>量词的辖域</strong><br>量词的约束范围，即指位于量词后面的单个谓词或者用括弧括起来的合式公式。例：<br><img src="/2019/04/19/人工智能原理笔记1/1.png" alt=""><br>约束变元：受到量词约束的变元，即辖域内与量词中同名的变元称为约束变元<br>自由变元：不受约束的变元称为自由变元<br>例·：<br><img src="/2019/04/19/人工智能原理笔记1/2.png" alt="在这里插入图片描述"></p>
+<p><strong>变元的换名</strong>：谓词公式中的变元可以换名。要保持变量的论域不变。<br>约束条件：（存在量词约束的变量换名也一样）</p>
+<ol>
+<li>对约束变元，必须把同名的约束变元都统一换成另外一个相同的名字，且不能与辖域内的自由变元同名。<br><img src="/2019/04/19/人工智能原理笔记1/3.png" alt=""></li>
+<li>对辖域内的自由变元，不能改成与约束变元相同的名字。<br><img src="/2019/04/19/人工智能原理笔记1/4.png" alt=""></li>
+</ol>
+<p><strong>谓词公式真值表</strong>：取出公式中所有单个谓词，按所有可能的取值组合，再按连接词和量词的定义给出合适公式的真值。例：<br><img src="/2019/04/19/人工智能原理笔记1/5.png" alt=""></p>
+<p><strong>等价公式</strong>：<br><img src="/2019/04/19/人工智能原理笔记1/6.png" alt=""><br><img src="/2019/04/19/人工智能原理笔记1/7.png" alt=""><br><img src="/2019/04/19/人工智能原理笔记1/8.png" alt=""><br>这里的量词转换中，对任意往往使用析取来代替描述，对存在则使用合取来描述。<br><img src="/2019/04/19/人工智能原理笔记1/9.png" alt=""></p>
+<h5 id="谓词逻辑表示步骤"><a href="#谓词逻辑表示步骤" class="headerlink" title="谓词逻辑表示步骤"></a>谓词逻辑表示步骤</h5><p>先根据要表示的知识定义谓词，再用连词、量词把这些谓词连接起来。</p>
+<h4 id="产生式表示法"><a href="#产生式表示法" class="headerlink" title="产生式表示法"></a>产生式表示法</h4><h5 id="产生式规则"><a href="#产生式规则" class="headerlink" title="产生式规则"></a>产生式规则</h5><p>形如下列的语句叫做一条产生式规则</p>
+<ol>
+<li>P→Q </li>
+<li>IF   P  THEN Q</li>
+<li>如果 P，那么 Q</li>
+</ol>
+<p>P叫做：前件、前项、左边。给出了该产生式可否使用的前提条件<br>Q叫做：后件、后项、右边。指出当前提P满足时，应该推导出的结论或应该执行的动作。</p>
+<h5 id="产生式的含义和作用"><a href="#产生式的含义和作用" class="headerlink" title="产生式的含义和作用"></a>产生式的含义和作用</h5><p>含义：如果前提P满足，则可推出结论Q或执行Q所规定的操作<br>作用：产生式规则用来表示问题领域的一般知识</p>
+<h5 id="与逻辑蕴涵的比较"><a href="#与逻辑蕴涵的比较" class="headerlink" title="与逻辑蕴涵的比较"></a>与逻辑蕴涵的比较</h5><ol>
+<li>逻辑规则的两边只能是命题或谓词，产生式可以是命题和谓词，也可以是其他符号串；</li>
+<li>逻辑规则要满足真值表，即前后件最终只能为T或F。产生式前后件都可以是任意类型的值，产生式规则右边可能是动作，甚至是复杂的过程语句；</li>
+<li>产生式可以处理不确定性，逻辑规则只能用于确定推理；</li>
+<li>逻辑规则可以视为产生式规则，反之不然；</li>
+<li>形式相同，产生式应用范围更广；</li>
+</ol>
+<h5 id="与条件语句的比较"><a href="#与条件语句的比较" class="headerlink" title="与条件语句的比较"></a>与条件语句的比较</h5><ol>
+<li>前项结构不同，产生式的前项可以是一个复杂的的结构，<strong>其值不一定为逻辑类型</strong>。</li>
+<li>控制流程不同：产生式系统中满足前提条件的规则被激活后，<strong>不一定被立即执行</strong>，<strong>能否执行将取决于冲突消解策略</strong>。</li>
+</ol>
+<h5 id="巴克斯范式描述（BNF）"><a href="#巴克斯范式描述（BNF）" class="headerlink" title="巴克斯范式描述（BNF）"></a>巴克斯范式描述（BNF）</h5><p>以美国人巴科斯(Backus)和丹麦人诺尔(Naur)的名字命名的一种形式化的语法表示方法，用来描述语法的一种形式体系，是一种典型的元语言。又称巴科斯-诺尔形式(Backus-Naur form)。它不仅能严格地表示语法规则，而且所描述的语法是与上下文无关的。<br>BNF表示语法规则的方式为：非终结符用尖括号括起。每条规则的左部是一个非终结符，右部是由非终结符和终结符组成的一个符号串，中间一般以“：：=”分开。具有相同左部的规则可以共用一个左部，各右部之间以直竖“|”隔开。</p>
+<ol>
+<li>尖括号( &lt; &gt; )内包含的为必选项</li>
+<li>方括号( [ ] )内包含的为可选项</li>
+<li>竖线( | )表示在其左右两边任选一项，相当于”OR”的意思。</li>
+<li>::= 是“被定义为”的意思。</li>
+</ol>
+<p>产生式的BNF描述<br>&lt;规则&gt; ::= &lt;前提&gt; -&gt; &lt;结论&gt;<br>&lt;前提&gt; ::= &lt;简单条件&gt; | &lt;复合条件&gt;<br>&lt;结论&gt; ::= &lt;事实&gt; | &lt;动作&gt;<br>&lt;复合条件&gt; ::= &lt;简单条件&gt; AND &lt;简单条件&gt; [( AND &lt;简单条件&gt; … )] | &lt;简单条件&gt; OR &lt;简单条件&gt; [( OR &lt;简单条件&gt; … )]<br>&lt;动作&gt; ::= &lt;动作名&gt; | [( &lt;变元&gt; … )]</p>
+<h3 id="结构化方法"><a href="#结构化方法" class="headerlink" title="结构化方法"></a>结构化方法</h3><h4 id="语义网络表示法"><a href="#语义网络表示法" class="headerlink" title="语义网络表示法"></a>语义网络表示法</h4><h5 id="语义网络"><a href="#语义网络" class="headerlink" title="语义网络"></a>语义网络</h5><p>语义网络是知识的一种结构化<strong>有向图</strong>表示方法。具有与产生式相同的表示能力。</p>
+<p><strong>结点（节点）</strong>：代表实体，表示各种事物、概念、情况、属性、状态、事件、动作等<br><strong>弧（有向边）</strong>：关系</p>
+<h5 id="语义基元"><a href="#语义基元" class="headerlink" title="语义基元"></a>语义基元</h5><p>语义网络中最基本的语义单元称为语义基元，可用三元组表示为：  （结点1，弧，结点2）</p>
+<h5 id="基本网络单元"><a href="#基本网络单元" class="headerlink" title="基本网络单元"></a>基本网络单元</h5><p>指一个语义基元对应的有向图。<br><img src="/2019/04/19/人工智能原理笔记1/10.png" alt="在这里插入图片描述"></p>
+<h5 id="基本语义关系"><a href="#基本语义关系" class="headerlink" title="基本语义关系"></a>基本语义关系</h5><p>1.实例关系： ISA<br>体现的是“具体与抽象”的概念，含义为“是一个”，表示一个事物是另一个事物的一个实例（类与对象）。<br><img src="/2019/04/19/人工智能原理笔记1/11.png" alt=""><br>2.分类关系： AKO<br>亦称泛化关系，体现的是“子类与超类”的概念，含义为“是一种”，表示一个事物是另一个事物的一种类型。<br><img src="/2019/04/19/人工智能原理笔记1/12.png" alt=""><br>3.成员关系： A-Member-of<br> 体现的是“个体与集体”的关系，含义为“是一员”，表示一个事物是另一个事物的一个成员。<br> <img src="/2019/04/19/人工智能原理笔记1/13.png" alt=""><br> 4.聚集(聚类、包含)关系<br>表达整体与其组成部分的关系。<br><img src="/2019/04/19/人工智能原理笔记1/14.png" alt=""><br>聚类关系一般不具备属性的继承性</p>
+<p>5.属性关系<br>指事物和其属性之间的关系,一个结点是另一个结点的属性值。<br><img src="/2019/04/19/人工智能原理笔记1/15.png" alt=""><br>6.拥有关系——Have， Own<br><img src="/2019/04/19/人工智能原理笔记1/16.png" alt=""><br>7.时间关系——Before、After、At等<br>指不同事件在其发生时间方面的先后次序关系。<br><img src="/2019/04/19/人工智能原理笔记1/17.png" alt=""><br>8.位置关系——Located_on (_at, _inside, _outside等)<br><img src="/2019/04/19/人工智能原理笔记1/18.png" alt=""><br>9.相似、相近关系——Similar-to, Near-to<br><img src="/2019/04/19/人工智能原理笔记1/19.png" alt=""><br>10.推论关系——Infer<br><img src="/2019/04/19/人工智能原理笔记1/20.png" alt=""></p>
+<h5 id="多元语义处理"><a href="#多元语义处理" class="headerlink" title="多元语义处理"></a>多元语义处理</h5><p>引入情形、事件、动作、概念等虚拟结点，将复杂的多元关系转换为多个二元关系，以表达复杂的知识。<br><strong>此虚拟结点代表整个场景。</strong><br><img src="/2019/04/19/人工智能原理笔记1/21.png" alt=""></p>
+<h4 id="框架表示法"><a href="#框架表示法" class="headerlink" title="框架表示法"></a>框架表示法</h4><p>框架是一种描述所讨论对象（事物、事件、概念等）属性和行为的数据结构。</p>
+<h5 id="框架名"><a href="#框架名" class="headerlink" title="框架名"></a>框架名</h5><p>每个框架都有一个框架名，唯一标识一个框架。 </p>
+<h5 id="槽（Slot）、槽名、槽值"><a href="#槽（Slot）、槽名、槽值" class="headerlink" title="槽（Slot）、槽名、槽值"></a>槽（Slot）、槽名、槽值</h5><p>一个框架由若干个槽构成，每个槽都有槽名；<br>一个槽用于说明框架某一方面的属性；<br>属性的值即为槽值。</p>
+<h5 id="侧面（Facet）、侧面名、侧面值"><a href="#侧面（Facet）、侧面名、侧面值" class="headerlink" title="侧面（Facet）、侧面名、侧面值"></a>侧面（Facet）、侧面名、侧面值</h5><p>一个槽有可能划分为若干个侧面，具有相应的侧面名；<br>一个槽可能含有若干细分属性，一个侧面用来说明其中的一个属性；<br>属性的值即为侧面值。</p>
+<h5 id="约束条件"><a href="#约束条件" class="headerlink" title="约束条件"></a>约束条件</h5><p>用来约束、限制槽值、侧面值的填写。一般不单独列出，而包含在值的填写约束中。<br><img src="/2019/04/19/人工智能原理笔记1/22.png" alt=""></p>
+<h5 id="框架与框架实例"><a href="#框架与框架实例" class="headerlink" title="框架与框架实例"></a>框架与框架实例</h5><p><strong>框架</strong>：是人们认识事物的一种通用的数据结构形式。即当新情况发生时，人们只要把新的数据加入到该通用数据结构（类）中便可形成一个具体的实体(对象)，这样的通用数据结构就称为框架。<br><strong>实例框架</strong>：对于一个框架，当人们把观察或认识到的具体细节填入后，就得到了该框架的一个具体实例，框架的这种具体实例被称为实例框架。</p>
+<h5 id="框架的继承"><a href="#框架的继承" class="headerlink" title="框架的继承"></a>框架的继承</h5><p>通过AKO、ISA槽从上层框架往下层框架，或从框架向框架实例进行继承。<br><img src="/2019/04/19/人工智能原理笔记1/23.png" alt=""></p>
+<h5 id="框架网络（框架系统）"><a href="#框架网络（框架系统）" class="headerlink" title="框架网络（框架系统）"></a>框架网络（框架系统）</h5><p>框架是知识的基本单位，把一组有关的框架连结起来便可形成一个框架网络（框架系统）。<br>连接手段：</p>
+<ol>
+<li>继承 — 框架的纵向联系</li>
+<li>用另一框架填写槽值或侧面值 — 框架的横向联系</li>
+</ol>
+<p>例：<br><img src="/2019/04/19/人工智能原理笔记1/24.png" alt=""></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/课程/" rel="tag"># 课程</a>
+          
+            <a href="/tags/人工智能原理/" rel="tag"># 人工智能原理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/01/体系结构笔记3/" rel="next" title="体系结构笔记------流水线冲突处理">
+                <i class="fa fa-chevron-left"></i> 体系结构笔记------流水线冲突处理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识表示"><span class="nav-number">1.</span> <span class="nav-text">知识表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#知识表示方法"><span class="nav-number">2.</span> <span class="nav-text">知识表示方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#非结构化方法"><span class="nav-number">2.1.</span> <span class="nav-text">非结构化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#谓词逻辑表示法"><span class="nav-number">2.1.1.</span> <span class="nav-text">谓词逻辑表示法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#命题"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">命题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#真值"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">真值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#论域（个体域）"><span class="nav-number">2.1.1.3.</span> <span class="nav-text">论域（个体域）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#谓词"><span class="nav-number">2.1.1.4.</span> <span class="nav-text">谓词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#函数"><span class="nav-number">2.1.1.5.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#谓词逻辑组成"><span class="nav-number">2.1.1.6.</span> <span class="nav-text">谓词逻辑组成</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#连接词"><span class="nav-number">2.1.1.7.</span> <span class="nav-text">连接词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#约束量词"><span class="nav-number">2.1.1.8.</span> <span class="nav-text">约束量词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#谓词公式"><span class="nav-number">2.1.1.9.</span> <span class="nav-text">谓词公式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#谓词逻辑表示步骤"><span class="nav-number">2.1.1.10.</span> <span class="nav-text">谓词逻辑表示步骤</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#产生式表示法"><span class="nav-number">2.1.2.</span> <span class="nav-text">产生式表示法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#产生式规则"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">产生式规则</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#产生式的含义和作用"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">产生式的含义和作用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#与逻辑蕴涵的比较"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">与逻辑蕴涵的比较</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#与条件语句的比较"><span class="nav-number">2.1.2.4.</span> <span class="nav-text">与条件语句的比较</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#巴克斯范式描述（BNF）"><span class="nav-number">2.1.2.5.</span> <span class="nav-text">巴克斯范式描述（BNF）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结构化方法"><span class="nav-number">2.2.</span> <span class="nav-text">结构化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#语义网络表示法"><span class="nav-number">2.2.1.</span> <span class="nav-text">语义网络表示法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语义网络"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">语义网络</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#语义基元"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">语义基元</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基本网络单元"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">基本网络单元</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基本语义关系"><span class="nav-number">2.2.1.4.</span> <span class="nav-text">基本语义关系</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#多元语义处理"><span class="nav-number">2.2.1.5.</span> <span class="nav-text">多元语义处理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#框架表示法"><span class="nav-number">2.2.2.</span> <span class="nav-text">框架表示法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#框架名"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">框架名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#槽（Slot）、槽名、槽值"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">槽（Slot）、槽名、槽值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#侧面（Facet）、侧面名、侧面值"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">侧面（Facet）、侧面名、侧面值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#约束条件"><span class="nav-number">2.2.2.4.</span> <span class="nav-text">约束条件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#框架与框架实例"><span class="nav-number">2.2.2.5.</span> <span class="nav-text">框架与框架实例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#框架的继承"><span class="nav-number">2.2.2.6.</span> <span class="nav-text">框架的继承</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#框架网络（框架系统）"><span class="nav-number">2.2.2.7.</span> <span class="nav-text">框架网络（框架系统）</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+<!-- 
+  <div class="footer-custom">true</div>
+ -->
+
+
+
+
+  <div class="footer-custom">  
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+ </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
