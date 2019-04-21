@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="推理方法的分类推理的逻辑基础分类演绎推理：演绎推理是从一般知识到具体判断的推理过程。即从问题领域的一般知识和具体问题的已知事实、判断出发，推导出这个具体问题的一个新的判断。归纳推理：归纳推理是从个别到一般的过程，是从足够多的具体事例中归纳出一般性知识的推理过程。缺省推理：缺省推理，也叫做默认推理，指推理时缺少部分前提条件、或部分前提条件没有证据证明为真，在我们假设这部分前提条件为真的情况下，推导出">
+<meta name="keywords" content="课程,人工智能原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人工智能原理笔记------确定性推理">
+<meta property="og:url" content="http://yoursite.com/2019/04/21/人工智能原理笔记2/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="推理方法的分类推理的逻辑基础分类演绎推理：演绎推理是从一般知识到具体判断的推理过程。即从问题领域的一般知识和具体问题的已知事实、判断出发，推导出这个具体问题的一个新的判断。归纳推理：归纳推理是从个别到一般的过程，是从足够多的具体事例中归纳出一般性知识的推理过程。缺省推理：缺省推理，也叫做默认推理，指推理时缺少部分前提条件、或部分前提条件没有证据证明为真，在我们假设这部分前提条件为真的情况下，推导出">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/2019/04/21/人工智能原理笔记2/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/21/人工智能原理笔记2/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/04/21/人工智能原理笔记2/3.png">
+<meta property="og:updated_time" content="2019-04-21T03:43:43.611Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="人工智能原理笔记------确定性推理">
+<meta name="twitter:description" content="推理方法的分类推理的逻辑基础分类演绎推理：演绎推理是从一般知识到具体判断的推理过程。即从问题领域的一般知识和具体问题的已知事实、判断出发，推导出这个具体问题的一个新的判断。归纳推理：归纳推理是从个别到一般的过程，是从足够多的具体事例中归纳出一般性知识的推理过程。缺省推理：缺省推理，也叫做默认推理，指推理时缺少部分前提条件、或部分前提条件没有证据证明为真，在我们假设这部分前提条件为真的情况下，推导出">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/21/人工智能原理笔记2/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/21/人工智能原理笔记2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>人工智能原理笔记------确定性推理 | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/21/人工智能原理笔记2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">人工智能原理笔记------确定性推理
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-21 11:39:59 / 修改时间：11:43:43" itemprop="dateCreated datePublished" datetime="2019-04-21T11:39:59+08:00">2019-04-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/人工智能/" itemprop="url" rel="index"><span itemprop="name">人工智能</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="推理方法的分类"><a href="#推理方法的分类" class="headerlink" title="推理方法的分类"></a>推理方法的分类</h2><h3 id="推理的逻辑基础分类"><a href="#推理的逻辑基础分类" class="headerlink" title="推理的逻辑基础分类"></a>推理的逻辑基础分类</h3><p><strong>演绎推理</strong>：演绎推理是从一般知识到具体判断的推理过程。即从问题领域的一般知识和具体问题的已知事实、判断出发，推导出这个具体问题的一个新的判断。<br><strong>归纳推理</strong>：归纳推理是从个别到一般的过程，是从足够多的具体事例中归纳出一般性知识的推理过程。<br><strong>缺省推理</strong>：缺省推理，也叫做默认推理，指推理时缺少部分前提条件、或部分前提条件没有证据证明为真，在我们假设这部分前提条件为真的情况下，推导出结论的过程。<em>这些缺少的、或没有证据证明为真的部分前提条件，通常是当前推理相关领域的一些常识性知识、事实，并且根据经验其存在、且为真的可能性极大，因此我们有理由默认这部分前提条件存在、且为真。</em><br><strong>演绎推理与归纳推理的区别</strong>：<strong>演绎推理</strong>是在已知领域内的一般性知识的前提下，通过演绎求解一个具体问题或者证明一个结论的正确性。它所得出的结论实际上早已蕴含在一般性知识的前提中，演绎推理只不过是将已有事实揭露出来，因此它<strong>不能增殖新知识</strong>。<br><strong>归纳推理</strong>所推出的结论是没有包含在前提内容中的。这种由个别事物或现象推出一般性知识的过程，是<strong>增殖新知识的过程</strong>。</p>
+<h3 id="按推理的确定性分类"><a href="#按推理的确定性分类" class="headerlink" title="按推理的确定性分类"></a>按推理的确定性分类</h3><p><strong>确定性推理</strong>：推理的证据、知识、结论都是确定的。（本篇讨论）<br><strong>不确定推理</strong>：推理的证据、知识、结论都是不确定的。</p>
+<h3 id="按推理的单调性分类"><a href="#按推理的单调性分类" class="headerlink" title="按推理的单调性分类"></a>按推理的单调性分类</h3><p><strong>单调推理</strong>：指系统中已知为真的判断、命题或知识随时间严格增加，呈现单调性，即推导产生的新的为真的判断、命题或知识加入到系统知识库中，<strong>不会和系统原有的知识不相容、或矛盾</strong>。基于经典命题逻辑和一阶谓词逻辑的推理是单调推理。<br>非单调推理：指推理产生的结论有可能<strong>与系统知识库中原有的知识不相容、或矛盾，甚至完全否定原有的某些判断</strong>。出现这种情况时，必须使用某种正确性维持机制，解除前后推理的不相容和矛盾，系统知识库中知识的增长呈现非单调性。</p>
+<p><strong>归纳推理、缺省推理、不确定性推理等都是非单调推理。</strong> </p>
+<h2 id="推理的控制策略"><a href="#推理的控制策略" class="headerlink" title="推理的控制策略"></a>推理的控制策略</h2><p><strong>求解策略</strong>：指仅求一个解，还是求所有解或最优解等。<br><strong>限制策略</strong>：指对推理的深度、宽度、时间、空间等进行的限制。<br><strong>推理方向控制策略</strong>：用于确定推理的控制方向，可分为<strong>正向推理</strong>、<strong>逆向推理</strong>、<strong>混合推理</strong>及<strong>双向推理</strong>。<br><strong>冲突消解策略</strong>：指当推理过程有多条知识可用时，如何从这多条可用知识中选出一条最佳知识用于推理的策略。</p>
+<h3 id="推理的方向控制"><a href="#推理的方向控制" class="headerlink" title="推理的方向控制"></a>推理的方向控制</h3><h4 id="正向推理"><a href="#正向推理" class="headerlink" title="正向推理"></a>正向推理</h4><p>从事实出发往目标方向进行的推理<br>基本思想：从用户给出的问题的事实开始，扫描系统知识库，得到适用于当前事实的所有知识的集合；运用某种冲突消解策略，从得到的知识集合中选择一条知识；将这条知识与当前事实结合进行推理，推导出新的事实或判断；将推导的结论加入原有的事实集合；重复上述过程，直到到达目标、或知识库中再没有知识可用。</p>
+<h4 id="逆向推理"><a href="#逆向推理" class="headerlink" title="逆向推理"></a>逆向推理</h4><p>从假设目标开始往事实方向进行的推理<br>基本思想：用户假设一个目标，找寻这个假设目标成立的证据，首先寻找假设目标的事实证据、或用户交互提供的证据；如果找不到事实证据，接着扫描系统知识库，找寻适用于这个假设的所有知识，使用某种冲突消解策略选择一条知识应用于假设目标，产生新的假设，即子目标；对每个子目标重复前面的过程，直到由假设目标产生的所有子目标都得到事实证据、或用户交互提供的证据。</p>
+<h4 id="混合推理"><a href="#混合推理" class="headerlink" title="混合推理"></a>混合推理</h4><p>把正向推理和逆向推理结合起来所进行的推理称为混合推理。<br><strong>先正向后逆向</strong>：这种方法先进行正向推理，从已知事实出发推出部分结果，然后再用逆向推理对这些结果进行证实或提高它们的可信度。<br><strong>先逆向后正向</strong>：这种方法先进行逆向推理，从假设目标出发推出一些中间假设，然后再用正向推理对这些中间假设进行证实。<br><strong>双向混合</strong>：是指正向推理和逆向推理同时进行，使推理过程在中间的某一步结合起来。</p>
+<h3 id="冲突消解策略"><a href="#冲突消解策略" class="headerlink" title="冲突消解策略"></a>冲突消解策略</h3><p><strong>推理冲突</strong>：在正向推理中出现一条事实能与系统知识库中的多条知识匹配，或者多个事实能与同一条知识匹配；在逆向推理中出现同一个假设目标能与系统知识库中多条知识匹配，或多个假设目标能与同一条知识匹配，叫做推理冲突。<br><strong>冲突消解</strong>：冲突消解策略就是推理出现冲突时，如何在多条冲突的知识中有效地选择知识进行推理的控制策略。</p>
+<h4 id="总体原则"><a href="#总体原则" class="headerlink" title="总体原则"></a>总体原则</h4><h5 id="按针对性排序"><a href="#按针对性排序" class="headerlink" title="按针对性排序"></a>按针对性排序</h5><p><strong>优先选择针对性大的知识</strong><br>假设系统知识库中有以下两条知识：<br>R1: if (a1 ^ a2 ^ …^ an) then h1<br>R2: if (a1 ^ a2 ^ …^ an ^ b1 ^ b2 ^ … ^ bm) then h2<br>R2包含了R1的全部条件，我们说R2比R1具有更大的针对性， R1比R2具有更大的通用性。按针对性排序，即优先选择针对性大的知识。如本例选R2</p>
+<h5 id="根据问题领域的特点排序"><a href="#根据问题领域的特点排序" class="headerlink" title="根据问题领域的特点排序"></a>根据问题领域的特点排序</h5><p>根据问题领域的特点，在组织系统知识库时预先给每条知识赋予优先级，出现推理冲突时，按知识的优先级选择知识。缺点是每往知识库中增加一条知识，都需要确定其优先级别参数。</p>
+<h5 id="按匹配程度排序"><a href="#按匹配程度排序" class="headerlink" title="按匹配程度排序"></a>按匹配程度排序</h5><p>在不确定匹配中，只要达到一定的匹配程度就可以认为两个知识模式是可匹配的。在这种情况下出现推理冲突，优先选择匹配度较大的知识进行推理。</p>
+<h5 id="按上下文限制排序"><a href="#按上下文限制排序" class="headerlink" title="按上下文限制排序"></a>按上下文限制排序</h5><p>系统知识库根据问题的状态、属性等，往往采用分块、或分组的方式进行组织。推理中根据推理的进程，即上下文线索，往往只能在某一块或某一组内选择知识。</p>
+<h5 id="按数据冗余限制排序"><a href="#按数据冗余限制排序" class="headerlink" title="按数据冗余限制排序"></a>按数据冗余限制排序</h5><p>当应用一条知识产生上下文冗余项时，这条知识的优先级降低。产生的冗余项越多，其优先级越低。</p>
+<h5 id="并行处理"><a href="#并行处理" class="headerlink" title="并行处理"></a>并行处理</h5><p>并行处理的思想是当出现推理冲突时，对全部的知识，或按某种策略选择的部分知识，并行进行推理。实现并行处理一方面要求计算机有强大的处理能力，另一方面要有一套好的并行处理算法。</p>
+<h2 id="置换与合一"><a href="#置换与合一" class="headerlink" title="置换与合一"></a>置换与合一</h2><h3 id="置换"><a href="#置换" class="headerlink" title="置换"></a>置换</h3><p>在一个谓词公式中用<strong>项</strong>去替换<strong>变量</strong>。<br><strong>置换是形如  { t1/x1, t2/x2, …, tn/xn }  的有限集合。</strong></p>
+<p>其中：<br>t1,t2,…,tn是项；<br>x1,x2,…,xn是互不相同的变元；<br><strong>ti/xi表示用ti替换xi。</strong><br>并且要求ti与xi不能相同，xi不能循环地出现在另一个ti中。</p>
+<p>比如：{a/x, c/y, f(b)/z} 是一个置换<br>{g(y)/x, f(x)/y} 不是一个置换.</p>
+<p><strong>因为置换的目的是用其它的变量、常量、函数替换谓词公式中的某个变量，使其不再出现在公式中</strong>，{ f(y)/x, g(x)/y } 中出现了 x，y 的循环替换，结果既不能消去x也不能消去 y，所以不是一个置换。不符合定义的要求。 </p>
+<p>置换常用罗马字符表示：如 θ、σ、 α、 λ等</p>
+<h4 id="谓词公式的置换"><a href="#谓词公式的置换" class="headerlink" title="谓词公式的置换"></a>谓词公式的置换</h4><p>设θ={t1/x1,t2/x2,…,tn/xn}是一个置换<br>F是一个谓词公式<br>把公式F中出现的所有 xi 换成 ti (i=1,2,…,n)，得到一个新的公式G，称G为F在置换θ下的<strong>例示</strong>，记作<strong>G=Fθ</strong><br><strong>一个谓词公式的任何例示都是该公式的逻辑结论</strong></p>
+<h5 id="置换的合成"><a href="#置换的合成" class="headerlink" title="置换的合成"></a>置换的合成</h5><p>θ={ t1/x1, t2/x2, …, tn/xn }<br>λ={ u1/y1, u2/y2, … , um/ym }<br>是两个置换。则θ与λ的合成也是一个置换，记作θλ。<br>对谓词公式F来说，即先做Fθ ，再做置换(Fθ)λ，通常θλ不等于λθ。</p>
+<p>例如：谓词公式P( x, f(y), z )，有2个置换<br>θ = { g(w)/x, c/z } , λ = { a/x, b/y }。<br>合成置换：<br>w1=θλ= { g(w)/x, c/z, b/y }<br>由于实际运算时 Pθ=P(g(w), f(y), c )，λ中对于a/x的操作就没有实际意义了，所以结果是g(w)/x。<br>(Pθ)λ=P(g(w), f(b), c )<br>Pw1 =P(g(w), f(b), c)</p>
+<p>同理，w2=λθ= { a/x, b/y, c/z }<br>Pw2 =P(a, f(b), c)<br>Pw1不等于Pw2</p>
+<h3 id="合一"><a href="#合一" class="headerlink" title="合一"></a>合一</h3><p>合一是寻找置换，使得2个谓词或谓词公式一致。</p>
+<h4 id="合一和可合一公式"><a href="#合一和可合一公式" class="headerlink" title="合一和可合一公式"></a>合一和可合一公式</h4><p>设有公式集F={F1, F2,…,Fn}，若存在一个置换θ，可使：F1θ=F2θ=…=Fnθ。<br>则称<strong>θ</strong>是F的一个<strong>合一置换</strong>。<br>称<strong>F1,F2,…,Fn</strong>是<strong>可合一的公式</strong>。</p>
+<p><strong>可合一公式集合的合一置换往往不止一个。</strong><br>例：公式集：F={ P( x, f(y), B), P( x, f(B), B) }<br>置换 θ={ A/x, B/y } 是一个合一置换。因为：<br>P( x, f(y), B ) θ = P( A, f(B), B )<br>P( x, f(B), B) θ = P( A, f(B), B )<br>置换 λ={ g(w)/x, B/y } 是另一个合一置换。</p>
+<h4 id="最一般（通用）合一者（mgu）"><a href="#最一般（通用）合一者（mgu）" class="headerlink" title="最一般（通用）合一者（mgu）"></a>最一般（通用）合一者（mgu）</h4><p>如果 F={F1, F2,…,Fn}是一个可合一公式集合，设σ是公式集F的一个合一置换。<br>即F1σ=F2σ=…….=Fn-1σ=Fnσ<br>如果对F的任一个合一者(合一置换)θ都存在一个置换λ，使得θ=σλ，则称σ是F的最一般合一者。<br><strong>一个公式集的最一般合一者是唯一的</strong></p>
+<h4 id="合一算法"><a href="#合一算法" class="headerlink" title="合一算法"></a>合一算法</h4><p>差异集合：设有一非空有限公式集合 F={F1, F2,…,Fn} ， 从F中各个公式的第一个符号同时向右比较， 直到发现第一个不尽相同的符号为止， 从F的各个公式中取出那些以第一个不一致符号开始的最大的子表达式为元素，组成一个集合D， 称为F的差异集合。</p>
+<p>例：F = { P( x, y, z ), P( x, f(a), h(b) ) }，从两个表达式的第一个符号从左往右扫描，得到第一个差异集合 D1 = { y,f(a) }，接着扫描得到第二个差异集合 D2 = { z,h(b) }。<br><strong>实际操作时，总是2个公式进行扫描，所以差异集中只有2个元素，这样便于置换、合一。</strong></p>
+<h5 id="具体算法描述"><a href="#具体算法描述" class="headerlink" title="具体算法描述"></a>具体算法描述</h5><p>目的：寻找mgu。设F为非空有限公式集合<br>①置 i=0， Fi=F， σi= ε， 其中ε为空集合，是不含任何元素的空置换；<br>②若 Fi 只含有一个表达式， 算法停止， σi 就是mgu；<br>③否则，找出 Fi 的差异集合 Di ;<br>④若 Di 中存在元素 ti 和 xi ，其中： ti 是项， xi 是变元， 且  xi 不在 ti 中出现，则置：<br>σi+1= σi {ti / xi}<br>Fi+1=Fi {ti / xi}<br>i=i+1<br>GOTO ②<br>⑤ 算法停止，F的mgu不存在。</p>
+<p><strong>例：F ={ P( a, x, f(g(y)) ), P( z, h(z,u), f(u)) }， 求mgu</strong> </p>
+<p>①i=0, F0=F, σ0= ε<br>F0未合一，求D0={a, z} ，则：<br>σ1= σ0{a/z} ={a/z}<br>F1 =F0{a/z}={ P( a, x, f(g(y)) ), P( a, h(a,u), f(u)) }<br>i=1;</p>
+<p>②i=1<br>F1未合一，求D1={x, h(a,u)} ，则：<br>σ2= σ1{h(a,u)/x} ={a/z, h(a,u)/x}<br>F2 =F1{h(a,u)/x}={ P( a, h(a,u), f(g(y)) ), P( a, h(a,u), f(u)) }<br>i=2;</p>
+<p>③i=2<br>F2未合一，求D2={g(y), u} ，则：<br>σ3= σ2{g(y)/u} = ={a/z, h(a,g(y))/x, g(y)/u}<br>F3 =F2{g(u)/u}={ P( a, h(a,u), f(g(y)) ), P( a, h(a,u), f(g(y))) }<br>i=3;</p>
+<p>④i=3<br>F3 已经合一， σ3 即为mgu。即：<br>mgu={ a/z, h(a,g(y))/x, g(y)/u }<br><strong>用 ti  去置换 xi 时，要把一个公式中所有的 xi 都替换成 ti</strong> 。</p>
+<h2 id="推理的逻辑基础"><a href="#推理的逻辑基础" class="headerlink" title="推理的逻辑基础"></a>推理的逻辑基础</h2><h3 id="谓词公式的解释"><a href="#谓词公式的解释" class="headerlink" title="谓词公式的解释"></a>谓词公式的解释</h3><p><strong>命题公式的解释</strong>：命题公式的一个解释就是对该命题公式中各个命题变元的一次真值指派，有了命题公式的解释，就可据此求出该命题公式的真值。<br><strong>谓词公式的解释</strong>：由于谓词公式中可能包含由个体常量、变元或函数，因此，必须先考虑这些个体常量、变量和函数在个体域（论域）上的取值，然后才能根据它们的具体取值为谓词分别指派真值。</p>
+<p>设D是谓词公式P的非空个体域（论域），若对P中的个体常量、变量、函数和谓词按如下规定赋值：<br>(1) 为每个个体常量和变量指派D中的一个元素；<br>(2) 为每个n元函数指派一个从Dn到D的一个映射，其中Dn ={(x1, x2, …, xn)| x1, x2, …, xn∈D}<br>(3) 为每个n元谓词指派一个从Dn到{F，T}的映射。<br><strong>这些指派为P在D上的一个解释</strong></p>
+<p>一个谓词公式在其个体域上的解释不是唯一的。对于真值指派的不同获取到的解释也是不同的。<br>比如：公式A=(∀x)(∀ y)P(x, y)在D上的解释<br>个体域D={1, 2}，对x与y取不同的值时P(x,y)的真值可以有{T，F}的组合，所以共有2<em>2</em>2*2共16种解释。</p>
+<h3 id="谓词公式的永真性"><a href="#谓词公式的永真性" class="headerlink" title="谓词公式的永真性"></a>谓词公式的永真性</h3><p>如果谓词公式 P对非空个体域D上的任一解释都取得真值T，则称P在D上是永真的。<br>如果P在任何非空个体域上均是永真的，则称P永真。</p>
+<h3 id="谓词公式的可满足性"><a href="#谓词公式的可满足性" class="headerlink" title="谓词公式的可满足性"></a>谓词公式的可满足性</h3><p>对于谓词公式P，如果至少存在D上的一个解释，使公式P在此解释下的真值为T，则称公式P在D上是可满足的。<br>谓词公式的可满足性也称为相容性。</p>
+<h3 id="谓词公式的不可满足性（永假性）"><a href="#谓词公式的不可满足性（永假性）" class="headerlink" title="谓词公式的不可满足性（永假性）"></a>谓词公式的不可满足性（永假性）</h3><p>如果谓词公式P对非空个体域D上的任一解释都取真值F，则称P在D上是永假的；<br>如果P在任何非空个体域上均是永假的，则称P永假。<br>谓词公式的永假性又称不可满足性或不相容。</p>
+<h3 id="推理规则"><a href="#推理规则" class="headerlink" title="推理规则"></a>推理规则</h3><p>等价式和永真蕴含式都是演绎推理的主要依据，因此也称它们为推理规则。<br><strong>等价式</strong>：设P与Q是D上的两个谓词公式，若对D上的任意解释，P与Q都有相同的真值，则称P与Q在D 上是等价的。如果D是任意非空个体域，则称P与Q是等价的，记作P⇔Q。<br><strong>永真蕴含式</strong>：对谓词公式P和Q，如果P→Q永真，则称P永真蕴含Q，且称Q为P的逻辑结论，P为Q的前提，记作P ⇒ Q。</p>
+<p><strong>常用的永真蕴含式</strong><br>(1) 化简式             P∧Q ⇒ P，  P∧Q ⇒ Q<br>(2) 附加式             P ⇒ P∨Q，  Q ⇒ P∨Q<br>(3) 析取三段论        ﹁ P ∧(P∨Q) ⇒ Q<br>(4) 假言推理        P ∧ (P→Q) ⇒ Q<br>(5) 拒取式            ¬Q ∧(P→Q) ⇒ ﹁ P<br>(6) 假言三段论        (P→Q) ∧(Q→R) ⇒P→R<br>(7) 二难推理        (P∨Q) ∧(P→R) ∧(Q→R) ⇒ R<br>(8) 全称固化        (∀x)P(x) ⇒ P(y)<br>其中，y是个体域中的任一个体，依此可消去谓词公式中的全称量词。<br>(9) 存在固化        (∃x)P(x) ⇒ P(y)<br>其中，y是个体域中某一个可以使P(y)为真的个体，依此可消去谓词公式中的存在量词。</p>
+<h3 id="谓词公式的范式"><a href="#谓词公式的范式" class="headerlink" title="谓词公式的范式"></a>谓词公式的范式</h3><h4 id="前束范式"><a href="#前束范式" class="headerlink" title="前束范式"></a>前束范式</h4><p>设F为一谓词公式，如果其中的所有量词均非否定地出现在公式的最前面，且它们的辖域为整个公式，则称F为前束范式。</p>
+<p>(Q1x1)……(Qnxn)M(x1,x2,……,xn)<br>其中，Qi(i=1,2,……,n)为前缀，它是一个由全称量词或存在量词组成的量词串； M(x1,x2,……,xn)为母式，它是一个不含任何量词的谓词公式。</p>
+<h4 id="Skolem范式"><a href="#Skolem范式" class="headerlink" title="Skolem范式"></a>Skolem范式</h4><p>如果前束范式中所有的存在量词都在全称量词之前，则称这种形式的谓词公式为Skolem范式。</p>
+<p>例如：(∃x) (∃z) (∀y)(P(x)∨Q(y,z)∧R(x,z)) 是Skolem范式</p>
+<h3 id="自然演绎推理"><a href="#自然演绎推理" class="headerlink" title="自然演绎推理"></a>自然演绎推理</h3><p>从一组已知为真的事实出发，直接运用经典逻辑中的推理规则推出结论的过程称为自然演绎推理。<br>最基本的推理规则是三段论推理，它包括：</p>
+<ol>
+<li>假言推理           P,  P→Q ⇒ Q</li>
+<li>拒取式          ﹁ Q,  P→Q ⇒ ﹁ P</li>
+<li>链式规则     P→Q,  Q→R ⇒ P→R</li>
+</ol>
+<h3 id="归结推理"><a href="#归结推理" class="headerlink" title="归结推理"></a>归结推理</h3><p>归结原理将永真性的证明转化为关于不可满足性的证明。</p>
+<h4 id="子句及子句集"><a href="#子句及子句集" class="headerlink" title="子句及子句集"></a>子句及子句集</h4><p><strong>文字</strong>：原子谓词公式及其否定统称为文字。<br><strong>子句</strong>：单个文字或任何文字的<strong>析取公式</strong>称为子句。<br><strong>空子句</strong>：不含任何文字的子句称为空子句。由于空子句不含有任何文字，也就不能被任何解释所满足，因此空子句是永假的，不可满足的。<br><strong>子句集</strong>：由子句构成的集合称为子句集。在谓词逻辑中，任何一个谓词公式都可以通过应用等价关系及推理规则化成相应的子句集。</p>
+<h4 id="谓词公式的子句集表示"><a href="#谓词公式的子句集表示" class="headerlink" title="谓词公式的子句集表示"></a>谓词公式的子句集表示</h4><p>任何一个谓词公式都可以化为<strong>合取范式</strong>，<strong>合取的每一个部分就是一个子句</strong>，所有子句组成这个谓词公式的子句集合，我们将这个子句集合叫做谓词公式的子句集表示。<br>步骤如下：</p>
+<ol>
+<li>消去蕴涵符号<br>使用等价公式   P→Q ⇔﹁ P∨Q  消去谓词公式中所有的蕴含连接词。</li>
+<li>缩小否定符号的作用范围（辖域）<br>反复使用以下推理规则，将每个否定符号“﹁”移到紧靠谓词的位置，即使得每个否定符号只作用于一个谓词上。<br><strong>双重否定律</strong><br>﹁(﹁P) ⇔ P<br><strong>德摩根定律</strong><br>﹁(P∧Q) ⇔﹁P∨﹁Q<br>﹁(P∨Q) ⇔﹁P∧﹁Q<br><strong>量词转换律</strong><br>﹁ (∀x)P(x) ⇔ (∃x) ﹁P(x)<br>﹁ (∃x)P(x) ⇔ (∀x)￢P(x)</li>
+<li>变量命名标准化<br>在一个量词的辖域内，把谓词公式中受该量词约束的变元全部用另外一个没有出现过的任意变元代替，使不同量词约束的变元有不同的名字。</li>
+<li>消去存在量词( Skolem化 )<br>①形如 (∀x) [(∃y)P(x,y)]，存在量词在全称量词的辖域内<br>存在量词y可能依赖于x，令这种依赖关系为y=f(x)，由f(x)把每个x值映射到存在的那个y，f(x)叫做Skolem函数。<br>上面的公式变为：(∀x) [ P(x, f(x) ]<br>② 形如 (∃y)(∀x)P(x,y)，存在量词前没有全称量词约束<br>在变量y的论域内，存在一些特定的取值，使得公式为真，那么我们就可以用y论域上使公式为真的一个特定取值–常量，来替代变量y，从而消去存在量词。所以这种情况的Skolem函数为一常量，用变量y论域内的，使得公式为真的特定取值的一个常量符号替代原来的变量y，这个常量符号不能与公式中的其它符号同名，也就是没有在公式中出现过。<br>令y=A，Skolem化后，变为：(∀x) [ P(x, A )]</li>
+<li>化为前束范式<br>将公式中的所有约束量词移到公式最前面，形成前束公式，形式如下：<br>前束式=（约束量词前缀）（母式）<br><strong>在移动时不能改变其相对顺序。</strong><br><em>由于第(3)步已对变元进行了标准化，每个量词都有自己的变元，这就消除了任何由变元引起冲突的可能，即：移动不改变量词辖域。</em></li>
+<li>消去全称量词<br>由于母式中的全部变元均受全称量词的约束，并且全称量词的次序已无关紧要，因此可以省掉全称量词。剩下的母式，默认所有变元受全称量词约束。</li>
+<li>化为合取范式<br>反复运用谓词公式的结合律和分配律，将公式化为合取范式。<br>分配率<br>P∧(Q∨R) &lt;=&gt; (P∧Q) ∨ (P∧R)<br>P∨(Q∧R) &lt;=&gt; (P∨Q) ∧ (P∨R)<br>结合率<br>(P∨Q)∨R &lt;=&gt; P∨(Q∨R)<br>(P∧Q)∧R &lt;=&gt; P∧(Q∧R)</li>
+<li>将公式用子句集合表示<br>取出合取范式中的每个子句；对子句变量换名，使任意两个子句中不出现相同的变量名，便于推理中的置换、合一。</li>
+</ol>
+<p><strong>例</strong>：(∀x) { P(x) → { (∀y) [ P(y) → P(f(x,y)) ] ∧ ￢(∀y)[ Q(x,y) → P(y) ] }}<br>(1) 去蕴含<br>(∀x) { ￢P(x) ∨ { (∀y) [￢P(y) ∨ P(f(x,y)) ]  ∧ ￢(∀y)[ ￢Q(x,y) ∨ P(y) ] }}<br>(2) 处理否定连接词<br>(∀x) { ￢P(x) ∨ { (∀y) [￢P(y) ∨ P(f(x,y)) ]  ∧ (∃y)[ Q(x,y) ∧ ￢P(y) ] }}<br>(3) 变量命名标准化 —- 令后面y=w<br>(∀x) { ￢P(x) ∨ { (∀y) [￢P(y) ∨ P(f(x,y)) ]  ∧ (∃w)[ Q(x,w) ∧ ￢P(w) ] }}<br>(4) 消去存在量词 –  引入Skolem函数 w=g(x)<br>(∀x) { ￢P(x) ∨ { (∀y) [￢P(y) ∨ P(f(x,y)) ]  ∧ [ Q(x,g(x)) ∧ ￢P(g(x)) ] }}<br>(5) 前束化<br>(∀x) (∀y) { ￢P(x) ∨ { [￢P(y) ∨ P(f(x,y)) ]  ∧ [ Q(x,g(x)) ∧ ￢P(g(x)) ] }}<br>(6) 隐去全称量词<br>{ ￢P(x) ∨ { [￢P(y) ∨ P(f(x,y)) ]  ∧ [ Q(x,g(x)) ∧ ￢P(g(x)) ] }}<br>(7) 化为合取范式<br>用集合律，去除括号：<br>￢P(x) ∨ { [￢P(y) ∨ P(f(x,y)) ] ∧ Q(x,g(x)) ∧ ￢P(g(x)) }<br>用分配律，得合取范式：<br>[ ￢P(x) ∨ ￢P(y) ∨ P(f(x,y)) ] ∧ [￢P(x) ∨Q(x,g(x) )] ∧ [ ￢P(x) ∨￢P(g(x)) ]<br>(8) 变量更名、将公式用子句集合表示<br>{[ ￢P(x) ∨ ￢P(y) ∨ P(f(x,y)) ]，[￢P(x) ∨Q(x,g(x) )] ，[ ￢P(x) ∨￢P(g(x)) ]} </p>
+<h4 id="子句集的不可满足性"><a href="#子句集的不可满足性" class="headerlink" title="子句集的不可满足性"></a>子句集的不可满足性</h4><p>子句集中的子句之间是合取关系。因此，子句集中只要有一个子句为不可满足，则整个子句集就是不可满足的；<br>空子句是不可满足的。因此，<strong>一个子句集中如果包含有空子句，则此子句集就一定是不可满足的。</strong></p>
+<p>如果一个谓词公式是不可满足的，则其子句集也一定是不可满足的，反之亦然。 </p>
+<h4 id="归结式"><a href="#归结式" class="headerlink" title="归结式"></a>归结式</h4><p><strong>互补对（互补文字）</strong>：若P是原子谓词公式，则称P与﹁P为互补对(文字)<br><strong>归结式（消解式）</strong>：设有C1和C2两个子句，其中C1 =P∨L，C2=Q∨﹁L，消去两个子句中的互补对（ L 和﹁L ），两个子句剩下部分组成一个新的子句C12 =P∨Q，称子句C12 =P∨Q为C1和C2的归结式（消解式）。</p>
+<p><strong>注意</strong>：两个子句能够消解的先绝条件是两个子句中存在互补的文字对。<br>两个子句中若存在多个互补对，可根据需要先任选一对进行消解。<br>谓词逻辑子句中常含有变量，需要先进行置换、合一处理，然后消去两个子句中的互补对，得到谓词逻辑的归结式或消解式。<br>两个谓词逻辑子句消解时，要求两个子句中不能有相同的变量名称，如果出现相同变量名称，则要将其中一个子句的变量更名，然后做置换、合一处理，再进行消解。 </p>
+<h4 id="鲁滨逊归结原理"><a href="#鲁滨逊归结原理" class="headerlink" title="鲁滨逊归结原理"></a>鲁滨逊归结原理</h4><p>设子句C1、C2的归结式为C12，则归结式C12是C1、C2的逻辑结论。<em>如果C1、C2同时为真， C12一定为真，表示为:C1，C2 =&gt; C12 。</em></p>
+<p>C1、C2 是子句集S中的两个子句， C12是C1、C2的归结式，用C12取代S中的C1、C2 ，得到一个新的子句集S1，如果S1不可满足，则S一定不可满足。<em>S1的不可满足性 ⇒ S的不可满足性</em></p>
+<p>设C1和C2是子句集S中的两个子句，C12是C1和C2的归结式，若把C12加入S中得到新的子句集S2，则S与S2的不可满足性是等价的。<em>S2的不可满足性 ⇔ S的不可满足性</em></p>
+<p>要证明子句集S的不可满足性，可以通过归结的方法，对S中能够归结的子句进行归结。<strong>用产生的归结式取代原来的子句得到新的子句集S1，或将产生的归结式加入到S中得到新的子句集S2 ，只要能证明S1或S2是不可满足的，那么S就是不可满足的。</strong></p>
+<p><strong>归结原理的基本思想</strong>：要证明子句集S的不可满足性，可通过归结的方法试图归结出空子句，一旦归结出了空子句，也就证明了S是不可满足的。</p>
+<p><strong>鲁滨逊归结原理</strong><br>原命题：在给定前提P为真下，证明结论Q为真。即：P=&gt;Q<br>(1) 假设原命题成立 — 即：P为真则Q为真；<br>(2) 反证法构造公式：P∧﹁Q ，则此公式一定不可满足。<br>(3) 证明P∧﹁Q不可满足<br>通过证明P∧﹁Q不可满足，而证明原命题成立。—- 反证（反演）<br>(4) 将P∧﹁Q化为子句集S表示；<br><img src="/2019/04/21/人工智能原理笔记2/1.png" alt=""></p>
+<h4 id="归结反演证明"><a href="#归结反演证明" class="headerlink" title="归结反演证明"></a>归结反演证明</h4><p>命题：在给定前提P为真下，证明结论Q为真。即：P=&gt;Q</p>
+<ol>
+<li>构造公式： P∧﹁Q </li>
+<li>将公式P∧﹁Q化为子句集S表示；</li>
+<li>反复对子句集S进行归结处理，并把新产生的归结式加入到S中：<br>如果出现空子句，则停止归结，原命题得证，即证明了P为真时，Q为真。 否则，没有新的归结，原命题不成立。<h2 id="产生式推理系统"><a href="#产生式推理系统" class="headerlink" title="产生式推理系统"></a>产生式推理系统</h2>产生式系统由规则库、工作数据库和推理机三个部分构成。<br><strong>规则库</strong>：规则库用来存放系统的所有产生式规则，用来表示问题领域的一般知识（背景知识）。<strong>规则库是产生式系统问题求解的基础</strong><br><strong>工作数据库</strong>：用来存放<strong>事实知识、中间结论、最终结果</strong>，工作数据库中的内容在系统工作时是动态变化的。</li>
+<li>事实知识：即给定的推理前提条件。可以在推理前全部输入；或在推理过程中交互输入；也可以从其它系统导入。</li>
+<li>中间结论：正向推理中是已经证明为真的证据；逆向推理中是匹配产生的中间目标。</li>
+<li>最终结果：推理的最终目标或结论。</li>
+</ol>
+<p><strong>推理机</strong>：完成推理<strong>控制策略</strong>。负责整个产生式系统的运行，决定问题求解过程的推理线路。</p>
+<h3 id="控制系统主要任务"><a href="#控制系统主要任务" class="headerlink" title="控制系统主要任务"></a>控制系统主要任务</h3><h4 id="选择匹配"><a href="#选择匹配" class="headerlink" title="选择匹配"></a>选择匹配</h4><p>按一定策略从规则库种选择规则与综合数据库中的已知事实进行匹配。<br><strong>正向推理匹配</strong>：匹配是指把所选规则的前提与综合数据库中的已知事实进行比较，若事实库中的事实与所选规则前提一致，则称匹配成功，该规则为可用；否则，称匹配失败，该规则不可用。<br><strong>逆向推理匹配</strong>：匹配是指选择中间目标，按先事实、后规则次序匹配；<br><em>规则匹配指用所选中间目标与规则后件进行比较；若中间目标与规则后件一致，则称匹配成功，该规则为可用；否则，称匹配失败，该规则不可用。</em></p>
+<h4 id="冲突消解"><a href="#冲突消解" class="headerlink" title="冲突消解"></a>冲突消解</h4><p>对匹配成功的规则，按照某种策略从中选出一条规则执行。</p>
+<h4 id="执行操作"><a href="#执行操作" class="headerlink" title="执行操作"></a>执行操作</h4><p>对所执行的规则，若其后件为一个或多个结论，则把这些结论加入综合数据库；若其后件为一个或多个操作时，执行这些操作。</p>
+<h4 id="终止推理"><a href="#终止推理" class="headerlink" title="终止推理"></a>终止推理</h4><p>检查综合数据库中是否包含有目标，若有，则停止推理。</p>
+<h4 id="路径解释"><a href="#路径解释" class="headerlink" title="路径解释"></a>路径解释</h4><p>在问题求解过程中，记住应用过的规则序列，以便最终能够给出问题的解的路径。</p>
+<h3 id="正向推理-1"><a href="#正向推理-1" class="headerlink" title="正向推理"></a>正向推理</h3><p>从已知事实出发，正向匹配规则，向着结论前进的一种推理方法。</p>
+<h4 id="正向推理过程"><a href="#正向推理过程" class="headerlink" title="正向推理过程"></a>正向推理过程</h4><ol>
+<li>初始化综合数据库，即把欲解决问题的已知事实、目标输入综合数据库中；</li>
+<li>检查规则库中是否有未使用过的规则，若没有，失败，退出；</li>
+<li>检查规则库的未使用规则中是否有其前提可与综合数据库中已知事实相匹配的规则，若有，形成当前可用（候选）规则集；否则转⑥ ；</li>
+<li>按照冲突消解策略，从当前可用（候选）规则集中选择一个规则执行，并对该规则作上标记。把执行该规则后所得到的结论作为新的证据加入综合数据库；如果该规则的结论是一些操作，则执行这些操作；</li>
+<li>检查综合数据库中是否包含了该问题的解（结论），若已包含，说明解已求出，成功，退出；否则，转② ；</li>
+<li>当规则库中还有未使用规则，但均不能与综合数据库中的已有事实相匹配时，要求用户进一步提供关于该问题的已知事实，若能提供，则转② ；否则，失败，退出；</li>
+</ol>
+<p><em>从第③步到第⑤步的循环过程实际上就是一个搜索过程。</em><br><img src="/2019/04/21/人工智能原理笔记2/2.png" alt=""></p>
+<h3 id="逆向推理-1"><a href="#逆向推理-1" class="headerlink" title="逆向推理"></a>逆向推理</h3><p>从目标出发，逆向匹配规则，向着事实前进的一种推理方法。‘自顶向下’推理。</p>
+<h4 id="逆向推理过程"><a href="#逆向推理过程" class="headerlink" title="逆向推理过程"></a>逆向推理过程</h4><ol>
+<li>初始化综合数据库：即把欲解决问题的已知事实输入综合数据库中，并标记；假设目标输入数据库，并标记；此处标记是为了区分‘事实证据’、‘假设目标’。</li>
+<li>从工作库中取出一个尚未匹配的‘假设目标’，到工作库中检索‘事实证据’匹配，若找到事实匹配，标记匹配。否则，找不到事实证据，转④ 。</li>
+<li>检查综合数据库中是否所有‘假设目标’都已标记匹配，若全部匹配，则总目标目标成立，成功，退出；否则，转② ；</li>
+<li>检查规则库中是否有未使用过的规则，若没有，转⑦ ；</li>
+<li>检索规则库中未使用规则中是否有其后件可与当前‘假设目标’相匹配的规则，若有，形成当前可用（候选）规则集；否则转⑦ ；</li>
+<li>按照冲突消解策略，从当前可用（候选）规则集中选择一个规则执行，并对该规则作上标记。把此规则的前件作为新的子目标加入综合数据库，转② ；</li>
+<li>当工作数据库中还有未匹配的子目标，但既不能找到事实证据，又没有规则匹配，要求用户进一步补充提供关于该假设目标的已知事实，若能提供，则转② ；否则，失败，退出；</li>
+</ol>
+<p><em>子目标匹配次序：先事实、后规则。</em><br><img src="/2019/04/21/人工智能原理笔记2/3.png" alt=""></p>
+<h3 id="混合推理-1"><a href="#混合推理-1" class="headerlink" title="混合推理"></a>混合推理</h3><p>混合推理是把正向推理和反向推理结合起来使用的一种推理方式，它需要把问题的初始状态和目标状态合并到一起构成综合数据库。方式有：</p>
+<ol>
+<li>先正向推理，再逆向推理</li>
+<li>先逆向推理，再正向推理</li>
+<li>正向和逆向推理同时进行，在中间某处完全匹配—双向推理。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/课程/" rel="tag"># 课程</a>
+          
+            <a href="/tags/人工智能原理/" rel="tag"># 人工智能原理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/19/人工智能原理笔记1/" rel="next" title="人工智能原理笔记------知识表示方法">
+                <i class="fa fa-chevron-left"></i> 人工智能原理笔记------知识表示方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#推理方法的分类"><span class="nav-number">1.</span> <span class="nav-text">推理方法的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推理的逻辑基础分类"><span class="nav-number">1.1.</span> <span class="nav-text">推理的逻辑基础分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按推理的确定性分类"><span class="nav-number">1.2.</span> <span class="nav-text">按推理的确定性分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按推理的单调性分类"><span class="nav-number">1.3.</span> <span class="nav-text">按推理的单调性分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推理的控制策略"><span class="nav-number">2.</span> <span class="nav-text">推理的控制策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推理的方向控制"><span class="nav-number">2.1.</span> <span class="nav-text">推理的方向控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正向推理"><span class="nav-number">2.1.1.</span> <span class="nav-text">正向推理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#逆向推理"><span class="nav-number">2.1.2.</span> <span class="nav-text">逆向推理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#混合推理"><span class="nav-number">2.1.3.</span> <span class="nav-text">混合推理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冲突消解策略"><span class="nav-number">2.2.</span> <span class="nav-text">冲突消解策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总体原则"><span class="nav-number">2.2.1.</span> <span class="nav-text">总体原则</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#按针对性排序"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">按针对性排序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#根据问题领域的特点排序"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">根据问题领域的特点排序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#按匹配程度排序"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">按匹配程度排序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#按上下文限制排序"><span class="nav-number">2.2.1.4.</span> <span class="nav-text">按上下文限制排序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#按数据冗余限制排序"><span class="nav-number">2.2.1.5.</span> <span class="nav-text">按数据冗余限制排序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#并行处理"><span class="nav-number">2.2.1.6.</span> <span class="nav-text">并行处理</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#置换与合一"><span class="nav-number">3.</span> <span class="nav-text">置换与合一</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#置换"><span class="nav-number">3.1.</span> <span class="nav-text">置换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#谓词公式的置换"><span class="nav-number">3.1.1.</span> <span class="nav-text">谓词公式的置换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#置换的合成"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">置换的合成</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合一"><span class="nav-number">3.2.</span> <span class="nav-text">合一</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#合一和可合一公式"><span class="nav-number">3.2.1.</span> <span class="nav-text">合一和可合一公式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最一般（通用）合一者（mgu）"><span class="nav-number">3.2.2.</span> <span class="nav-text">最一般（通用）合一者（mgu）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合一算法"><span class="nav-number">3.2.3.</span> <span class="nav-text">合一算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#具体算法描述"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">具体算法描述</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推理的逻辑基础"><span class="nav-number">4.</span> <span class="nav-text">推理的逻辑基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#谓词公式的解释"><span class="nav-number">4.1.</span> <span class="nav-text">谓词公式的解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谓词公式的永真性"><span class="nav-number">4.2.</span> <span class="nav-text">谓词公式的永真性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谓词公式的可满足性"><span class="nav-number">4.3.</span> <span class="nav-text">谓词公式的可满足性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谓词公式的不可满足性（永假性）"><span class="nav-number">4.4.</span> <span class="nav-text">谓词公式的不可满足性（永假性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推理规则"><span class="nav-number">4.5.</span> <span class="nav-text">推理规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谓词公式的范式"><span class="nav-number">4.6.</span> <span class="nav-text">谓词公式的范式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前束范式"><span class="nav-number">4.6.1.</span> <span class="nav-text">前束范式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Skolem范式"><span class="nav-number">4.6.2.</span> <span class="nav-text">Skolem范式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自然演绎推理"><span class="nav-number">4.7.</span> <span class="nav-text">自然演绎推理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归结推理"><span class="nav-number">4.8.</span> <span class="nav-text">归结推理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#子句及子句集"><span class="nav-number">4.8.1.</span> <span class="nav-text">子句及子句集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#谓词公式的子句集表示"><span class="nav-number">4.8.2.</span> <span class="nav-text">谓词公式的子句集表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子句集的不可满足性"><span class="nav-number">4.8.3.</span> <span class="nav-text">子句集的不可满足性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#归结式"><span class="nav-number">4.8.4.</span> <span class="nav-text">归结式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#鲁滨逊归结原理"><span class="nav-number">4.8.5.</span> <span class="nav-text">鲁滨逊归结原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#归结反演证明"><span class="nav-number">4.8.6.</span> <span class="nav-text">归结反演证明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#产生式推理系统"><span class="nav-number">5.</span> <span class="nav-text">产生式推理系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#控制系统主要任务"><span class="nav-number">5.1.</span> <span class="nav-text">控制系统主要任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择匹配"><span class="nav-number">5.1.1.</span> <span class="nav-text">选择匹配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#冲突消解"><span class="nav-number">5.1.2.</span> <span class="nav-text">冲突消解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行操作"><span class="nav-number">5.1.3.</span> <span class="nav-text">执行操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#终止推理"><span class="nav-number">5.1.4.</span> <span class="nav-text">终止推理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路径解释"><span class="nav-number">5.1.5.</span> <span class="nav-text">路径解释</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正向推理-1"><span class="nav-number">5.2.</span> <span class="nav-text">正向推理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正向推理过程"><span class="nav-number">5.2.1.</span> <span class="nav-text">正向推理过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逆向推理-1"><span class="nav-number">5.3.</span> <span class="nav-text">逆向推理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#逆向推理过程"><span class="nav-number">5.3.1.</span> <span class="nav-text">逆向推理过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#混合推理-1"><span class="nav-number">5.4.</span> <span class="nav-text">混合推理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+<!-- 
+  <div class="footer-custom">true</div>
+ -->
+
+
+
+
+  <div class="footer-custom">  
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+ </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
