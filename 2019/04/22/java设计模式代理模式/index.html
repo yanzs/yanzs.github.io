@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="核心思想为其他对象提供一种代理来控制对这个对象的访问。其核心在于访问控制。 具体实现抽象业务：一般是一个抽象类或者是一个接口，用于定义相关的业务函数。业务主体：这个类具体实现了抽象业务中定义的方法，或者实现了抽象类中的接口，在实际的运行中是由该部分实际的承担着相关业务的逻辑与运行。代理委托：这个类也实现抽象业务中的相关方法或者接口，但是其并不具体实现相关的方法，而是产生一个业务主体的类通过这个类的">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java设计模式结构篇------代理模式">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/java设计模式代理模式/index.html">
+<meta property="og:site_name" content="yanzs_博客">
+<meta property="og:description" content="核心思想为其他对象提供一种代理来控制对这个对象的访问。其核心在于访问控制。 具体实现抽象业务：一般是一个抽象类或者是一个接口，用于定义相关的业务函数。业务主体：这个类具体实现了抽象业务中定义的方法，或者实现了抽象类中的接口，在实际的运行中是由该部分实际的承担着相关业务的逻辑与运行。代理委托：这个类也实现抽象业务中的相关方法或者接口，但是其并不具体实现相关的方法，而是产生一个业务主体的类通过这个类的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-22T09:10:22.862Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java设计模式结构篇------代理模式">
+<meta name="twitter:description" content="核心思想为其他对象提供一种代理来控制对这个对象的访问。其核心在于访问控制。 具体实现抽象业务：一般是一个抽象类或者是一个接口，用于定义相关的业务函数。业务主体：这个类具体实现了抽象业务中定义的方法，或者实现了抽象类中的接口，在实际的运行中是由该部分实际的承担着相关业务的逻辑与运行。代理委托：这个类也实现抽象业务中的相关方法或者接口，但是其并不具体实现相关的方法，而是产生一个业务主体的类通过这个类的">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/22/java设计模式代理模式/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>java设计模式结构篇------代理模式 | yanzs_博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanzs_博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/java设计模式代理模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanzs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanzs_博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java设计模式结构篇------代理模式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-22 17:09:03 / 修改时间：17:10:22" itemprop="dateCreated datePublished" datetime="2019-04-22T17:09:03+08:00">2019-04-22</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h2><p>为其他对象提供一种代理来控制对这个对象的访问。其核心在于<strong>访问控制</strong>。</p>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><p><strong>抽象业务</strong>：一般是一个抽象类或者是一个接口，用于定义相关的业务函数。<br><strong>业务主体</strong>：这个类具体实现了抽象业务中定义的方法，或者实现了抽象类中的接口，在实际的运行中是由该部分实际的承担着相关业务的逻辑与运行。<br><strong>代理委托</strong>：这个类也实现抽象业务中的相关方法或者接口，但是其并不具体实现相关的方法，而是产生一个业务主体的类通过这个类的实例来处理抽象业务。</p>
+<h3 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h3><p>先定义一个业务<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>;<span class="comment">//业务方法 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我们通过一个接口来定义一个deal()方法作为我们抽象业务的主体部分。</p>
+<p>之后我们需要具体的实现这个业务逻辑。我们以一个RealA类来表示。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealA</span> <span class="keyword">implements</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"deal"</span>);<span class="comment">//具体的业务实现</span></span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样我们就完成了基本的业务部分了，如果在实际应用时就可以直接的使用RealA来进行处理了，但是我们还需要一个代理类来实现对业务类的访问控制。这个类也实现了抽象接口的定义，但是实际是通过调用业务类的方法实现的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyA</span> <span class="keyword">implements</span> <span class="title">Service</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Service realDeal;<span class="comment">//实际的业务处理者，被代理的对象</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ProxyA</span> <span class="params">(Service service)</span></span>&#123;<span class="comment">//构造方法传入被代理的对象</span></span><br><span class="line">		<span class="keyword">this</span>.realDeal=service;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//处理前的操作     </span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">beforeDeal</span><span class="params">()</span></span>&#123;             </span><br><span class="line">		System.out.println(<span class="string">"before deal"</span>);</span><br><span class="line">	&#125;     </span><br><span class="line">	 </span><br><span class="line">	<span class="comment">//处理后的操作     </span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">afterDeal</span><span class="params">()</span></span>&#123;    </span><br><span class="line">		System.out.println(<span class="string">"after deal"</span>);             </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span>     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		beforeDeal();</span><br><span class="line">		realDeal.deal();<span class="comment">//实际还是被代理对象在进行处理</span></span><br><span class="line">		afterDeal();</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样一个简单的代理模式就完成了，在实际的代理操作中我们可以在代理操作之前后之后增加一些处理，比如在操作前进行一些条件判断啥的，即是上面的beforeDeal()和afterDeal()的作用了。</p>
+<h2 id="实际运用"><a href="#实际运用" class="headerlink" title="实际运用"></a>实际运用</h2><h3 id="普通代理"><a href="#普通代理" class="headerlink" title="普通代理"></a>普通代理</h3><p>先定义一个业务<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>;<span class="comment">//业务方法 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实际的业务处理者(被代理者)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealA</span> <span class="keyword">implements</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="keyword">private</span> String args;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">RealA</span> <span class="params">(Service proxy,String args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(proxy==<span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"无法创建"</span>);<span class="comment">//保证只有代理类才可以创建被代理者，彻底的代理。</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.args=args;<span class="comment">//传入需要的参数。</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(args);<span class="comment">//具体的业务实现</span></span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代理类的实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyA</span> <span class="keyword">implements</span> <span class="title">Service</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Service realDeal;<span class="comment">//实际的业务处理者，被代理的对象</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ProxyA</span> <span class="params">(String args)</span></span>&#123;<span class="comment">//构造方法传入被代理的对象的参数，由代理类来进行被代理对象的创建。</span></span><br><span class="line">		<span class="keyword">this</span>.realDeal=<span class="keyword">new</span> RealA(<span class="keyword">this</span>,args);<span class="comment">//创建被代理对象，被代理类对象的代理类是当前类的实例。</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//处理前的操作     </span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">beforeDeal</span><span class="params">()</span></span>&#123;             </span><br><span class="line">		System.out.println(<span class="string">"before deal"</span>);</span><br><span class="line">	&#125;     </span><br><span class="line">	 </span><br><span class="line">	<span class="comment">//处理后的操作     </span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">afterDeal</span><span class="params">()</span></span>&#123;    </span><br><span class="line">		System.out.println(<span class="string">"after deal"</span>);             </span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span>     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		beforeDeal();</span><br><span class="line">		realDeal.deal();<span class="comment">//实际还是被代理对象在进行处理</span></span><br><span class="line">		afterDeal();</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种使用与上面的简单实现有一个最大的不同，就是对实际的被代理类对象的创建是完全由代理类控制的，这样就保证了代理类的访问控制。当具体的业务需要变更时只需要对被代理类中的逻辑进行修改就可以了，对其他模块的使用不会造成任何影响。</p>
+<h3 id="强制代理"><a href="#强制代理" class="headerlink" title="强制代理"></a>强制代理</h3><p>先看看其代码实现，先是业务定义：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>;<span class="comment">//业务方法 </span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Proxy <span class="title">getProxy</span><span class="params">()</span></span>;<span class="comment">//新加了一个方法用于获取代理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>相比之下多了一个方法用于获取代理类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealA</span> <span class="keyword">implements</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="keyword">private</span> String args;</span><br><span class="line">	<span class="keyword">private</span> Proxy proxy=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">RealA</span> <span class="params">(String args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.args=args;<span class="comment">//传入需要的参数。</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Proxy <span class="title">getProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(!isProxy())&#123;</span><br><span class="line">			proxy=<span class="keyword">new</span> Proxy(<span class="keyword">this</span>);<span class="comment">//如果没有指定代理就创建一个</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> proxy;</span><br><span class="line">	&#125; </span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(isProxy())&#123;</span><br><span class="line">			System.out.println(args);<span class="comment">//具体的业务实现</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"非法访问"</span>);<span class="comment">//保证只有代理类才可以调用具体的业务实现</span></span><br><span class="line">		&#125;	</span><br><span class="line">	&#125; </span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(proxy==<span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里多了有一个isProxy的方法用于检查对代理的设置，如果没有指定代理就不允许对相关方法进行访问，同时getProxy方法直接提供了对代理的管理，只有通过这个方法建立代理类才能对相关的业务函数进行访问，直接new一个代理类也无法实现对被代理类的访问，“强制”也是在这里体现。</p>
+<p>之后是代理类，实现也没什么特别，只是getProxy的方法指向了自身。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="keyword">private</span> RealA real=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Proxy</span> <span class="params">(RealA real)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.real=real;<span class="comment">//设置被代理对象</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Proxy <span class="title">getProxy</span><span class="params">()</span></span>&#123;<span class="comment">//设置代理类的代理就是自身</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">	&#125; </span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		real.deal();<span class="comment">//被代理对象进行实际处理</span></span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>强制代理的使用就有意思了，我们想使用代理但是却是对被代理类进行实例化，之后在通过被代理类的getProxy方法获得代理实例，再由代理类对被代理对象进行访问。听起来有点绕，我们就具体的用一下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;            </span><br><span class="line">	RealA realA = <span class="keyword">new</span> RealA(<span class="string">"args"</span>); </span><br><span class="line">	Proxy proxy=realA.getProxy();</span><br><span class="line">	proxy.deal();                    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//输出 args</span></span><br></pre></td></tr></table></figure></p>
+<p>这里一定是由被代理对象生成代理，之后在对其业务进行操作，如果是直接调用被代理类，或是是自己创建代理就会无法调用相关方法。比如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;            </span><br><span class="line">	RealA realA = <span class="keyword">new</span> RealA(<span class="string">"args"</span>); </span><br><span class="line">	realA.deal();                    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//输出 非法访问</span></span><br></pre></td></tr></table></figure></p>
+<p>还有这样直接创建代理也不行<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;            </span><br><span class="line">	RealA realA = <span class="keyword">new</span> RealA(<span class="string">"args"</span>); </span><br><span class="line">	Proxy proxy= <span class="keyword">new</span> Proxy(realA);</span><br><span class="line">	proxy.deal();                    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//输出 非法访问</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="代理扩展"><a href="#代理扩展" class="headerlink" title="代理扩展"></a>代理扩展</h3><p>对于代理类来说，我们还可以通过实现多个接口来扩展代理的功能，以完成各种需求，这里就不再赘述。</p>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>动态代理是根据被代理的接口生成所有的方法， 也就是说给定一个接口，动态代理会实现该接口下的所有方法，而要实现动态代理就必须要了解一下InvocationHandler这个接口，它是Java中用于处理动态代理的接口。先看源码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个接口中也没啥，就只有一个invoke方法。但是实现这个接口之后，就可以通过这个invoke方法来调用被代理类中的<strong>接口方法</strong>。再看看一个简单的动态代理实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//业务抽象</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>;<span class="comment">//业务方法 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//被代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealA</span> <span class="keyword">implements</span> <span class="title">Service</span></span>&#123;     </span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deal</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"deal"</span>);<span class="comment">//具体的业务实现</span></span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实现了InvocationHandler的代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyA</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object obj=<span class="keyword">null</span>;<span class="comment">//被代理类的实例</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ProxyA</span> <span class="params">(Object obj)</span></span>&#123;<span class="comment">//构造方法传入被代理的实例</span></span><br><span class="line">		<span class="keyword">this</span>.obj = obj; </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span>     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> method.invoke(<span class="keyword">this</span>.obj, args)；</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的method.invoke()方法是Method类中的方法，用于运行具体的method，传入的参数是方法所在的类实例和实现该方法的参数。</p>
+<p>我们来实际运用一下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;            </span><br><span class="line">	Service realA = <span class="keyword">new</span> RealA(); </span><br><span class="line">	InvocationHandler handler = <span class="keyword">new</span> ProxyA(realA);</span><br><span class="line">	ClassLoader cl = realA.getClass().getClassLoader(); </span><br><span class="line">	Service proxy=(Service) Proxy.newProxyInstance(cl, <span class="keyword">new</span> Class[] &#123;Service.class&#125;, handler);</span><br><span class="line">	proxy.deal();                    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//输出 deal</span></span><br></pre></td></tr></table></figure></p>
+<p>这里我们首先创建了一个具体的被代理类，之后有创建了一个InvocationHandler接口，最后使用Proxy中的newProxyInstance方法来创建了代理proxy，完成了方法的调用。其中Proxy.newProxyInstance方法用于实现对代理类的创建，传入的值为被代理类的类加载器，相关的接口类，还有具体的InvocationHandler接口实例。</p>
+<p>动态代理的核心就在于InvocationHandler接口与Proxy.newProxyInstance()方法，前者用于实际的运行代理类接口中的方法，而后者配合前者，通过传入的接口类与被代理类的类加载器，还有<strong>反射机制</strong>动态的创建代理类，具体的实现步骤可以看看Proxy类的源码（在java.lang.reflect包中）。</p>
+<p>这里动态代理只是创建代理类的方式不同，但是其具体的思想还是与上面一致的，我们可以根据需求结合使用。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>代理模式的运用还是比较广泛的，我们熟知的AOP就与其息息相关。静态代理相对简单，动态代理就没有那么好理解，其中包含有反射机制和一些复杂类的调用比如（Proxy），但是实现起来还是不困难的，但是注意动态代理中代理的方法是接口方法，不能是抽象方法，这是由Proxy.newProxyInstance()中传入的接口类型参数而固定的，也就是说其传入的只能是接口类型的class不能是抽象类，这点要注意。只要了解其基本的思想我们就可以很容易的进行代理的设计来实现需求。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/21/人工智能原理笔记2/" rel="next" title="人工智能原理笔记------确定性推理">
+                <i class="fa fa-chevron-left"></i> 人工智能原理笔记------确定性推理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yanzs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心思想"><span class="nav-number">1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体实现"><span class="nav-number">2.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单实现"><span class="nav-number">2.1.</span> <span class="nav-text">简单实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际运用"><span class="nav-number">3.</span> <span class="nav-text">实际运用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通代理"><span class="nav-number">3.1.</span> <span class="nav-text">普通代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强制代理"><span class="nav-number">3.2.</span> <span class="nav-text">强制代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理扩展"><span class="nav-number">3.3.</span> <span class="nav-text">代理扩展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态代理"><span class="nav-number">3.4.</span> <span class="nav-text">动态代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanzs</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.7.0</div>
+
+
+<!-- 
+  <div class="footer-custom">true</div>
+ -->
+
+
+
+
+  <div class="footer-custom">  
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+ </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
